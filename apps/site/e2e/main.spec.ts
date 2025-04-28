@@ -1,5 +1,5 @@
-import { PERFORMANCE_THRESHOLDS, assertPerformanceMetric } from './helpers';
 import { expect, test } from '@playwright/test';
+import { PERFORMANCE_THRESHOLDS, assertPerformanceMetric } from './helpers';
 
 test.describe('Main page', () => {
   test('serves correct robots.txt and sitemap.xml', async ({ page }) => {

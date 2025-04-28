@@ -1,18 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-
+import { routing } from '@/i18n/routing';
 import createMiddleware from 'next-intl/middleware';
-import { routing } from '@/lang';
 
-const intlMiddleware = createMiddleware(routing);
-
-export default async function middleware(request: NextRequest) {
-  try {
-    const response = intlMiddleware(request);
-    return response;
-  } catch (error) {
-    return NextResponse.next();
-  }
-}
+export default createMiddleware(routing);
 
 export const config = {
   matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],

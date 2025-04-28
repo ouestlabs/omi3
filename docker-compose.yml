@@ -1,6 +1,5 @@
 services:
   site:
-    container_name: omi3-site
     build:
       context: .
       dockerfile: ./apps/site/Dockerfile

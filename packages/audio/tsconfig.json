@@ -1,14 +1,15 @@
 {
-  "extends": "@omi3/typescript/base",
+  "extends": "@omi3/typescript/react-library",
   "compilerOptions": {
-    "jsx": "react",
-    "jsxFactory": "React.createElement",
-    "jsxFragmentFactory": "React.Fragment",
-    "outDir": "./dist",
-    "declaration": true,
-    "lib": ["DOM", "DOM.Iterable", "ESNext"],
-    "types": ["jest", "node"]
+    "jsx": "react-jsx"
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["node_modules", "**/*.test.ts", "jest.config.ts", "__tests__"]
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.test.ts",
+    "__tests__"
+  ]
 }

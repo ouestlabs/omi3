@@ -6,14 +6,22 @@
   "scripts": {
     "dev": "tsup --watch",
     "build": "tsup",
-    "lint": "eslint src",
-    "pretest": "pnpm lint && pnpm build",
-    "test": "jest",
+    "lint": "biome check --write .",
+    "test": "vitest run --passWithNoTests",
     "prepublishOnly": "pnpm run build"
   },
-  "types": "./dist/index.d.ts",
-  "main": "./dist/index.js",
+  "types": "./dist/index.d.mts",
   "module": "./dist/index.mjs",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./react": {
+      "types": "./dist/react/index.d.mts",
+      "import": "./dist/react/index.mjs"
+    }
+  },
   "files": [
     "dist/**",
     "LICENSE",
@@ -25,38 +33,38 @@
   },
   "author": {
     "name": "Omi3",
-    "url": "https://github.com/xyhomi3"
+    "url": "https://github.com/lucien-loua"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/xyhomi3/omi3.git"
+    "url": "https://github.com/lucien-loua/omi3.git"
   },
-  "homepage": "https://github.com/xyhomi3/omi3/tree/main/packages/audio#readme",
+  "homepage": "https://github.com/lucien-loua/omi3/tree/main/packages/audio#readme",
   "bugs": {
-    "url": "https://github.com/xyhomi3/omi3/issues"
+    "url": "https://github.com/lucien-loua/omi3/issues"
   },
   "keywords": [
     "audio",
-    "web audio api",
-    "audio library",
-    "audio processing",
-    "audio playback"
+    "web audio",
+    "html5 audio",
+    "react"
   ],
   "devDependencies": {
-    "@omi3/eslint": "workspace:*",
-    "@omi3/tsup": "workspace:*",
     "@omi3/typescript": "workspace:*",
     "@omi3/utils": "workspace:*",
-    "@types/jest": "^29.5.12",
-    "@types/node": "^20.12.7",
-    "@types/react": "^18.3.0",
-    "jest": "29.7.0",
-    "react": "^18.3.0",
-    "ts-jest": "^29.2.5",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitest/coverage-v8": "3.1.2",
+    "jsdom": "^26.1.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tsup": "^8.4.0",
+    "typescript": "^5",
+    "vitest": "^3.1.2"
   },
   "peerDependencies": {
-    "react": "^18.3.0"
+    "react": "^18.3.0 || ^19.0.0",
+    "react-dom": "^18.3.0 || ^19.0.0"
   }
 }

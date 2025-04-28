@@ -1,6 +1,2 @@
-export { AudioChannel } from './audio-channel';
-export { AudioError } from './audio-channel/AudioError';
+export * from './core';
 export * from './interfaces';
-export * from './types';
-export { default as Visualizer } from './visualizer';
-

@@ -2,6 +2,11 @@
   "name": "@omi3/typescript",
   "version": "0.0.1",
   "license": "MIT",
+  "files": [
+    "base.json",
+    "nextjs.json",
+    "react-library.json"
+  ],
   "publishConfig": {
     "access": "public"
   }
