@@ -1,13 +1,15 @@
-import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
-import { AudioPlayer } from '../_components';
-import { Metadata } from 'next';
+import { AudioPlayer } from '@/components/audio/player';
+import type { Metadata } from 'next';
+import type { Locale } from 'next-intl';
 
 type Props = {
-  params: { locale: string };
+  params: Promise<{ locale: Locale }>;
 };
 
-export async function generateMetadata({ params: { locale } }: Props): Promise<Metadata> {
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'Pages.player' });
   return {
     title: t('meta.title'),
@@ -15,13 +17,12 @@ export async function generateMetadata({ params: { locale } }: Props): Promise<M
   };
 }
 
-export default async function Home({ params: { locale } }: Props) {
-  unstable_setRequestLocale(locale);
+export default async function Home({ params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
   return (
-    <main className="flex flex-grow items-center justify-center p-5" role="main">
-      <section className="w-full max-w-lg">
-        <AudioPlayer />
-      </section>
+    <main>
+      <AudioPlayer />
     </main>
   );
 }

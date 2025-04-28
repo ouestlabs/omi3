@@ -1,4 +1,5 @@
-import { getPathname, routing } from '@/lang';
+import { getPathname } from '@/i18n/navigation';
+import type { routing } from '@/i18n/routing';
 
 import { MAIN_URL } from '@omi3/utils';
 

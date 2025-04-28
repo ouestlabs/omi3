@@ -1,59 +1,91 @@
-import { Music } from '../types';
-
-/**
- * Interface for the audio channel event handler.
- * Defines callbacks for various audio events.
- */
-export interface EventHandler {
-  /** Invoked when audio playback starts */
-  onPlay?: () => void;
-  /** Invoked when audio playback is paused */
-  onPause?: () => void;
-  /** Invoked when audio playback is stopped */
-  onStop?: () => void;
-  /** Invoked when audio playback reaches the end */
-  onEnded?: () => void;
-  /** Invoked periodically with the current playback time (in seconds) */
-  onTimeUpdate?: (time: number) => void;
-  /** Invoked when the audio duration is known or has changed (in seconds) */
-  onDurationChange?: (duration: number) => void;
-  /** Invoked when an error occurs during audio operations */
-  onError?: (error: Error) => void;
-  /** Invoked when the audio analyser node is created */
-  onAnalyserCreated?: (analyser: AnalyserNode) => void;
-  /** Invoked when the play state changes */
-  onPlayStateChange?: (isPlaying: boolean) => void;
-  /** Invoked when the audio is seeked to a specific time */
-  onSeek?: (time: number) => void;
-  /** Invoked when the audio buffer is loaded and decoded */
-  onBufferLoaded?: (buffer: AudioBuffer) => void;
+export enum PlaybackState {
+  IDLE = "idle",
+  LOADING = "loading",
+  READY = "ready",
+  PLAYING = "playing",
+  PAUSED = "paused",
+  ERROR = "error",
 }
 
-/**
- * Interface for the audio channel.
- * Defines the main operations that can be performed on an audio channel.
- */
-export interface AudioChannel {
-  /** Loads an audio file and prepares it for playback */
-  load: (music: Music) => Promise<void>;
-  /** Starts or resumes audio playback */
-  play: () => Promise<void>;
-  /** Pauses audio playback */
-  pause: () => void;
-  /** Seeks to a specific time in the audio (in seconds) */
-  seek: (time: number) => void;
-  /** Checks if audio is currently playing */
-  isPlaying: () => boolean;
-  /** Disposes of the audio channel and releases resources */
-  dispose: () => void;
-  /** Sets the volume of the audio channel (0 to 1) */
-  setVolume: (volume: number) => void;
-  /** Gets the current playback time (in seconds) */
-  getCurrentTime: () => number;
-  /** Gets the total duration of the loaded audio (in seconds) */
-  getDuration: () => number;
-  /** Connects the audio channel to an AudioNode or AudioParam */
-  connect: (destination: AudioNode | AudioParam) => void;
-  /** Disconnects the audio channel from all or specific destinations */
-  disconnect: (destination?: AudioNode | AudioParam) => void;
+export interface Music {
+  id?: string | number;
+  url: string;
+  duration?: number;
+  codec?: string;
+  bitrate?: number;
+  sampleRate?: number;
+  lossless?: boolean;
+  title?: string;
+  artist?: string;
+  album?: string;
+  albumArtist?: string;
+  composer?: string;
+  genre?: string;
+  year?: number | string;
+  trackNumber?: number | string;
+  discNumber?: number | string;
+  comment?: string;
+  lyrics?: string;
+  encodedBy?: string;
+  artwork?: MediaImage;
+  bpm?: number;
+  grouping?: string;
+  initialKey?: string;
+  isrc?: string;
+  publisher?: string;
+  copyright?: string;
+};
+
+export type MediaImage = { src: string; type?: string; sizes?: string };
+
+export interface AudioEngineEventMap {
+  "play": CustomEvent<void>;
+  "pause": CustomEvent<void>;
+  "ended": CustomEvent<void>;
+  "error": CustomEvent<{ code: number; message: string }>;
+  "timeUpdate": CustomEvent<{ currentTime: number }>;
+  "durationChange": CustomEvent<{ duration: number }>;
+  "volumeChange": CustomEvent<{ volume: number; muted: boolean }>;
+  "playbackStateChange": CustomEvent<{ state: PlaybackState }>;
+  "bufferingStateChange": CustomEvent<{ buffering: boolean }>;
+  "trackChange": CustomEvent<{ music: Music | null }>;
+  "seek": CustomEvent<{ time: number }>;
+  "bufferLoaded": CustomEvent<void>;
+  "requestPreviousTrack": CustomEvent<void>;
+  "requestNextTrack": CustomEvent<void>;
+  "frequencyDataUpdate": CustomEvent<{ data: Uint8Array }>;
+}
+
+export interface IAudioEngine {
+  readonly playbackState: PlaybackState;
+  readonly currentMusic: Music | null;
+  readonly volume: number;
+  readonly duration: number;
+  readonly currentTime: number;
+  readonly isMuted: boolean;
+  readonly isBuffering: boolean;
+  readonly lastError: { code: number; message: string } | null;
+  readonly frequencyData: Uint8Array | null;
+  readonly analyserNode: AnalyserNode | null;
+
+  load(music: Music, startTime?: number): Promise<void>;
+  play(): Promise<void>;
+  pause(): void;
+  seek(time: number): void;
+  setVolume(volume: number): void;
+  dispose(): void;
+
+  addEventListener<K extends keyof AudioEngineEventMap>(
+    type: K,
+    listener: (this: IAudioEngine, ev: AudioEngineEventMap[K]) => any,
+    options?: boolean | AddEventListenerOptions
+  ): void;
+
+  removeEventListener<K extends keyof AudioEngineEventMap>(
+    type: K,
+    listener: (this: IAudioEngine, ev: AudioEngineEventMap[K]) => any,
+    options?: boolean | EventListenerOptions
+  ): void;
+
+  dispatchEvent<K extends keyof AudioEngineEventMap>(event: AudioEngineEventMap[K]): boolean;
 }

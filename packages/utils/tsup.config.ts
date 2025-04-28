@@ -1,5 +1,12 @@
-import createTsupConfig from '@omi3/tsup';
+import { defineConfig } from 'tsup';
 
-export default createTsupConfig({
+export default defineConfig({
   entry: ['src/index.ts'],
+  format: ["esm"],
+  clean: true,
+  treeshake: true,
+  dts: true,
+  esbuildOptions(options) {
+    options.jsx = "transform";
+  },
 });

@@ -8,13 +8,15 @@
     "build": "tsup",
     "clean": "rm -rf .turbo node_modules dist",
     "type-check": "tsc --noEmit",
-    "lint": "eslint src",
-    "pretest": "pnpm build",
-    "test": "jest"
+    "lint": "biome check --write .",
+    "test": "vitest run --passWithNoTests"
   },
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    }
+  },
   "files": [
     "dist/**",
     "README.md"
@@ -31,20 +33,12 @@
   "bugs": {
     "url": "https://github.com/xyhomi3/omi3/issues"
   },
-  "dependencies": {
-    "clsx": "^2.1.1",
-    "react": "^18.3.0",
-    "tailwind-merge": "^2.3.0"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@omi3/tsup": "workspace:*",
     "@omi3/typescript": "workspace:*",
-    "@types/jest": "^29.5.12",
-    "@types/node": "^20.12.7",
-    "@types/react": "^18.3.0",
-    "jest": "29.7.0",
-    "ts-jest": "^29.2.5",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "@types/node": "^22",
+    "tsup": "^8.4.0",
+    "typescript": "^5",
+    "vitest": "^3.1.2"
   }
 }

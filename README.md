@@ -18,8 +18,10 @@
 
 ### Key Features
 
-- Audio processing and manipulation
-- Customizable audio playback controls
+- **Core Audio Engine (`@omi3/audio`)**: Robust audio playback management using the Web Audio API, featuring play/pause/seek/volume controls, an event-driven architecture (`addEventListener`), buffering status, error handling, and audio analysis capabilities (`AnalyserNode`).
+- **Media Session API Integration**: Automatic integration with the browser's Media Session API for native media controls and metadata display.
+- **UI Components (`@omi3/ui`)**: Reusable React components for building audio interfaces (details TBD).
+- **Utility Functions (`@omi3/utils`)**: Shared helper functions, including audio time formatting.
 
 ## Project Structure
 

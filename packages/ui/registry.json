@@ -1,0 +1,76 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "audiocn",
+  "homepage": "https://github.com/lucien-loua/omi3",
+  "items": [
+    {
+      "name": "spinner",
+      "type": "registry:component",
+      "title": "Spinner",
+      "description": "A simple spinner component",
+      "files": [
+        {
+          "path": "src/registry/new-york/ui/spinner.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "audio-player",
+      "type": "registry:component",
+      "title": "Audio Player",
+      "description": "Simple audio player component",
+      "dependencies": [
+        "@omi3/utils",
+        "@omi3/audio"
+      ],
+      "registryDependencies": [
+        "button",
+        "input",
+        "label",
+        "slider",
+        "dropdown-menu",
+        "tooltip",
+        "skeleton",
+        "http://localhost:3000/registry/spinner"
+      ],
+      "files": [
+        {
+          "path": "src/registry/new-york/blocks/audio/elements/controls.tsx",
+          "target": "components/audio/elements/controls.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/registry/new-york/blocks/audio/elements/file-input.tsx",
+          "target": "components/audio/elements/file-input.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/registry/new-york/blocks/audio/elements/seek-bar.tsx",
+          "target": "components/audio/elements/seek-bar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/registry/new-york/blocks/audio/elements/track-info.tsx",
+          "target": "components/audio/elements/track-info.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/registry/new-york/blocks/audio/elements/visualizer.tsx",
+          "target": "components/audio/elements/visualizer.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/registry/new-york/blocks/audio/elements/volume.tsx",
+          "target": "components/audio/elements/volume.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "src/registry/new-york/blocks/audio/player.tsx",
+          "target": "components/audio/player.tsx",
+          "type": "registry:block"
+        }
+      ]
+    }
+  ]
+}

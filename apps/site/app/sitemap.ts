@@ -1,7 +1,7 @@
 import { generateLocaleRoutes, getStaticRoutes, getUrl } from './_utils/sitemap';
 
-import { MetadataRoute } from 'next';
-import { routing } from '@/lang';
+import { routing } from '@/i18n/routing';
+import type { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const keys = Object.keys(routing.pathnames) as Array<keyof typeof routing.pathnames>;

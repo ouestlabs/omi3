@@ -1,5 +1,10 @@
 {
   "extends": "@omi3/typescript/base",
-  "include": ["."],
-  "exclude": ["node_modules"]
+  "include": [
+    ".",
+    "packages/ui/src/registry/default/.keep"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
