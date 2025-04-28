@@ -6,4 +6,4 @@
 "@omi3/site": patch
 ---
 
-.
+chore(cleanup): remove unused configuration files and component stories in the UI package
