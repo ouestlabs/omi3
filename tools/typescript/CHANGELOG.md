@@ -1,5 +1,11 @@
 # @omi3/typescript
 
+## 2.0.1
+
+### Patch Changes
+
+- 3409e79: chore(cleanup): remove unused configuration files and component stories in the UI package
+
 ## 2.0.0
 
 ### Major Changes

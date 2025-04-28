@@ -1,5 +1,14 @@
 # @omi3/ui
 
+## 2.0.1
+
+### Patch Changes
+
+- 3409e79: chore(cleanup): remove unused configuration files and component stories in the UI package
+- Updated dependencies [3409e79]
+  - @omi3/audio@2.0.1
+  - @omi3/utils@2.0.1
+
 ## 2.0.0
 
 ### Major Changes
