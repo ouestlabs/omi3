@@ -1,6 +1,6 @@
 {
   "name": "@omi3/typescript",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "license": "MIT",
   "files": [
     "base.json",
