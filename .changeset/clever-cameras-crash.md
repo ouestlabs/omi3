@@ -17,6 +17,5 @@ Major overhaul of the `@omi3/audio` package.
 - Simplified constructor, `AudioContext` is now initialized internally when needed.
 - Added Reusable React components for building audio interfaces (details TBD).
 
-
 This update introduces significant breaking changes to the API surface.
 
