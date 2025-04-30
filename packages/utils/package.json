@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "tsup --watch",
-    "build": "tsup",
+    "build:pkg": "tsup",
     "clean": "rm -rf .turbo node_modules dist",
     "type-check": "tsc --noEmit",
     "lint": "biome check --write .",

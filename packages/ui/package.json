@@ -20,7 +20,7 @@
   },
   "scripts": {
     "dev": "next dev --turbo",
-    "build:ui": "next build",
+    "build:ui": "next build --turbo",
     "start": "next start",
     "lint": "biome check --write .",
     "clean": "rm -rf .next .turbo node_modules",
