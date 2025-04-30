@@ -5,3 +5,9 @@ services:
       dockerfile: ./apps/site/Dockerfile
     ports:
       - '3000:3000'
+  ui:
+    build:
+      context: .
+      dockerfile: ./packages/ui/Dockerfile
+    ports:
+      - '3000:3000'
