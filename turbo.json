@@ -33,10 +33,10 @@
         "dist/**"
       ]
     },
-    "build:ui": {
+    "build:registry": {
       "dependsOn": [
         "^build:pkg",
-        "^build:ui"
+        "^build:registry"
       ],
       "inputs": [
         "$TURBO_DEFAULT$",
@@ -45,6 +45,15 @@
       "outputs": [
         ".next/**",
         "!.next/cache/**"
+      ]
+    },
+    "serve:registry": {
+      "dependsOn": [
+        "^serve:registry"
+      ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*"
       ]
     },
     "lint": {

@@ -6,7 +6,8 @@
   "scripts": {
     "build": "turbo build",
     "build:pkg": "turbo build:pkg",
-    "build:ui": "turbo build:ui",
+    "build:registry": "turbo build:registry",
+    "serve:registry": "turbo serve:registry",
     "dev": "turbo dev",
     "lint": "turbo lint",
     "test": "turbo test",

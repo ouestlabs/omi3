@@ -20,11 +20,10 @@
   },
   "scripts": {
     "dev": "next dev --turbo",
-    "build:ui": "next build --turbo",
-    "start": "next start",
+    "build:registry": "shadcn build && next build --turbo",
+    "serve:registry": "next start",
     "lint": "biome check --write .",
-    "clean": "rm -rf .next .turbo node_modules",
-    "registry:build": "shadcn build"
+    "clean": "rm -rf .next .turbo node_modules"
   },
   "peerDependencies": {
     "next": "^14.0.0 || ^15.0.0",
