@@ -1,6 +1,8 @@
 "use client";
 
-import { useAudioEngine } from "@omi3/audio/react";
+import {
+  useAudio,
+} from "@omi3/audio/react";
 import { Button } from "@omi3/ui/components/button";
 import {
   DropdownMenu,
@@ -24,7 +26,12 @@ export function AudioVolume({
   sliderProps,
   ...props
 }: AudioVolumeProps) {
-  const { volume, isMuted, isEngineInitialized, setVolume } = useAudioEngine();
+  const {
+    volume,
+    isMuted,
+    isEngineInitialized,
+    setVolume,
+  } = useAudio();
 
   const handleVolumeChange = useCallback((value: number[]) => {
     const newVolume = value[0];

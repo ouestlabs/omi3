@@ -3,11 +3,25 @@
 import * as React from 'react';
 import { AudioEngine } from '../../core';
 import { type AudioEngineEventMap, type IAudioEngine, type Music, PlaybackState } from '../../interfaces';
-import { AudioEngineContext, type AudioEngineContextType } from "../context";
+import {
+  AudioTimeContext,
+  AudioPlaybackContext,
+  AudioVolumeContext,
+  AudioActionsContext,
+  AudioStatusContext,
+  AudioFrequencyContext,
+} from "../context";
 import { initialState, reducer } from './state';
 
 const canUseDOM = () => typeof window !== 'undefined' && window.document?.createElement !== undefined;
 
+/**
+ * Provides the audio engine contexts to its children.
+ *
+ * Initializes the AudioEngine instance and sets up listeners to update context states.
+ * Uses multiple specialized contexts and memoized values to optimize performance
+ * and prevent unnecessary re-renders in consuming components.
+ */
 export function AudioProvider({ children }: { children: React.ReactNode }) {
   const engineRef = React.useRef<IAudioEngine | null>(null);
   const [state, dispatch] = React.useReducer(reducer, initialState);
@@ -41,6 +55,7 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
           error: (e) => dispatch({ type: 'SET_ERROR', payload: e.detail }),
           trackChange: (e) => dispatch({ type: 'SET_CURRENT_MUSIC', payload: e.detail.music }),
           frequencyDataUpdate: (e) => dispatch({ type: 'SET_FREQUENCY_DATA', payload: e.detail.data }),
+          contextInitialized: (e) => dispatch({ type: 'SET_ANALYSER_NODE', payload: e.detail.analyserNode }),
         };
 
         for (const [eventName, listener] of Object.entries(listeners)) {
@@ -104,30 +119,56 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
   const isLoading = state.playbackState === PlaybackState.LOADING;
   const isPlaying = state.playbackState === PlaybackState.PLAYING;
 
-  const contextValue: AudioEngineContextType = {
-    engine: state.engineInstance,
+  const timeContextValue = React.useMemo(() => ({
     currentTime: state.currentTime,
     duration: state.duration,
-    volume: state.volume,
-    isMuted: state.isMuted,
+  }), [state.currentTime, state.duration]);
+
+  const playbackContextValue = React.useMemo(() => ({
     playbackState: state.playbackState,
+    currentMusic: state.currentMusic,
     isBuffering: state.isBuffering,
     error: state.error,
-    currentMusic: state.currentMusic,
-    frequencyData: state.frequencyData,
-    analyserNode: state.analyserNode,
-    isEngineInitialized,
     isLoading,
     isPlaying,
+  }), [state.playbackState, state.currentMusic, state.isBuffering, state.error, isLoading, isPlaying]);
+
+  const volumeContextValue = React.useMemo(() => ({
+    volume: state.volume,
+    isMuted: state.isMuted,
+  }), [state.volume, state.isMuted]);
+
+  const frequencyContextValue = React.useMemo(() => ({
+    frequencyData: state.frequencyData,
+  }), [state.frequencyData]);
+
+  const actionsContextValue = React.useMemo(() => ({
     load,
     play,
     pause,
     seek,
     setVolume: setEngineVolume,
-  };
+  }), [load, play, pause, seek, setEngineVolume]);
+
+  const statusContextValue = React.useMemo(() => ({
+    engine: state.engineInstance,
+    isEngineInitialized,
+    analyserNode: state.analyserNode,
+  }), [state.engineInstance, isEngineInitialized, state.analyserNode]);
+
   return (
-    <AudioEngineContext.Provider value={contextValue}>
-      {children}
-    </AudioEngineContext.Provider>
+    <AudioActionsContext.Provider value={actionsContextValue}>
+      <AudioStatusContext.Provider value={statusContextValue}>
+        <AudioVolumeContext.Provider value={volumeContextValue}>
+          <AudioPlaybackContext.Provider value={playbackContextValue}>
+            <AudioFrequencyContext.Provider value={frequencyContextValue}>
+              <AudioTimeContext.Provider value={timeContextValue}>
+                {children}
+              </AudioTimeContext.Provider>
+            </AudioFrequencyContext.Provider>
+          </AudioPlaybackContext.Provider>
+        </AudioVolumeContext.Provider>
+      </AudioStatusContext.Provider>
+    </AudioActionsContext.Provider>
   );
 }

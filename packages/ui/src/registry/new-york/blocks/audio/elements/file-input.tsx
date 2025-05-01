@@ -1,6 +1,9 @@
 "use client";
 
-import { type Music, useAudioEngine } from "@omi3/audio/react";
+import {
+  type Music,
+  useAudio
+} from "@omi3/audio/react";
 import { Input } from "@omi3/ui/components/input";
 import { Label } from "@omi3/ui/components/label";
 import { cn } from "@omi3/ui/lib/utils";
@@ -16,7 +19,11 @@ export function AudioFileInput({
   className,
   ...props
 }: AudioFileInputProps) {
-  const { isLoading, isEngineInitialized, load } = useAudioEngine();
+  const {
+    isLoading,
+    isEngineInitialized,
+    load,
+  } = useAudio();
   const [currentBlobUrl, setCurrentBlobUrl] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const id = React.useId();

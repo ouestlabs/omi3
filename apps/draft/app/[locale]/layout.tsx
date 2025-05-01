@@ -2,7 +2,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 import { LangueSelect } from '@/components/i18n/select';
 import { routing } from '@/i18n/routing';
-import { Logo, montserrat } from '@omi3/ui/assets';
+import { Logo, geist } from '@omi3/ui/assets';
 import { buttonVariants } from '@omi3/ui/components/button';
 import { cn } from '@omi3/ui/lib/utils';
 import { ThemeProvider, ThemeToggler } from '@omi3/ui/theme';
@@ -72,7 +72,7 @@ export default async function LocaleLayout({
   setRequestLocale(locale);
   return (
     <html lang={locale} className="h-full" suppressHydrationWarning>
-      <body className={cn(montserrat.className, 'min-h-full antialiased')}>
+      <body className={cn(geist.className, 'min-h-full antialiased')}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

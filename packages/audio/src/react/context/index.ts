@@ -1,34 +1,28 @@
 "use client";
 
-import React from 'react';
-import { type IAudioEngine, type Music, PlaybackState } from '../../interfaces';
+import React from "react";
+import type { IAudioEngine, Music, PlaybackState } from "../../interfaces";
 
-export const initialCurrentTime = 0;
-export const initialDuration = 0;
-export const initialVolume = 1;
-export const initialIsMuted = false;
-export const initialPlaybackState = PlaybackState.IDLE;
-export const initialIsBuffering = false;
-export const initialError = null;
-export const initialCurrentMusic = null;
-export const initialFrequencyData = null;
-export const initialAnalyserNode = null;
-
-export type AudioEngineContextType = {
-  engine: IAudioEngine | null;
+export type AudioTimeState = {
   currentTime: number;
   duration: number;
-  volume: number;
-  isMuted: boolean;
+};
+
+export type AudioPlaybackState = {
   playbackState: PlaybackState;
+  currentMusic: Music | null;
   isBuffering: boolean;
   error: { code?: number; message?: string } | null;
-  currentMusic: Music | null;
-  frequencyData: Uint8Array | null;
-  analyserNode: AnalyserNode | null;
-  isEngineInitialized: boolean;
-  isLoading: boolean;
   isPlaying: boolean;
+  isLoading: boolean;
+};
+
+export type AudioVolumeState = {
+  volume: number;
+  isMuted: boolean;
+};
+
+export type AudioActions = {
   load: (music: Music, startTime?: number) => void;
   play: () => void;
   pause: () => void;
@@ -36,12 +30,118 @@ export type AudioEngineContextType = {
   setVolume: (volume: number) => void;
 };
 
-export const AudioEngineContext = React.createContext<AudioEngineContextType | null>(null);
+export type AudioStatusState = {
+  engine: IAudioEngine | null;
+  isEngineInitialized: boolean;
+  analyserNode: AnalyserNode | null;
+};
 
-export const useAudioEngine = () => {
-  const context = React.useContext(AudioEngineContext);
+export type AudioFrequencyState = {
+  frequencyData: Uint8Array | null;
+};
+
+
+const AudioTimeContext = React.createContext<AudioTimeState | null>(null);
+const AudioPlaybackContext = React.createContext<AudioPlaybackState | null>(null);
+const AudioVolumeContext = React.createContext<AudioVolumeState | null>(null);
+const AudioActionsContext = React.createContext<AudioActions | null>(null);
+const AudioStatusContext = React.createContext<AudioStatusState | null>(null);
+const AudioFrequencyContext = React.createContext<AudioFrequencyState | null>(null);
+
+/** Provides access to the time-related state (currentTime, duration). Optimized for frequent updates. */
+export const useAudioTime = () => {
+  const context = React.useContext(AudioTimeContext);
   if (!context) {
-    throw new Error("useAudioEngine must be used within an AudioProvider");
+    throw new Error("useAudioTime must be used within an AudioProvider");
   }
   return context;
+};
+
+export const useAudioPlayback = () => {
+  const context = React.useContext(AudioPlaybackContext);
+  if (!context) {
+    throw new Error("useAudioPlayback must be used within an AudioProvider");
+  }
+  return context;
+};
+
+export const useAudioVolume = () => {
+  const context = React.useContext(AudioVolumeContext);
+  if (!context) {
+    throw new Error("useAudioVolume must be used within an AudioProvider");
+  }
+  return context;
+};
+
+export const useAudioActions = () => {
+  const context = React.useContext(AudioActionsContext);
+  if (!context) {
+    throw new Error("useAudioActions must be used within an AudioProvider");
+  }
+  return context;
+};
+
+export const useAudioStatus = () => {
+  const context = React.useContext(AudioStatusContext);
+  if (!context) {
+    throw new Error("useAudioStatus must be used within an AudioProvider");
+  }
+  return context;
+};
+
+/** Provides access to the frequency data state (Uint8Array or null). */
+export const useAudioFrequency = () => {
+  const context = React.useContext(AudioFrequencyContext);
+  if (!context) {
+    throw new Error("useAudioFrequency must be used within an AudioProvider");
+  }
+  return context;
+};
+
+/**
+ * Hook providing common audio state properties (playback, status, volume).
+ * This hook is memoized based on its underlying specific hooks.
+ * Prefer this for accessing multiple state values that don't include currentTime.
+ */
+export const useAudioState = () => {
+  const playback = useAudioPlayback();
+  const status = useAudioStatus();
+  const volume = useAudioVolume();
+
+  return React.useMemo(
+    () => ({
+      ...playback,
+      ...status,
+      ...volume,
+    }),
+    [playback, status, volume]
+  );
+};
+
+/**
+ * Hook providing common audio states and all available actions.
+ * This hook is memoized based on useAudioState and useAudioActions.
+ * This is the primary recommended hook for most UI components interacting with the audio player.
+ */
+export const useAudio = () => {
+  const state = useAudioState();
+  const actions = useAudioActions();
+
+  return React.useMemo(
+    () => ({
+      ...state,
+      ...actions,
+    }),
+    [state, actions]
+  );
+};
+
+// Export contexts for internal use by the Provider
+export {
+  AudioTimeContext,
+  AudioPlaybackContext,
+  AudioVolumeContext,
+  AudioActionsContext,
+  AudioStatusContext,
+  AudioFrequencyContext,
 };

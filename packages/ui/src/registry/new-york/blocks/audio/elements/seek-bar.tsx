@@ -1,10 +1,15 @@
 "use client";
 
-import { PlaybackState, useAudioEngine } from "@omi3/audio/react";
+import {
+  useAudioTime,
+  PlaybackState,
+  useAudio
+} from "@omi3/audio/react";
 import { Slider } from "@omi3/ui/components/slider";
 import { cn } from "@omi3/ui/lib/utils";
 import { formatDuration, formatSecondsToISO8601 } from "@omi3/utils";
 import { useEffect, useState } from "react";
+
 type AudioSeekBarProps = React.ComponentProps<typeof Slider> & {
   className?: string;
 };
@@ -12,12 +17,14 @@ type AudioSeekBarProps = React.ComponentProps<typeof Slider> & {
 export function AudioSeekBar({ className, ...props }: AudioSeekBarProps) {
   const {
     currentTime,
-    duration,
+    duration
+  } = useAudioTime();
+  const {
     playbackState,
     error,
     isEngineInitialized,
-    seek
-  } = useAudioEngine();
+    seek,
+  } = useAudio();
 
   const [isDragging, setIsDragging] = useState(false);
   const [internalTime, setInternalTime] = useState(currentTime);

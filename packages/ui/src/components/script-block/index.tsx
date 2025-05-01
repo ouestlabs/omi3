@@ -97,7 +97,7 @@ export function ScriptBlock({
                   variant="ghost"
                   size="sm"
                   className={cn(
-                    "relative rounded-none bg-background px-2 py-1 text-xs hover:bg-background",
+                    "relative rounded-none bg-background px-2 py-1 hover:bg-background",
                     packageManager === pm ? "text-primary" : "text-muted-foreground"
                   )}
                   onClick={() => setPackageManager(pm)}

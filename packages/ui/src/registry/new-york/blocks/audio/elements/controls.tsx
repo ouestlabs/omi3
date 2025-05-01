@@ -1,6 +1,9 @@
 "use client";
 
-import { PlaybackState, useAudioEngine } from "@omi3/audio/react";
+import {
+  PlaybackState,
+  useAudio
+} from "@omi3/audio/react";
 import { Button } from "@omi3/ui/components/button";
 import { Spinner } from "@omi3/ui/components/spinner";
 import {
@@ -13,18 +16,20 @@ import { cn } from "@omi3/ui/lib/utils";
 import { Pause, Play, SkipBack, SkipForward } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
+
 type AudioControlsProps = React.ComponentProps<"div">
+
 export function AudioControls({ className, ...props }: AudioControlsProps) {
   const {
     isPlaying,
     isLoading,
     isBuffering,
     playbackState,
-    isEngineInitialized,
     currentMusic,
+    isEngineInitialized,
     play,
-    pause
-  } = useAudioEngine();
+    pause,
+  } = useAudio();
 
   const [isActionPending, setIsActionPending] = useState(false);
   const showSpinner = !isEngineInitialized || isLoading || isBuffering || isActionPending;
