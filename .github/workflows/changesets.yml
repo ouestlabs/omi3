@@ -1,45 +1,44 @@
-name: Changesets
+name: Release
 
 on:
-  pull_request:
-    branches: [main]
+  push:
+    branches:
+      - main
 
-permissions:
-  contents: write
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  check:
-    name: Check Changes
+  release:
+    name: Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repo
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Configure Git
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-
-      - name: Setup repository
-        run: |
-          git fetch origin main:main
-          git branch -a
-
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 9.12.0
-
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 'lts/*'
           cache: 'pnpm'
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.0
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Check Changesets
-        run: pnpm changeset status
-
-      - name: Dry Run Version Update
-        run: pnpm changeset version --dry-run --verbose
+      - name: Create Release Pull Request or Publish to npm
+        uses: changesets/action@v1
+        with:
+          version: pnpm version-packages
+          publish: pnpm release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
