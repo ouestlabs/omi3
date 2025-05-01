@@ -5,14 +5,16 @@
   "private": true,
   "scripts": {
     "build": "turbo build",
-    "build-storybook": "turbo build-storybook",
+    "build:pkg": "turbo build:pkg",
+    "build:registry": "turbo build:registry",
+    "serve:registry": "turbo serve:registry",
     "dev": "turbo dev",
     "lint": "turbo lint",
     "test": "turbo test",
     "clean": "turbo clean && rm -rf node_modules",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "turbo build lint && changeset publish"
+    "release": "turbo build:pkg lint && changeset publish"
   },
   "packageManager": "pnpm@9.12.0",
   "engines": {

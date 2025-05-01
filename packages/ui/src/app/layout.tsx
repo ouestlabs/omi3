@@ -2,7 +2,7 @@ import { Toaster } from '@omi3/ui/components/sonner';
 import { ThemeProvider } from '@omi3/ui/theme';
 import type { Metadata } from "next";
 import "@omi3/ui/globals.css";
-import { silk } from '@omi3/ui/assets';
+import { montserrat, silk } from '@omi3/ui/assets';
 
 import Script from "next/script";
 
@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${silk.variable} antialiased`}
+        className={`${montserrat.className} antialiased`}
       >
         <ThemeProvider attribute="class"
           defaultTheme="system"

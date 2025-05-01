@@ -5,10 +5,10 @@
   "license": "Apache-2.0",
   "scripts": {
     "dev": "tsup --watch",
-    "build": "tsup",
+    "build:pkg": "tsup",
     "lint": "biome check --write .",
     "test": "vitest run --passWithNoTests",
-    "prepublishOnly": "pnpm run build"
+    "prepublishOnly": "pnpm run build:pkg"
   },
   "types": "./dist/index.d.mts",
   "module": "./dist/index.mjs",
