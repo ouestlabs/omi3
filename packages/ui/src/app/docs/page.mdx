@@ -32,6 +32,8 @@ export default function MyPage() {
 }
 `;
 
+<article className="prose prose-neutral dark:prose-invert prose-h1:text-xl prose-h1:font-medium prose-h2:mt-12 prose-h2:scroll-m-20 prose-h2:text-lg prose-h2:font-medium prose-h3:text-base prose-h3:font-medium prose-h4:font-medium prose-h5:text-base prose-h5:font-medium prose-h6:text-base prose-h6:font-medium prose-strong:font-medium">
+
 # Introduction to `audiocn`
 
 `audiocn` provides UI components for the Omi3 project, specifically focused on audio features, distributed using a registry approach inspired by Shadcn/ui.
@@ -54,17 +56,21 @@ Learn more about the philosophy at:
 
 Before adding components, ensure you have initialized the Shadcn/ui CLI in your project:
 
+<div className="not-prose">
 <ScriptBlock
   commandMap={initCommands}
   label="Initialize Shadcn/ui CLI"
   codeLanguage="bash"
 />
+</div>
 
 Follow the prompts to configure the paths.
 
 Then, add components from the Omi3 registry:
 
+<div className="not-prose">
 <ScriptBlock commandMap={installCommands} label="Add the Audio Player" />
+</div>
 
 This command copies the `audio-player` block and its dependencies into your configured components directory (e.g., `components/ui/`).
 
@@ -72,13 +78,15 @@ This command copies the `audio-player` block and its dependencies into your conf
 
 After adding the `audio-player`, you can use it like any other component. Remember to wrap the relevant part of your application with the `AudioProvider` from `@omi3/audio/react`:
 
+<div className="not-prose">
 <CodeBlock>
   <CodeBlockCode code={usageExample} language="jsx" />
 </CodeBlock>
+</div>
 
 ## Customization
 
-Since the code resides in your project, you can modify the component files (e.g., `components/ui/audio-player.tsx` and its elements) directly to adjust styles or behavior.
+Since the code resides in your project, you can modify the component files (e.g., `components/ui/audio/index.tsx` and its elements) directly to adjust styles or behavior.
 
 ## Dependencies
 
@@ -90,3 +98,5 @@ Components generally rely on:
 *   `@omi3/audio` (for audio components)
 *   `@omi3/utils`
 *   `clsx`, `tailwind-merge`
+
+</article>
