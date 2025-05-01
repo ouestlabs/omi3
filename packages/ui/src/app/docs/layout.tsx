@@ -4,7 +4,7 @@ export default function LayoutBlogPost({
   children: React.ReactNode
 }) {
   return (
-    <main className="px-2 py-10 w-full">
+    <main className="px-2 py-20 w-full max-w-max mx-auto">
       {children}
     </main>
   )
