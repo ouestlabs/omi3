@@ -1,5 +1,9 @@
 import { type AudioEngineEventMap, type IAudioEngine, type Music, PlaybackState } from '../interfaces';
 
+/**
+ * Core audio playback engine using HTMLAudioElement and Web Audio API for analysis.
+ * Implements the IAudioEngine interface.
+ */
 export class AudioEngine implements IAudioEngine {
 
   private audio: HTMLAudioElement;
@@ -49,7 +53,7 @@ export class AudioEngine implements IAudioEngine {
       this.analyserNode.connect(this.audioContext.destination);
 
       this.isContextInitialized = true;
-      console.log("AudioContext initialized successfully.");
+      this.dispatchCustomEvent("contextInitialized", { analyserNode: this.analyserNode });
       return true;
     } catch (error) {
       console.error("AudioEngine: Failed to initialize AudioContext:", error);
@@ -58,6 +62,7 @@ export class AudioEngine implements IAudioEngine {
       this.analyserNode = null;
       this.sourceNode = null;
       this.frequencyDataBuffer = null;
+      this.dispatchCustomEvent("contextInitialized", { analyserNode: null });
       return false;
     }
   }
@@ -78,6 +83,13 @@ export class AudioEngine implements IAudioEngine {
   get lastError(): { code: number; message: string } | null { return this._lastError; }
   get frequencyData(): Uint8Array | null { return this._frequencyData; }
 
+  /**
+   * Loads a new music track into the engine.
+   * Stops current playback and replaces the audio source.
+   *
+   * @param music The Music object containing URL and metadata.
+   * @param startTime Optional time (in seconds) to seek to once the track is ready.
+   */
   public async load(music: Music, startTime?: number): Promise<void> {
     this._lastError = null;
     this.seekOnReadyTime = startTime ?? null;
@@ -132,6 +144,13 @@ export class AudioEngine implements IAudioEngine {
     }
   }
 
+  /**
+   * Initiates playback of the loaded track.
+   * Resumes if paused, starts from the beginning or `startTime` if loaded.
+   * Initializes the AudioContext on the first play attempt if necessary.
+   *
+   * @returns A promise that resolves when playback begins or rejects if an error occurs.
+   */
   public async play(): Promise<void> {
     if (!this.isContextInitialized) {
       if (!this.initAudioContext()) {
@@ -179,12 +198,20 @@ export class AudioEngine implements IAudioEngine {
     }
   }
 
+  /**
+   * Pauses the currently playing audio.
+   */
   public pause(): void {
     if (this._playbackState === PlaybackState.PLAYING) {
       this.audio.pause();
     }
   }
 
+  /**
+   * Seeks to a specific time within the loaded track.
+   *
+   * @param time The time in seconds to seek to. Clamped between 0 and track duration.
+   */
   public seek(time: number): void {
     const duration = this.duration;
     const seekableTime = Math.max(0, Math.min(time, duration));
@@ -209,12 +236,22 @@ export class AudioEngine implements IAudioEngine {
     }
   }
 
+  /**
+   * Sets the audio volume.
+   *
+   * @param volume A value between 0.0 (silent) and 1.0 (maximum).
+   */
   public setVolume(volume: number): void {
     const safeVolume = Math.max(0, Math.min(1, volume));
     this.audio.volume = safeVolume;
     this.audio.muted = safeVolume === 0;
   }
 
+  /**
+   * Releases resources used by the AudioEngine instance.
+   * Stops playback, removes event listeners, cleans up Media Session and AudioContext.
+   * The instance should not be used after calling dispose.
+   */
   public dispose(): void {
     this.stopFrequencyAnalysis();
     this.audio.pause();
@@ -223,7 +260,6 @@ export class AudioEngine implements IAudioEngine {
     this.cleanupMediaSession();
     this._currentMusic = null;
     this.setPlaybackState(PlaybackState.IDLE);
-    console.log("AudioEngine disposed.");
 
     if (this.isContextInitialized && this.audioContext) {
       this.sourceNode?.disconnect();
@@ -231,10 +267,16 @@ export class AudioEngine implements IAudioEngine {
       this.sourceNode = null;
       this.analyserNode = null;
       this.isContextInitialized = false;
-      console.log("AudioContext resources released.");
     }
   }
 
+  /**
+   * Registers an event listener for the specified event type.
+   *
+   * @param type The name of the event to listen for.
+   * @param listener The function to call when the event is dispatched.
+   * @param options Optional configuration object for the listener.
+   */
   public addEventListener<K extends keyof AudioEngineEventMap>(
     type: K,
     listener: (this: IAudioEngine, ev: AudioEngineEventMap[K]) => any,
@@ -243,6 +285,13 @@ export class AudioEngine implements IAudioEngine {
     this.eventTarget.addEventListener(type, listener as EventListener, options);
   }
 
+  /**
+   * Removes a previously registered event listener.
+   *
+   * @param type The name of the event.
+   * @param listener The listener function to remove.
+   * @param options Optional configuration object used when adding the listener.
+   */
   public removeEventListener<K extends keyof AudioEngineEventMap>(
     type: K,
     listener: (this: IAudioEngine, ev: AudioEngineEventMap[K]) => any,
@@ -251,6 +300,13 @@ export class AudioEngine implements IAudioEngine {
     this.eventTarget.removeEventListener(type, listener as EventListener, options);
   }
 
+  /**
+   * Dispatches an event of the specified type.
+   * (Typically used internally, but part of the IAudioEngine interface).
+   *
+   * @param event The event object to dispatch.
+   * @returns boolean Indicating if the event was dispatched successfully.
+   */
   public dispatchEvent<K extends keyof AudioEngineEventMap>(event: AudioEngineEventMap[K]): boolean {
     return this.eventTarget.dispatchEvent(event);
   }

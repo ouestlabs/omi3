@@ -1,16 +1,16 @@
-import type { IAudioEngine, Music, PlaybackState } from '../../interfaces';
-import {
-  initialAnalyserNode,
-  initialCurrentMusic,
-  initialCurrentTime,
-  initialDuration,
-  initialError,
-  initialFrequencyData,
-  initialIsBuffering,
-  initialIsMuted,
-  initialPlaybackState,
-  initialVolume
-} from "../context";
+import { type IAudioEngine, type Music, PlaybackState } from '../../interfaces';
+
+// --- Initial State Values ---
+const initialCurrentTime = 0;
+const initialDuration = 0;
+const initialVolume = 1;
+const initialIsMuted = false;
+const initialPlaybackState = PlaybackState.IDLE;
+const initialIsBuffering = false;
+const initialError = null;
+const initialCurrentMusic = null;
+const initialFrequencyData = null;
+const initialAnalyserNode = null;
 
 export interface AudioEngineState {
   currentTime: number;
@@ -53,6 +53,10 @@ type Action =
   | { type: 'SET_ANALYSER_NODE'; payload: AnalyserNode | null }
   | { type: 'RESET_STATE' };
 
+/**
+ * Reducer function to manage the state of the AudioProvider based on dispatched actions.
+ * Takes the current state and an action, and returns the new state.
+ */
 export function reducer(state: AudioEngineState, action: Action): AudioEngineState {
   switch (action.type) {
     case 'SET_ENGINE_INSTANCE':

@@ -1,6 +1,6 @@
 "use client";
 
-import { useAudioEngine } from "@omi3/audio/react";
+import { useAudioState } from "@omi3/audio/react";
 import { Skeleton } from "@omi3/ui/components/skeleton";
 import { cn } from "@omi3/ui/lib/utils";
 import { MusicIcon } from "lucide-react";
@@ -26,7 +26,7 @@ function AudioTrackArtwork({ className, iconClassName, ...props }: AudioTrackArt
 type AudioTrackInfoProps = React.ComponentProps<"div">;
 
 export function AudioTrackInfo({ className, ...props }: AudioTrackInfoProps) {
-  const { isLoading, error, currentMusic } = useAudioEngine();
+  const { isLoading, error, currentMusic } = useAudioState();
 
   if (isLoading) {
     return (

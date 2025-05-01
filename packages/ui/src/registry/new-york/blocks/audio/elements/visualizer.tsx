@@ -1,6 +1,9 @@
 "use client";
 
-import { PlaybackState, useAudioEngine } from "@omi3/audio/react";
+import {
+  PlaybackState,
+  useAudioState
+} from "@omi3/audio/react";
 import { cn } from "@omi3/ui/lib/utils";
 import { drawVisualization } from "@omi3/utils";
 import { useEffect, useRef, useState } from "react";
@@ -20,7 +23,7 @@ export function AudioVisualizer({
   lineColor = "oklch(84.94% 0.2069 128.89)",
   ...props
 }: AudioVisualizerProps) {
-  const { analyserNode, playbackState } = useAudioEngine();
+  const { playbackState, analyserNode } = useAudioState();
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animationFrameId = useRef<number | null>(null);
   const dataArray = useRef<Uint8Array | null>(null);
@@ -58,7 +61,9 @@ export function AudioVisualizer({
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
-    if (!canvas || !ctx || currentWidth === 0 || height === 0) { return; }
+    if (!canvas || !ctx || currentWidth === 0 || height === 0) {
+      return;
+    }
 
     if (canvas.width !== currentWidth) {
       canvas.width = currentWidth;
