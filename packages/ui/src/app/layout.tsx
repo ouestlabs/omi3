@@ -5,6 +5,8 @@ import "@omi3/ui/globals.css";
 import { montserrat, silk } from '@omi3/ui/assets';
 
 import Script from "next/script";
+import { Header } from './_components/header';
+import { Footer } from './_components/footer';
 
 export const metadata: Metadata = {
   title: "AudioCn",
@@ -24,10 +26,11 @@ export default function RootLayout({
         <ThemeProvider attribute="class"
           defaultTheme="system"
           disableTransitionOnChange
-          enableSystem>
-
+          enableSystem >
           <div className="max-w-5xl w-full mx-auto flex flex-col min-h-svh">
+            <Header />
             {children}
+            <Footer />
           </div>
           <Toaster />
         </ThemeProvider>

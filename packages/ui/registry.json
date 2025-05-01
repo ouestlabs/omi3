@@ -32,7 +32,7 @@
         "dropdown-menu",
         "tooltip",
         "skeleton",
-        "http://localhost:3000/registry/spinner"
+        "https://omi3.ouestlabs.com/registry/spinner"
       ],
       "files": [
         {
