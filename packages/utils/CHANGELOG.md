@@ -1,5 +1,12 @@
 # @omi3/utils
 
+## 2.0.2
+
+### Patch Changes
+
+- 377072e: - chore(cleanup): remove obsolete GitHub workflow files for build, PR checks, and audio interfaces
+  - chore(cleanup): remove obsolete GitHub workflow files for build, PR checks, and audio interfaces
+
 ## 2.0.1
 
 ### Patch Changes
