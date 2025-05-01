@@ -1,16 +1,15 @@
-import { Toaster } from '@omi3/ui/components/sonner';
-import { ThemeProvider } from '@omi3/ui/theme';
 import type { Metadata } from "next";
 import "@omi3/ui/globals.css";
-import { montserrat, silk } from '@omi3/ui/assets';
+import { geist } from '@omi3/ui/assets';
 
 import Script from "next/script";
 import { Header } from './_components/header';
 import { Footer } from './_components/footer';
+import { Providers } from './_providers';
 
 export const metadata: Metadata = {
-  title: "AudioCn",
-  description: "AudioCn is a registry for audio components.",
+  title: "Omi3 registry",
+  description: "audiocn is a registry for audio components.",
 };
 
 export default function RootLayout({
@@ -21,21 +20,17 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${montserrat.className} antialiased`}
+        className={`${geist.className} antialiased`}
       >
-        <ThemeProvider attribute="class"
-          defaultTheme="system"
-          disableTransitionOnChange
-          enableSystem >
+        <Providers>
           <div className="max-w-5xl w-full mx-auto flex flex-col min-h-svh">
             <Header />
             {children}
             <Footer />
           </div>
-          <Toaster />
-        </ThemeProvider>
-        <Script src="https://unpkg.com/react-scan/dist/auto.global.js" />
+          <Script src="https://unpkg.com/react-scan/dist/auto.global.js" />
+        </Providers>
       </body>
-    </html>
+    </html >
   );
 }

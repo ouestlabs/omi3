@@ -1,49 +1,40 @@
-import { CodeBlock, CodeBlockCode } from "../../components/code-block";
-import { ScriptBlock } from "../../components/script-block";
+import { CodeBlock, CodeBlockCode } from "@omi3/ui/components/code-block";
+import { ScriptBlock } from "@omi3/ui/components/script-block";
 import Link from "next/link";
-
-export const installCommands = {
-  pnpm: "pnpm dlx shadcn@latest add 'https://omi3.ouestlabs.com/registry/audio-player'",
-  npm: "npm run shadcn@latest add 'https://omi3.ouestlabs.com/registry/audio-player'",
-  yarn: "npx shadcn@latest add 'https://omi3.ouestlabs.com/registry/audio-player'",
-  bun: "bunx --bun shadcn@latest add 'https://omi3.ouestlabs.com/registry/audio-player'",
-};
-
-export const initCommands = {
-  pnpm: "pnpm dlx shadcn@latest init",
-  npm: "npx shadcn@latest init",
-  yarn: "npx shadcn@latest init",
-  bun: "bunx --bun shadcn@latest init",
-};
+import { addAudioPlayerCommands, initShadcnCommands } from "@omi3/ui/lib/commands";
 
 export const usageExample = `
-import { AudioProvider } from '@omi3/audio/react';
 import { AudioPlayer } from '@/components/ui/audio';
 
 export default function MyPage() {
   return (
-      <main className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4">My Awesome Audio Player</h1>
-        <AudioPlayer />
-      </main>
+    <main className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-4">My Awesome Audio Player</h1>
+      {/*
+        AudioPlayer includes its own Provider by default for quick use.
+        See the component's code comments for how to move the Provider
+        to a layout for global state if needed.
+      */}
+      <AudioPlayer />
+    </main>
   );
 }
 `;
 
-<article className="prose prose-neutral dark:prose-invert prose-h1:text-xl prose-h1:font-medium prose-h2:mt-12 prose-h2:scroll-m-20 prose-h2:text-lg prose-h2:font-medium prose-h3:text-base prose-h3:font-medium prose-h4:font-medium prose-h5:text-base prose-h5:font-medium prose-h6:text-base prose-h6:font-medium prose-strong:font-medium">
+# `@omi3/ui`
 
-# Introduction to `audiocn`
-
-`audiocn` provides UI components for the Omi3 project, specifically focused on audio features, distributed using a registry approach inspired by Shadcn/ui.
+UI components for the Omi3 project, distributed via a `shadcn/ui` registry.
 
 ## Philosophy
 
-This is **not** a traditional component library you install from npm. Instead, you add individual components directly into your project's codebase using the command line.
+**This is not a traditional component library.**
 
-*   **Open Code:** You get the source code for maximum flexibility.
-*   **Ownership:** Components live in your project for easy customization.
-*   **Composable:** Designed to work together seamlessly.
-*   **Foundation:** Built on Radix UI and Tailwind CSS.
+Instead of installing a monolithic package, you add individual components directly to your project using a command-line interface. This approach provides several benefits:
+
+*   **Open Code:** Full source code access for transparency and customization.
+*   **Ownership:** Components live in your project for complete control.
+*   **Composable:** Designed for seamless integration.
+*   **Foundation:** Built on Radix UI & Tailwind CSS for accessibility and customization.
 
 Learn more about the philosophy at:
 <Link href="https://ui.shadcn.com/docs" target="_blank" rel="noopener noreferrer" className="font-medium text-primary underline underline-offset-4">
@@ -52,39 +43,58 @@ Learn more about the philosophy at:
 
 ## Installation & Usage
 
-Before adding components, ensure you have initialized the Shadcn/ui CLI in your project:
+To add components from the Omi3 UI registry to your project:
 
-<div className="not-prose">
-<ScriptBlock
-  commandMap={initCommands}
-  label="Initialize Shadcn/ui CLI"
-  codeLanguage="bash"
-/>
-</div>
+1.  **Ensure Shadcn/ui CLI is initialized:** If you haven't already, initialize Shadcn/ui in your target project (e.g., your Next.js app):
 
-Follow the prompts to configure the paths.
+    <div className="not-prose">
+    <ScriptBlock
+      commandMap={initShadcnCommands}
+      label="Initialize Shadcn/ui CLI"
+      codeLanguage="bash"
+    />
+    </div>
 
-Then, add components from the Omi3 registry:
+    Follow the prompts to configure paths according to your project structure.
 
-<div className="not-prose">
-<ScriptBlock commandMap={installCommands} label="Add the Audio Player" />
-</div>
+2.  **Add Components from the Omi3 Registry:** Use the Shadcn CLI (`dlx`, `npx`, `bunx`) to add components by specifying the Omi3 registry URL:
 
-This command copies the `audio-player` block and its dependencies into your configured components directory (e.g., `components/ui/`).
+    <div className="not-prose">
+    <ScriptBlock commandMap={addAudioPlayerCommands} label="Add the Audio Player" />
+    </div>
+
+    *Replace `audio-player` with the specific component block you want to add.*
+
+    This command will copy the component's source code, along with any necessary dependencies (like specific Radix primitives or utility functions) directly into your project, typically under the components path you configured during `init`.
 
 ## Usage Example
 
-After adding the `audio-player`, you can use it like any other component. Remember to wrap the relevant part of your application with the `AudioProvider` from `@omi3/audio/react`:
+After adding the `audio-player`, you can use it like any other component. The example below shows a basic integration:
 
 <div className="not-prose">
 <CodeBlock>
-  <CodeBlockCode code={usageExample} language="jsx" />
+  <CodeBlockCode code={usageExample} language="tsx" />
 </CodeBlock>
 </div>
 
+## Available Components
+
+### Audio Player Block (`audio-player`)
+
+*   A complete audio player component including:
+    *   File Input (`AudioFileInput`)
+    *   Track Information Display (`AudioTrackInfo`)
+    *   Seek Bar (`AudioSeekBar`)
+    *   Playback Controls (`AudioControls`)
+    *   Volume Control (`AudioVolume`)
+    *   Audio Visualizer (`AudioVisualizer`)
+*   Relies on `@omi3/audio` for core functionality and state management via React Context.
+
+*(More components may be added to the registry over time.)*
+
 ## Customization
 
-Since the code resides in your project, you can modify the component files (e.g., `components/ui/audio/index.tsx` and its elements) directly to adjust styles or behavior.
+Since the component code is copied directly into your project (e.g., into `./components/ui/`), you can modify the source files freely to suit your specific needs. Adjust styles, change behavior, or extend functionality as required.
 
 ## Dependencies
 
@@ -92,9 +102,8 @@ Components generally rely on:
 
 *   React
 *   Tailwind CSS
-*   Radix UI Primitives
-*   `@omi3/audio` (for audio components)
-*   `@omi3/utils`
+*   Radix UI Primitives (installed automatically when adding components)
+*   `@omi3/audio` (for audio-related components)
+*   `@omi3/utils` (for shared utilities)
 *   `clsx`, `tailwind-merge`
 
-</article>

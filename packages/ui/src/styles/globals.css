@@ -197,20 +197,16 @@
 			height: 0;
 		}
 	}
-}
 
-@keyframes spinner-leaf-fade {
-	0%,
-	100% {
-		opacity: 0;
+	@keyframes spinner-leaf-fade {
+		0%,
+		100% {
+			opacity: 0;
+		}
+		50% {
+			opacity: 1;
+		}
 	}
-	50% {
-		opacity: 1;
-	}
-}
-
-.animate-spinner-leaf-fade {
-	animation: spinner-leaf-fade 800ms linear infinite;
 }
 
 @layer base {
