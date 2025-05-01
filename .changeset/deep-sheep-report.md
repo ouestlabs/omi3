@@ -6,4 +6,5 @@
 "@omi3/site": patch
 ---
 
-chore(cleanup): remove obsolete GitHub workflow files for build, PR checks, and audio interfaces
+- chore(cleanup): remove obsolete GitHub workflow files for build, PR checks, and audio interfaces
+- chore(cleanup): remove obsolete GitHub workflow files for build, PR checks, and audio interfaces
