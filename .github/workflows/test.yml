@@ -1,4 +1,4 @@
-name: Site e2e Tests
+name: Tests
 on:
   push:
     branches: [main]
