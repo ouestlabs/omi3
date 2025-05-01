@@ -8,8 +8,7 @@
     "build": "next build",
     "start": "next start",
     "clean": "rm -rf .next .turbo node_modules",
-    "lint": "biome check --write .",
-    "test": "playwright test"
+    "lint": "biome check --write ."
   },
   "dependencies": {
     "@omi3/audio": "workspace:*",
