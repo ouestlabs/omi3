@@ -31,19 +31,22 @@ The project is organized as follows:
 ├── apps/ # Main applications
 │   └── site/ # Main website and demo
 ├── packages/ # Shared packages
-│   ├── audio/ # Core audio processing library
-│   ├── ui/ # Reusable UI components
+│   ├── audio/ # Core audio processing library & React integration
+│   ├── ui/ # Reusable UI components registry, including audio player elements.
 │   └── utils/ # Utility functions
 └── tools/ # Development tools and configurations
-    ├── eslint/ # ESLint configuration
-    ├── tailwind/ # Tailwind CSS configuration
-    ├── tsup/ # tsup configuration
     └── typescript/ # TypeScript configurations
 ```
 
+### Packages
+
+*   **`@omi3/audio`**: ([packages/audio/README.md](./packages/audio/README.md)) Core audio engine and React hooks/provider for state management.
+*   **`@omi3/ui`**: Reusable UI components registry, including audio player elements.
+*   **`@omi3/utils`**: Shared utility functions (e.g., time formatting).
+
 ## Getting Started
 
-1. Ensure you have `Node.js (>=18)`, `pnpm`, and `make` installed.
+1. Ensure you have `Node.js (>=22)`, `pnpm`, and `make` installed.
 2. Clone the repository.
 3. Install dependencies:
    ```
@@ -56,44 +59,9 @@ The project is organized as follows:
 
 ## Development Workflow
 
-We use a Makefile to streamline our development process. Here are the main commands:
+We use `make` to simplify common development tasks like updating branches, cleaning up, and more.
 
-- Update your current branch or a specific branch with the latest changes from `main`:
-
-  ```
-  make update
-  ```
-
-  or
-
-  ```
-  make update BRANCH=your-branch-name
-  ```
-
-- Synchronize the `main` branch with `dev`:
-
-  ```
-  make sync-main
-  ```
-
-- Clean up local branches that have been merged:
-
-  ```
-  make clean
-  ```
-
-- Prune remote branches that no longer exist:
-
-  ```
-  make prune
-  ```
-
-- For more information on available commands:
-  ```
-  make help
-  ```
-
-Note: The main production branch is `main`. Always make sure you're updating from and merging into the correct branch for your specific task.
+For a full list of commands and detailed instructions, please refer to the [Development Workflow section in CONTRIBUTING.md](./CONTRIBUTING.md#development-workflow) or run `make help` in your terminal.
 
 ## Contributing
 

@@ -1,16 +1,25 @@
 import { cn } from "../../lib/utils";
 import { buttonVariants } from "../../components/button";
 import { ThemeToggler } from "../../theme/toogler";
+import Link from 'next/link';
 
 export function Header() {
   return (
-    <header className="flex justify-between items-center p-2">
-      <h2 className="text-2xl font-bold">
-        audiocn/ui
-      </h2>
-      <div className="flex items-center gap-2">
+    <header className="sticky top-0 z-50 w-full border-b bg-background flex justify-between items-center p-2">
+      <Link href="/" aria-label="audiocn Home">
+        <h2 className="text-lg font-bold">
+          audiocn
+        </h2>
+      </Link>
+
+      <nav className="flex items-center gap-2">
+        <Link href="/docs" className={cn(buttonVariants({ variant: "ghost" }))}>
+          Docs
+        </Link>
         <a
           href="https://github.com/ouestlabs/omi3"
+          target="_blank"
+          rel="noopener noreferrer"
           className={cn(buttonVariants({ variant: "outline", size: "icon" }))}
         >
           <svg
@@ -30,7 +39,7 @@ export function Header() {
           </svg>
         </a>
         <ThemeToggler />
-      </div>
+      </nav>
     </header>
   );
 }

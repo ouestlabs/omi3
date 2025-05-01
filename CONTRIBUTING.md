@@ -64,4 +64,31 @@ Enhancement suggestions are also tracked as GitHub issues. When creating an enha
   - Class: `{ClassName}`
   - Method: `{ClassName.methodName}`
 
+## Development Workflow
+
+We use `make` to streamline common development tasks. Here are the main commands:
+
+*   **Update your branch:** Fetch the latest changes from the `main` branch and rebase your current branch (or a specified one) onto it.
+    ```bash
+    make update
+    # or
+    make update BRANCH=your-branch-name
+    ```
+*   **Sync `main` from `dev`:** Ensure the `main` branch reflects the stable state of `dev`. (Use with caution, typically done before releases).
+    ```bash
+    make sync-main
+    ```
+*   **Clean local branches:** Delete local branches that have already been merged into your current HEAD.
+    ```bash
+    make clean
+    ```
+*   **Prune remote branches:** Remove local references to remote branches that no longer exist on the origin.
+    ```bash
+    make prune
+    ```
+*   **List all commands:** Show all available `make` commands and their descriptions.
+    ```bash
+    make help
+    ```
+
 Thank you for contributing to `Omi3`!

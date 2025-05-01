@@ -1,7 +1,4 @@
 import { AudioPlayer } from "@omi3/ui/registry/new-york/blocks/audio/player";
-import { ThemeToggler } from "@omi3/ui/theme/toogler";
-import { cn } from "../lib/utils";
-import { buttonVariants } from "../components/button";
 import { ScriptBlock } from "../components/script-block";
 
 const customCommandMap = {
