@@ -32,16 +32,16 @@
     "access": "public"
   },
   "author": {
-    "name": "Omi3",
+    "name": "Lucien Loua",
     "url": "https://github.com/lucien-loua"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/lucien-loua/omi3.git"
+    "url": "https://github.com/ouestlabs/omi3.git"
   },
-  "homepage": "https://github.com/lucien-loua/omi3/tree/main/packages/audio#readme",
+  "homepage": "https://github.com/ouestlabs/omi3/tree/main/packages/audio#readme",
   "bugs": {
-    "url": "https://github.com/lucien-loua/omi3/issues"
+    "url": "https://github.com/ouestlabs/omi3/issues"
   },
   "keywords": [
     "audio",

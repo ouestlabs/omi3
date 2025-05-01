@@ -27,11 +27,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/xyhomi3/omi3.git"
+    "url": "https://github.com/ouestlabs/omi3.git"
   },
-  "homepage": "https://github.com/xyhomi3/omi3/tree/main/packages/utils#readme",
+  "homepage": "https://github.com/ouestlabs/omi3/tree/main/packages/utils#readme",
   "bugs": {
-    "url": "https://github.com/xyhomi3/omi3/issues"
+    "url": "https://github.com/ouestlabs/omi3/issues"
   },
   "dependencies": {},
   "devDependencies": {
