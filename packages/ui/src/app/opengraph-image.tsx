@@ -37,7 +37,7 @@ export default async function Image() {
           <div
             key={i.toString()}
             style={{
-              width: "4px",
+              width: "5px",
               height: `${Math.sin(i * 0.2) * 100 + 500}px`,
               background: "#B0FC31",
               margin: "0 8px",
