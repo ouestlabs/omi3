@@ -8,8 +8,8 @@ import { Footer } from './_components/footer';
 import { Providers } from './_providers';
 
 export const metadata: Metadata = {
-  title: "Omi3 registry",
-  description: "audiocn is a registry for audio components.",
+  title: "@omi3/ui - audio components for the web",
+  description: "@omi3/ui is a registry for audio components.",
 };
 
 export default function RootLayout({
