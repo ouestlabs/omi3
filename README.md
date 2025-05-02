@@ -69,8 +69,4 @@ We welcome contributions from the community! Please read our [Contributing Guide
 
 ## License
 
-`Omi3` is open-source software licensed under the Apache License 2.0. See the [LICENSE](LICENSE) file for more details.
-
----
-
-<a href="https://www.producthunt.com/posts/omi3?embed=true&utm_source=badge-featured&utm_medium=badge&utm_souce=badge-omi3" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=487676&theme=light" alt="Omi3 - Audio&#0032;processing&#0032;and&#0032;playback&#0032;capabilities&#0032;for&#0032;web&#0046; | Product Hunt" width="256" height="64" /></a>
+`Omi3` is open-source software licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
