@@ -43,7 +43,7 @@
     "@next/mdx": "^15.3.1",
     "@omi3/audio": "workspace:*",
     "@omi3/utils": "workspace:*",
-    "@radix-ui/react-dropdown-menu": "^2.1.12",
+    "@radix-ui/react-dropdown-menu": "^2.1.14",
     "@radix-ui/react-label": "^2.1.4",
     "@radix-ui/react-progress": "^1.1.0",
     "@radix-ui/react-select": "^2.2.2",
