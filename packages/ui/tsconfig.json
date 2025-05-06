@@ -9,6 +9,9 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "@/*": [
+        "./src/*"
+      ],
       "@omi3/ui/*": [
         "./src/*"
       ]

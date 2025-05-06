@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "../../lib/utils";
-import { buttonVariants } from "../../components/button";
+import { buttonVariants } from "../../components/ui/button";
 import { ThemeToggler } from "../../theme/toogler";
 import Link from 'next/link';
 import { useGithubStars } from "../../hooks/use-github";

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@omi3/ui/components/button";
+import { Button } from "@/components/ui/button";
 import { cn } from "@omi3/ui/lib/utils";
 import { motion } from "motion/react";
 import { Check, Copy } from "lucide-react";
@@ -12,8 +12,8 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@omi3/ui/components/tooltip";
-import { Label } from "@omi3/ui/components/label";
+} from "@/components/ui/tooltip";
+import { Label } from "@/components/ui/label";
 
 interface ScriptBlockProps extends HTMLAttributes<HTMLDivElement> {
   showMultiplePackageOptions?: boolean;

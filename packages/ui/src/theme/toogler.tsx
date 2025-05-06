@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@omi3/ui/components/button";
+import { Button } from "@/components/ui/button";
 import { useTheme } from "@omi3/ui/hooks/use-theme";
 import { Moon, Sun } from "lucide-react";
 export function ThemeToggler() {

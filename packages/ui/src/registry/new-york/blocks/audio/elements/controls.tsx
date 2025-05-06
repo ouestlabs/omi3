@@ -4,15 +4,15 @@ import {
   PlaybackState,
   useAudio
 } from "@omi3/audio/react";
-import { Button } from "@omi3/ui/components/button";
-import { Spinner } from "@omi3/ui/components/spinner";
+import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@omi3/ui/components/tooltip";
-import { cn } from "@omi3/ui/lib/utils";
+} from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 import { Pause, Play, SkipBack, SkipForward } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 

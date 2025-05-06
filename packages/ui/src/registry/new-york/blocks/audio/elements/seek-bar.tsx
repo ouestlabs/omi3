@@ -5,8 +5,8 @@ import {
   PlaybackState,
   useAudio
 } from "@omi3/audio/react";
-import { Slider } from "@omi3/ui/components/slider";
-import { cn } from "@omi3/ui/lib/utils";
+import { Slider } from "@/components/ui/slider";
+import { cn } from "@/lib/utils";
 import { formatDuration, formatSecondsToISO8601 } from "@omi3/utils";
 import { useEffect, useState } from "react";
 

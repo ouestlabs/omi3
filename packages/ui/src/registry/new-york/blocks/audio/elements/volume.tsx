@@ -3,14 +3,14 @@
 import {
   useAudio,
 } from "@omi3/audio/react";
-import { Button } from "@omi3/ui/components/button";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from "@omi3/ui/components/dropdown-menu";
-import { Slider } from "@omi3/ui/components/slider";
-import { cn } from "@omi3/ui/lib/utils";
+} from "@/components/ui/dropdown-menu";
+import { Slider } from "@/components/ui/slider";
+import { cn } from "@/lib/utils";
 import { Volume, Volume1, Volume2, VolumeX } from "lucide-react";
 import { useCallback } from "react";
 
