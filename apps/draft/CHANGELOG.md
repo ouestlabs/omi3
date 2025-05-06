@@ -1,5 +1,12 @@
 # @omi3/site
 
+## 2.0.4
+
+### Patch Changes
+
+- Updated dependencies [22ccfb1]
+  - @omi3/ui@2.0.4
+
 ## 2.0.3
 
 ### Patch Changes
