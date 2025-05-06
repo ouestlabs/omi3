@@ -22,7 +22,8 @@
       "description": "Simple audio player component",
       "dependencies": [
         "@omi3/utils",
-        "@omi3/audio"
+        "@omi3/audio",
+        "sonner"
       ],
       "registryDependencies": [
         "button",

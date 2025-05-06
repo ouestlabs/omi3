@@ -4,7 +4,7 @@ import {
   PlaybackState,
   useAudioState
 } from "@omi3/audio/react";
-import { cn } from "@omi3/ui/lib/utils";
+import { cn } from "@/lib/utils";
 import { drawVisualization } from "@omi3/utils";
 import { useEffect, useRef, useState } from "react";
 

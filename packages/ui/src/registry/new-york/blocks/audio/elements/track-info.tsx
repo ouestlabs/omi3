@@ -1,8 +1,8 @@
 "use client";
 
 import { useAudioState } from "@omi3/audio/react";
-import { Skeleton } from "@omi3/ui/components/skeleton";
-import { cn } from "@omi3/ui/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 import { MusicIcon } from "lucide-react";
 
 type AudioTrackArtworkProps = React.ComponentProps<"div"> & {
