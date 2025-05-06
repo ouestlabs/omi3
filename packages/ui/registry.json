@@ -8,10 +8,134 @@
       "type": "registry:component",
       "title": "Spinner",
       "description": "A simple spinner component",
+      "dependencies": [
+        "@radix-ui/react-slot"
+      ],
       "files": [
         {
           "path": "src/registry/new-york/ui/spinner.tsx",
           "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "audio-controls",
+      "type": "registry:component",
+      "title": "Audio Controls",
+      "description": "Audio controls component",
+      "dependencies": [
+        "@omi3/utils",
+        "@omi3/audio"
+      ],
+      "registryDependencies": [
+        "button",
+        "tooltip",
+        "https://omi3.ouestlabs.com/registry/spinner"
+      ],
+      "files": [
+        {
+          "path": "src/registry/new-york/blocks/audio/elements/controls.tsx",
+          "target": "components/audio/elements/controls.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "audio-file-input",
+      "type": "registry:component",
+      "title": "Audio File Input",
+      "description": "Audio file input component",
+      "dependencies": [
+        "@omi3/utils",
+        "@omi3/audio",
+        "sonner"
+      ],
+      "registryDependencies": [
+        "input",
+        "label"
+      ],
+      "files": [
+        {
+          "path": "src/registry/new-york/blocks/audio/elements/file-input.tsx",
+          "target": "components/audio/elements/file-input.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "audio-seek-bar",
+      "type": "registry:component",
+      "title": "Audio Seek Bar",
+      "description": "Audio seek bar component",
+      "dependencies": [
+        "@omi3/utils",
+        "@omi3/audio"
+      ],
+      "registryDependencies": [
+        "slider"
+      ],
+      "files": [
+        {
+          "path": "src/registry/new-york/blocks/audio/elements/seek-bar.tsx",
+          "target": "components/audio/elements/seek-bar.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "audio-track-info",
+      "type": "registry:component",
+      "title": "Audio Track Info",
+      "description": "Audio track information component",
+      "dependencies": [
+        "@omi3/audio"
+      ],
+      "registryDependencies": [
+        "skeleton"
+      ],
+      "files": [
+        {
+          "path": "src/registry/new-york/blocks/audio/elements/track-info.tsx",
+          "target": "components/audio/elements/track-info.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "audio-visualizer",
+      "type": "registry:component",
+      "title": "Audio Visualizer",
+      "description": "Audio visualizer component",
+      "dependencies": [
+        "@omi3/utils",
+        "@omi3/audio"
+      ],
+      "files": [
+        {
+          "path": "src/registry/new-york/blocks/audio/elements/visualizer.tsx",
+          "target": "components/audio/elements/visualizer.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "audio-volume",
+      "type": "registry:component",
+      "title": "Audio Volume",
+      "description": "Audio volume control component",
+      "dependencies": [
+        "@omi3/audio"
+      ],
+      "registryDependencies": [
+        "button",
+        "dropdown-menu",
+        "slider"
+      ],
+      "files": [
+        {
+          "path": "src/registry/new-york/blocks/audio/elements/volume.tsx",
+          "target": "components/audio/elements/volume.tsx",
+          "type": "registry:component"
         }
       ]
     },

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "audio-track-info",
+  "type": "registry:component",
+  "title": "Audio Track Info",
+  "description": "Audio track information component",
+  "dependencies": [
+    "@omi3/audio"
+  ],
+  "registryDependencies": [
+    "skeleton"
+  ],
+  "files": [
+    {
+      "path": "src/registry/new-york/blocks/audio/elements/track-info.tsx",
+      "content": "\"use client\";\n\nimport { useAudioState } from \"@omi3/audio/react\";\nimport { Skeleton } from \"@/components/ui/skeleton\";\nimport { cn } from \"@/lib/utils\";\nimport { MusicIcon } from \"lucide-react\";\n\ntype AudioTrackArtworkProps = React.ComponentProps<\"div\"> & {\n  iconClassName?: string;\n};\n\nfunction AudioTrackArtwork({ className, iconClassName, ...props }: AudioTrackArtworkProps) {\n  return (\n    <div\n      className={cn(\n        \"h-10 w-10 flex-shrink-0 flex items-center justify-center bg-muted rounded-sm\",\n        className\n      )}\n      {...props}\n    >\n      <MusicIcon className={cn(\"h-5 w-5 text-muted-foreground\", iconClassName)} />\n    </div>\n  );\n}\n\ntype AudioTrackInfoProps = React.ComponentProps<\"div\">;\n\nexport function AudioTrackInfo({ className, ...props }: AudioTrackInfoProps) {\n  const { isLoading, error, currentMusic } = useAudioState();\n\n  if (isLoading) {\n    return (\n      <div\n        className={cn(\"flex items-center space-x-2 w-full truncate\", className)}\n        {...props}\n        data-state=\"loading\"\n        aria-live=\"polite\"\n        aria-busy=\"true\"\n      >\n        <AudioTrackArtwork />\n        <div className=\"space-y-1\">\n          <Skeleton className=\"h-4 w-[150px]\" />\n          <Skeleton className=\"h-3 w-[100px]\" />\n        </div>\n      </div>\n    );\n  }\n\n  if (error) {\n    return (\n      <div\n        className={cn(\"flex items-center space-x-2 w-full truncate text-destructive\", className)}\n        {...props}\n        data-state=\"error\"\n        role=\"alert\"\n      >\n        <AudioTrackArtwork />\n        <div className=\"space-y-1\">\n          <p className=\"text-sm font-medium\">Error loading track</p>\n          <p className=\"text-xs\">{error.message || \"An unknown error occurred.\"}</p>\n        </div>\n      </div>\n    );\n  }\n\n  if (!currentMusic) {\n    return (\n      <div\n        className={cn(\"flex items-center space-x-2 w-full truncate\", className)}\n        {...props}\n        data-state=\"empty\"\n      >\n        <AudioTrackArtwork />\n        <div className=\"space-y-1\">\n          <p className=\"text-sm font-medium\">No track selected</p>\n          <p className=\"text-xs text-muted-foreground\">Please select a track</p>\n        </div>\n      </div>\n    );\n  }\n\n  const itemScope = true;\n  const itemType = \"https://schema.org/MusicRecording\";\n\n  return (\n    <div\n      className={cn(\"flex items-center space-x-2 w-full truncate\", className)}\n      itemScope={itemScope}\n      itemType={itemType}\n      {...props}\n      data-state=\"loaded\"\n    >\n      {currentMusic.artwork ? (\n        <figure className=\"size-10 flex-shrink-0 aspect-square rounded-sm overflow-hidden\" itemProp=\"image\">\n          <img\n            src={currentMusic.artwork.src}\n            alt={`Artwork for ${currentMusic.title || 'track'}`}\n            className=\"size-full object-cover\"\n          />\n        </figure>\n      ) : (\n        <AudioTrackArtwork />\n      )}\n      <dl className=\"space-y-1 overflow-hidden\">\n        <div>\n          <dt className=\"sr-only\">Title</dt>\n          <dd className=\"text-sm font-medium truncate\" itemProp=\"name\">\n            {currentMusic.title || \"Unknown Title\"}\n          </dd>\n        </div>\n        <div>\n          <dt className=\"sr-only\">Artist</dt>\n          <dd className=\"text-xs text-muted-foreground truncate\" itemProp=\"byArtist\">\n            {currentMusic.artist || \"Unknown Artist\"}\n          </dd>\n        </div>\n      </dl>\n    </div>\n  );\n}\n",
+      "type": "registry:component",
+      "target": "components/audio/elements/track-info.tsx"
+    }
+  ]
+}
