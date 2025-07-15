@@ -52,7 +52,7 @@
   "devDependencies": {
     "@omi3/typescript": "workspace:*",
     "@omi3/utils": "workspace:*",
-    "@types/node": "^22",
+    "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@vitest/coverage-v8": "3.1.2",
