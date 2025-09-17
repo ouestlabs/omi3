@@ -22,7 +22,7 @@
   "devDependencies": {
     "@omi3/typescript": "workspace:*",
     "@playwright/test": "^1.46.1",
-    "@types/node": "^22",
+    "@types/node": "^24",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "typescript": "^5"
