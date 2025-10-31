@@ -1,0 +1,56 @@
+---
+title: Get Started
+description: A quick guide to adding your first component.
+---
+
+This guide provides the essentials for adding **audio ui** components to your React application.
+
+## Prerequisites
+
+Our components are built with [Tailwind CSS v4](https://tailwindcss.com). Before you begin, make sure you have a React project set up with Tailwind CSS.
+
+## Adding Components
+
+You can add components **automatically with the shadcn CLI** or **manually by copying the files**. Both methods work for primitives, particles, and atoms.
+
+### With the CLI
+
+Each component page provides a command to add it to your project automatically. The CLI will create the necessary files and install any dependencies for you.
+
+### Install Components
+
+You can add individual components from the **audio ui** registry. Each component page provides the specific command to add it to your project. For example, to add the audio player:
+
+```bash
+npx shadcn@latest add @audio/ui
+```
+
+### Manually
+
+1.  **Find a component** on the [Components](/docs) or [Particles](/particles) pages.
+2.  **Copy the code** from the **Code** tab.
+3.  **Create a new file** in your project (e.g., `components/ui/button.tsx`) and paste the code.
+4.  **Install any dependencies** listed on the component's page.
+5.  **Import and use** the component in your app.
+
+## Styling
+
+Components are styled with a design token system defined by CSS variables and implemented with Tailwind CSS.
+
+The variables are the same as shadcn/ui, and are fully customizable. You can modify them in your global stylesheet (e.g., `app/globals.css`) to match your design system.
+
+We've introduced a few additional tokens to provide more granular control:
+
+- `--destructive-foreground`: Used for destructive-outline buttons, destructive menu items, badges, and field errors
+- `--info` and `--info-foreground`: Commonly used for info-colored badges, toast types, and alerts
+- `--success` and `--success-foreground`: Used for success-colored badges, toast types, and alerts
+- `--warning` and `--warning-foreground`: Used for warning-colored badges, toast types, and alerts
+
+**Important**: If you manually import components, you must also import these additional tokens in your CSS file (e.g., `app/globals.css`). However, if you use the CLI to import components, these tokens will be automatically imported and configured for you.
+
+## Working with LLMs
+
+We structure the documentation to make the components **AI-friendly**, so language models can understand, reason about, and modify them. To support this, we include:
+
+- A [llms.txt](/llms.txt) file that provides a map of the documentation and component structure for your AI agent.
+- A **Copy Markdown** button on every page, so you can easily share content or feed it to your AI workflows.

@@ -1,0 +1,150 @@
+---
+title: Styling
+description: A guide to styling components with our color system.
+---
+
+## Overview
+
+This UI library is optimized to work with specific color tokens that provide crisp, contrasted borders and enhanced visual depth. Our styling system builds upon [shadcn/ui's CSS variables approach](https://ui.shadcn.com/docs/theming) to ensure consistency and maintainability.
+
+Our components use opaque borders instead of solid ones to ensure crisp, contrasted borders even when backgrounds lack sufficient contrast. These opaque borders mix with bottom shadows to create enhanced contrast and visual depth.
+
+While this color system is optional, it's designed to provide optimal visual results. Using conventional color tokens may result in inconsistent borders and shadows that don't achieve the intended design quality.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTab value="cli">CLI</TabsTab>
+  <TabsTab value="manual">Manual</TabsTab>
+</TabsList>
+
+<TabsPanel value="cli">
+
+```bash
+npx shadcn@latest add @audio/colors-zinc
+```
+
+This command will override your existing color variables. We're currently providing a default configuration based on zinc colors, but we plan to add more color variants in the future to give you more styling options while maintaining the same optimization principles.
+
+</TabsPanel>
+
+<TabsPanel value="manual">
+
+<Steps>
+
+<Step>
+  Copy and paste the following CSS variables into your `globals.css` file:
+</Step>
+
+```css title="app/globals.css"
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  --background: oklch(100% 0 0);
+  --foreground: oklch(21.61% 0.0061 56.04);
+  --primary: oklch(21.61% 0.0061 56.04);
+  --primary-foreground: oklch(98.45% 0.0013 106.42);
+  --secondary: oklch(96.99% 0.0013 106.42);
+  --secondary-foreground: oklch(37.41% 0.0087 67.56);
+  --accent: oklch(97% 0.0013 106.42);
+  --accent-foreground: oklch(37.41% 0.0087 67.56);
+  --card: oklch(98.45% 0.0013 106.42);
+  --card-foreground: oklch(37.41% 0.0087 67.56);
+  --popover: oklch(99.99% 0 0);
+  --popover-foreground: oklch(37.41% 0.0087 67.56);
+  --muted: oklch(86.83% 0.0043 56.37);
+  --muted-foreground: oklch(71.61% 0.0091 56.26);
+  --destructive: oklch(54.68% 0.2078 25.33);
+  --destructive-foreground: oklch(98.45% 0.0013 106.42);
+  --info: oklch(68.47% 0.1479 237.32);
+  --info-foreground: oklch(98.45% 0.0013 106.42);
+  --warning: oklch(76.86% 0.1647 70.08);
+  --warning-foreground: oklch(98.45% 0.0013 106.42);
+  --success: oklch(65.86% 0.15 142.08);
+  --success-foreground: oklch(98.45% 0.0013 106.42);
+  --border: oklch(92.32% 0.0026 48.72);
+  --input: oklch(92.32% 0.0026 48.72);
+  --ring: oklch(55.34% 0.0116 58.07);
+  --radius: 0.5rem;
+}
+
+.dark {
+  --background: oklch(14.67% 0.0041 49.31);
+  --foreground: oklch(98.45% 0.0013 106.42);
+  --primary: oklch(84.94% 0.2069 128.89);
+  --primary-foreground: oklch(14.69% 0.0041 49.25);
+  --secondary: oklch(44.44% 0.0096 73.64);
+  --secondary-foreground: oklch(98.45% 0.0013 106.42);
+  --accent: oklch(37.42% 0.0087 67.56);
+  --accent-foreground: oklch(98.45% 0.0013 106.42);
+  --card: oklch(26.85% 0.0063 34.3);
+  --card-foreground: oklch(98.45% 0.0013 106.42);
+  --popover: oklch(21.61% 0.0061 56.04);
+  --popover-foreground: oklch(98.45% 0.0013 106.42);
+  --muted: oklch(37.42% 0.0087 67.56);
+  --muted-foreground: oklch(71.61% 0.0091 56.26);
+  --destructive: oklch(73.68% 0.2078 25.33);
+  --destructive-foreground: oklch(14.69% 0.0041 49.25);
+  --info: oklch(78.47% 0.1479 237.32);
+  --info-foreground: oklch(14.69% 0.0041 49.25);
+  --warning: oklch(86.86% 0.1647 70.08);
+  --warning-foreground: oklch(14.69% 0.0041 49.25);
+  --success: oklch(75.86% 0.15 142.08);
+  --success-foreground: oklch(14.69% 0.0041 49.25);
+  --border: oklch(37.42% 0.0087 67.56);
+  --input: oklch(37.42% 0.0087 67.56);
+  --ring: oklch(55.34% 0.0116 58.07);
+}
+```
+
+</Steps>
+
+</TabsPanel>
+
+</CodeTabs>
+
+## Extended Color Variables
+
+We've introduced additional color variables beyond the standard shadcn/ui palette to provide more control for specific components like badges and alerts:
+
+- `--destructive-foreground`: Foreground color for destructive actions
+- `--info`: Information state color
+- `--info-foreground`: Foreground color for information states
+- `--success`: Success state color
+- `--success-foreground`: Foreground color for success states
+- `--warning`: Warning state color
+- `--warning-foreground`: Foreground color for warning states
+
+These additional variables ensure consistent styling across components that need to communicate different states or levels of importance.

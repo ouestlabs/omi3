@@ -1,0 +1,99 @@
+---
+title: Cover
+description: A component for displaying a cover image with a fallback.
+
+links:
+  doc: https://base-ui.com/react/components/Cover#api-reference
+---
+
+<ComponentPreview name="cover-demo" />
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTab value="cli">CLI</TabsTab>
+  <TabsTab value="manual">Manual</TabsTab>
+</TabsList>
+
+<TabsPanel value="cli">
+
+```bash
+npx shadcn@latest add @audio/cover
+```
+
+</TabsPanel>
+
+<TabsPanel value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install @base-ui-components/react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource name="cover" title="components/ui/cover.tsx" />
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsPanel>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { Cover, CoverFallback, CoverImage } from "@/components/ui/cover"
+```
+
+```tsx
+<Cover>
+  <CoverImage src="/covers/01.png" alt="Sample Cover" />
+  <CoverFallback>SC</CoverFallback>
+</Cover>
+```
+
+## Examples
+
+### Fallback Only
+
+<ComponentPreview
+  name="cover-fallback"
+  className="[&_[data-slot=code]_pre]:h-[240px] [&_[data-slot=preview]>*]:h-[240px]"
+/>
+
+### Different Sizes
+
+<ComponentPreview
+  name="cover-size"
+  className="[&_[data-slot=code]_pre]:h-[240px] [&_[data-slot=preview]>*]:h-[240px]"
+/>
+
+### Different Radius
+
+<ComponentPreview
+  name="cover-radius"
+  className="[&_[data-slot=code]_pre]:h-[240px] [&_[data-slot=preview]>*]:h-[240px]"
+/>
+
+### Group Covers
+
+<ComponentPreview
+  name="cover-group"
+  className="[&_[data-slot=code]_pre]:h-[240px] [&_[data-slot=preview]>*]:h-[240px]"
+/>
+
+## Comparing with Radix / shadcn
+
+If you’re already familiar with Radix UI and shadcn/ui, this guide highlights the small differences and similarities so you can get started with **coss ui** quickly.
+
+### Quick Checklist
+
+- If you used `asChild` on parts, switch to the `render` prop

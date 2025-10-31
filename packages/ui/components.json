@@ -10,11 +10,11 @@
     "cssVariables": true
   },
   "aliases": {
-    "components": "@omi3/ui/components",
-    "utils": "@omi3/ui/lib/utils",
-    "lib": "@omi3/ui/lib",
-    "hooks": "@omi3/ui/hooks",
-    "ui": "@omi3/ui/components"
+    "components": "audio-ui/components",
+    "utils": "audio-ui/lib/utils",
+    "lib": "audio-ui/lib",
+    "hooks": "audio-ui/hooks",
+    "ui": "audio-ui/components"
   },
   "iconLibrary": "lucide"
 }

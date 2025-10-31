@@ -1,0 +1,13 @@
+# audio ui
+
+**audio-ui** is a collection of beautifully designed, accessible, and composable components for your React apps. Built on top of [Base UI](https://base-ui.com/) and styled with [Tailwind CSS](https://tailwindcss.com/), it’s designed for you to copy, paste, and own.
+
+## Overview
+
+- [Introduction](https://audio-ui.vercel.app/docs/index.md)
+- [Get Started](https://audio-ui.vercel.app/docs/get-started.md)
+- [Roadmap](https://audio-ui.vercel.app/docs/roadmap.md)
+
+## Components
+
+- [Spinner](https://audio-ui.vercel.app/docs/spinner.md)

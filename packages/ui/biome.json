@@ -1,8 +1,15 @@
 {
-	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-	"extends": ["../../biome.json"],
-	"formatter": {
-		"enabled": true,
-		"include": ["./src/**/*.{ts,tsx,js,jsx,json,md}"]
-	}
+  "root": false,
+  "extends": "//",
+  "linter": {
+    "rules": {
+      "style": {
+        "useNamingConvention": "off"
+      },
+      "performance": {
+        "noNamespaceImport": "off",
+        "noBarrelFile": "off"
+      }
+    }
+  }
 }

@@ -1,0 +1,221 @@
+---
+title: Menu
+description: A list of actions in a dropdown, enhanced with keyboard navigation.
+
+links:
+  doc: https://base-ui.com/react/components/menu#api-reference
+---
+
+<ComponentPreview name="menu-demo" />
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTab value="cli">CLI</TabsTab>
+  <TabsTab value="manual">Manual</TabsTab>
+</TabsList>
+<TabsPanel value="cli">
+
+```bash
+npx shadcn@latest add @coss/menu
+```
+
+</TabsPanel>
+
+<TabsPanel value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install @base-ui-components/react
+```
+
+<Step>Import the following variables into your CSS file</Step>
+
+```css
+@theme inline {
+  --color-destructive-foreground: var(--destructive-foreground);
+}
+
+:root {
+  --destructive-foreground: oklch(0.505 0.213 27.518);
+}
+
+.dark {
+  --destructive-foreground: oklch(0.704 0.191 22.216);
+}
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource name="menu" title="components/ui/menu.tsx" />
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsPanel>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  Menu,
+  MenuCheckboxItem,
+  MenuGroup,
+  MenuGroupLabel,
+  MenuItem,
+  MenuPopup,
+  MenuRadioGroup,
+  MenuRadioItem,
+  MenuSeparator,
+  MenuSub,
+  MenuSubPopup,
+  MenuSubTrigger,
+  MenuTrigger,
+} from "@/components/ui/menu"
+```
+
+```tsx
+<Menu>
+  <MenuTrigger>Open</MenuTrigger>
+  <MenuPopup align="start" sideOffset={4}>
+    <MenuItem>Profile</MenuItem>
+    <MenuSeparator />
+
+    <MenuGroup>
+      <MenuGroupLabel>Playback</MenuGroupLabel>
+      <MenuItem>Play</MenuItem>
+      <MenuItem>Pause</MenuItem>
+    </MenuGroup>
+
+    <MenuSeparator />
+
+    <MenuCheckboxItem>Shuffle</MenuCheckboxItem>
+    <MenuCheckboxItem>Repeat</MenuCheckboxItem>
+
+    <MenuSeparator />
+
+    <MenuGroup>
+      <MenuGroupLabel>Sort by</MenuGroupLabel>
+      <MenuRadioGroup>
+        <MenuRadioItem>Artist</MenuRadioItem>
+        <MenuRadioItem>Album</MenuRadioItem>
+        <MenuRadioItem>Title</MenuRadioItem>
+      </MenuRadioGroup>
+    </MenuGroup>
+
+    <MenuSeparator />
+
+    <MenuSub>
+      <MenuSubTrigger>Add to playlist</MenuSubTrigger>
+      <MenuSubPopup>
+        <MenuItem>Jazz</MenuItem>
+        <MenuItem>Rock</MenuItem>
+      </MenuSubPopup>
+    </MenuSub>
+  </MenuPopup>
+</Menu>
+```
+
+## Examples
+
+### Open on Hover
+
+<ComponentPreview name="menu-hover" />
+
+### With Checkbox
+
+<ComponentPreview name="menu-checkbox" />
+
+### With Radio Group
+
+<ComponentPreview name="menu-radio-group" />
+
+### With Link
+
+<ComponentPreview name="menu-link" />
+
+### With Group Label
+
+<ComponentPreview name="menu-group-labels" />
+
+### Nested Menu
+
+<ComponentPreview name="menu-nested" />
+
+### Close on Click
+
+<ComponentPreview name="menu-close-on-click" />
+
+### Open a Dialog
+
+<ComponentPreview name="dialog-from-menu" />
+
+## Comparing with Radix / shadcn
+
+If you’re already familiar with Radix UI and shadcn/ui, this guide highlights the small differences and similarities so you can get started with **coss ui** quickly.
+
+### Prop Mapping
+
+| Component  | Radix UI Prop | Base UI Prop |
+| ---------- | ------------- | ------------ |
+| `MenuItem` | `onSelect`    | `onClick`    |
+
+### Quick Checklist
+
+- If you used `asChild` on parts, switch to the `render` prop
+- Replace `onSelect` → `onClick` on menu items
+- Update import path from `@/components/ui/dropdown-menu` → `@/components/ui/menu`
+- Prefer `Menu*` component names; `DropdownMenu*` remain for legacy
+- Prefer `MenuGroupLabel` instead of `DropdownMenuLabel`
+- Prefer `MenuPopup` instead of `DropdownMenuContent`
+- Prefer `MenuSubPopup` instead of `DropdownMenuSubContent`
+
+### Comparison Examples
+
+<span data-lib="radix-ui">
+```tsx title="shadcn/ui"
+// [!code word:onSelect]
+<DropdownMenu>
+  <DropdownMenuTrigger>Open menu</DropdownMenuTrigger>
+  <DropdownMenuContent>
+    <DropdownMenuItem
+      onSelect={() => {
+        console.log("Dashboard")
+      }}
+    >
+      Dashboard
+    </DropdownMenuItem>
+    <DropdownMenuItem>Settings</DropdownMenuItem>
+    <DropdownMenuItem>Sign out</DropdownMenuItem>
+  </DropdownMenuContent>
+</DropdownMenu>
+```
+</span>
+
+<span data-lib="base-ui">
+```tsx title="coss ui"
+// [!code word:onClick]
+<Menu>
+  <MenuTrigger>Open menu</MenuTrigger>
+  <MenuPopup>
+    <MenuItem
+      onClick={() => {
+        console.log("Dashboard")
+      }}
+    >
+      Dashboard
+    </MenuItem>
+    <MenuItem>Settings</MenuItem>
+    <MenuItem>Sign out</MenuItem>
+  </MenuPopup>
+</Menu>
+```
+</span>

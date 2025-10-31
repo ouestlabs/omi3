@@ -1,0 +1,204 @@
+---
+title: Toast
+description: Generates toast notifications.
+
+links:
+  doc: https://base-ui.com/react/components/toast#api-reference
+---
+
+<ComponentPreview name="toast-demo" />
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTab value="cli">CLI</TabsTab>
+  <TabsTab value="manual">Manual</TabsTab>
+</TabsList>
+<TabsPanel value="cli">
+
+```bash
+npx shadcn@latest add @coss/toast
+```
+
+<Step>Add the `ToastProvider` to your app.</Step>
+
+<span data-lib="base-ui">
+```tsx title="app/layout.tsx"
+// [!code word:import { ToastProvider } from "@/components/ui/toast"]
+// [!code word:<ToastProvider>]
+// [!code word:</ToastProvider>]
+import { ToastProvider } from "@/components/ui/toast"
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <head />
+      <body>
+        <ToastProvider>
+          <main>{children}</main>
+        </ToastProvider>
+      </body>
+    </html>
+  )
+}
+```
+</span>
+
+</TabsPanel>
+
+<TabsPanel value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install @base-ui-components/react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource name="toast" title="components/ui/toast.tsx" />
+
+<Step>Update the import paths to match your project setup.</Step>
+
+<Step>Add the `ToastProvider` to your app.</Step>
+
+<span data-lib="base-ui">
+```tsx title="app/layout.tsx"
+// [!code word:import { ToastProvider } from "@/rcomponents/ui/toast"]
+// [!code word:<ToastProvider>]
+// [!code word:</ToastProvider>]
+import { ToastProvider } from "@/rcomponents/ui/toast"
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <head />
+      <body>
+        <ToastProvider>
+          <main>{children}</main>
+        </ToastProvider>
+      </body>
+    </html>
+  )
+}
+```
+</span>
+
+</Steps>
+
+</TabsPanel>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { toastManager } from "@/components/ui/toast"
+```
+
+```tsx
+toastManager.add({
+  title: "Event has been created",
+  description: "Monday, January 3rd at 6:00pm",
+})
+```
+
+By default, toasts appear in the **bottom-right** corner. You can change this by setting the `position` prop on the `ToastProvider`.
+
+Allowed values: `top-left`, `top-center`, `top-right`, `bottom-left`, `bottom-center`, `bottom-right`. For example:
+
+```tsx
+<ToastProvider position="top-center">{children}</ToastProvider>
+```
+
+## Examples
+
+### With Status
+
+<ComponentPreview name="toast-with-status" />
+
+### Loading
+
+<ComponentPreview name="toast-loading" />
+
+### With Action
+
+<ComponentPreview name="toast-with-action" />
+
+### Promise
+
+<ComponentPreview name="toast-promise" />
+
+### With Varying Heights
+
+<ComponentPreview name="toast-heights" />
+
+## Comparing with Sonner / shadcn
+
+The API is significantly different from shadcn/ui (Sonner). Please review both docs before migrating: [Sonner Docs](https://sonner.emilkowal.ski/) and [shadcn/ui Sonner](https://ui.shadcn.com/docs/components/sonner), and our Base UI toast docs referenced at the top of this page.
+
+### Comparison Examples
+
+**shadcn/ui (Sonner)**
+
+```tsx title="app/layout.tsx"
+import { Toaster } from "@/components/ui/sonner"
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <head />
+      <body>
+        <main>{children}</main>
+        <Toaster />
+      </body>
+    </html>
+  )
+}
+```
+
+```tsx
+toast("Event has been created", {
+  description: "Sunday, December 03, 2023 at 9:00 AM",
+  cancel: {
+    label: "Undo",
+  },
+})
+```
+
+**coss ui (Base UI)**
+
+```tsx title="app/layout.tsx"
+import { ToastProvider } from "@/rcomponents/ui/toast"
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en">
+      <head />
+      <body>
+        <ToastProvider>
+          <main>{children}</main>
+        </ToastProvider>
+      </body>
+    </html>
+  )
+}
+```
+
+```tsx
+onClick={() => {
+  const id = toastManager.add({
+    title: "Event has been created",
+    description: "Sunday, December 03, 2023 at 9:00 AM",
+    type: "success",
+    actionProps: {
+      children: "Undo",
+      onClick: () => toastManager.close(id),
+    },
+  })
+}}
+```

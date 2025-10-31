@@ -1,0 +1,261 @@
+---
+title: Badge
+description: A badge or a component that looks like a badge.
+
+links:
+  doc: https://base-ui.com/react/components/badge#api-reference
+---
+
+<ComponentPreview name="badge-demo" />
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTab value="cli">CLI</TabsTab>
+  <TabsTab value="manual">Manual</TabsTab>
+</TabsList>
+<TabsPanel value="cli">
+
+```bash
+npx shadcn@latest add @coss/badge
+```
+
+</TabsPanel>
+
+<TabsPanel value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install @base-ui-components/react
+```
+
+<Step>Import the following variables into your CSS file</Step>
+
+```css
+@theme inline {
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+}
+
+:root {
+  --destructive-foreground: oklch(0.505 0.213 27.518);
+  --info: oklch(0.623 0.214 259.815);
+  --info-foreground: oklch(0.488 0.243 264.376);
+  --success: oklch(0.696 0.17 162.48);
+  --success-foreground: oklch(0.508 0.118 165.612);
+  --warning: oklch(0.769 0.188 70.08);
+  --warning-foreground: oklch(0.555 0.163 48.998);
+}
+
+.dark {
+  --destructive-foreground: oklch(0.704 0.191 22.216);
+  --info: oklch(0.623 0.214 259.815);
+  --info-foreground: oklch(0.707 0.165 254.624);
+  --success: oklch(0.696 0.17 162.48);
+  --success-foreground: oklch(0.765 0.177 163.223);
+  --warning: oklch(0.769 0.188 70.08);
+  --warning-foreground: oklch(0.828 0.189 84.429);
+}
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource name="badge" title="components/ui/badge.tsx" />
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsPanel>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { Badge } from "@/components/ui/badge"
+```
+
+```tsx
+<Badge>Badge</Badge>
+```
+
+## Link
+
+You can use the [`render`](https://base-ui.com/react/utils/use-render#migrating-from-radix-ui) prop to make another component look like a badge. Here's an example of a link that looks like a badge.
+
+```tsx
+import Link from "next/link"
+
+import { Badge } from "@/components/ui/badge"
+
+export function LinkAsBadge() {
+  return <Badge render={<Link href="/pricing" />}>New</Badge>
+}
+```
+
+## Examples
+
+### Outline
+
+<ComponentPreview
+  name="badge-outline"
+  className="[&_[data-slot=code]_pre]:h-[240px] [&_[data-slot=preview]>*]:h-[240px]"
+/>
+
+### Secondary
+
+<ComponentPreview
+  name="badge-secondary"
+  className="[&_[data-slot=code]_pre]:h-[240px] [&_[data-slot=preview]>*]:h-[240px]"
+/>
+
+### Destructive
+
+<ComponentPreview
+  name="badge-destructive"
+  className="[&_[data-slot=code]_pre]:h-[240px] [&_[data-slot=preview]>*]:h-[240px]"
+/>
+
+### Info
+
+<ComponentPreview
+  name="badge-info"
+  className="[&_[data-slot=code]_pre]:h-[240px] [&_[data-slot=preview]>*]:h-[240px]"
+/>
+
+### Success
+
+<ComponentPreview
+  name="badge-success"
+  className="[&_[data-slot=code]_pre]:h-[240px] [&_[data-slot=preview]>*]:h-[240px]"
+/>
+
+### Warning
+
+<ComponentPreview
+  name="badge-warning"
+  className="[&_[data-slot=code]_pre]:h-[240px] [&_[data-slot=preview]>*]:h-[240px]"
+/>
+
+### Error
+
+<ComponentPreview
+  name="badge-error"
+  className="[&_[data-slot=code]_pre]:h-[240px] [&_[data-slot=preview]>*]:h-[240px]"
+/>
+
+### Small
+
+<ComponentPreview
+  name="badge-sm"
+  className="[&_[data-slot=code]_pre]:h-[240px] [&_[data-slot=preview]>*]:h-[240px]"
+/>
+
+### Large
+
+<ComponentPreview
+  name="badge-lg"
+  className="[&_[data-slot=code]_pre]:h-[240px] [&_[data-slot=preview]>*]:h-[240px]"
+/>
+
+### With Icon
+
+<ComponentPreview
+  name="badge-with-icon"
+  className="[&_[data-slot=code]_pre]:h-[240px] [&_[data-slot=preview]>*]:h-[240px]"
+/>
+
+### With Link
+
+<ComponentPreview
+  name="badge-with-link"
+  className="[&_[data-slot=code]_pre]:h-[240px] [&_[data-slot=preview]>*]:h-[240px]"
+/>
+
+## Comparing with Radix / shadcn
+
+If you’re already familiar with Radix UI and shadcn/ui, this guide highlights the small differences and similarities so you can get started with **coss ui** quickly.
+
+### Prop Mapping
+
+| Component | Radix UI Prop | Base UI Prop |
+| --------- | ------------- | ------------ |
+| `Badge`   | `asChild`     | `render`     |
+
+### Quick Checklist
+
+- Replace `asChild` → `render` on `Badge`
+
+### Additional Notes
+
+**Size Comparison**
+
+Compared to shadcn/ui, our `Badge` component includes size variants for better density control. shadcn/ui badges have a fixed size, while our component offers flexible sizing with `sm`, `default`, and `lg` options.
+
+So, if you want to preserve the original shadcn/ui badge size, you should use the `lg` size in coss ui.
+
+**New Variants**
+
+We've added new colored variants to the existing ones (`default`, `destructive`, `outline`, `secondary`) for better semantic meaning and visual communication:
+
+We've added new colored variants for better semantic meaning:
+
+| Variant   | Description                    |
+| --------- | ------------------------------ |
+| `info`    | Blue badge for information     |
+| `success` | Green badge for success states |
+| `warning` | Yellow badge for warnings      |
+| `error`   | Red badge for errors           |
+
+Ensure you have the following variables imported in your CSS file:
+
+- `--destructive-foreground`
+- `--info`
+- `--info-foreground`
+- `--success`
+- `--success-foreground`
+- `--warning`
+- `--warning-foreground`
+
+### Comparison Example
+
+<span data-lib="radix-ui">
+```tsx title="shadcn/ui"
+// [!code word:asChild]
+import Link from "next/link"
+import { Badge } from "@/components/ui/badge"
+
+export function LinkAsButton() {
+  return (
+    <Badge asChild>
+      <Link href="/login">Login</Link>
+    </Badge>
+  )
+}
+```
+</span>
+
+<span data-lib="base-ui">
+```tsx title="coss ui"
+// [!code word:render]
+import Link from "next/link"
+import { Badge } from "@/components/ui/badge"
+
+export function LinkAsButton() {
+  return (
+    <Badge render={<Link href="/login" />}>Login</Badge>
+  )
+}
+```
+</span>

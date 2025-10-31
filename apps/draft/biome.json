@@ -1,8 +1,0 @@
-{
-	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-	"extends": ["../../biome.json"],
-	"formatter": {
-		"enabled": true,
-		"include": ["./src/**/*.{ts,tsx,js,jsx,json,md}"]
-	}
-}

@@ -1,0 +1,69 @@
+{
+  "name": "audio-engine",
+  "version": "0.0.0",
+  "description": "Audio Engine for Audio UI",
+  "license": "MIT",
+  "author": {
+    "name": "Lucien Loua",
+    "url": "https://github.com/lucien-loua"
+  },
+  "homepage": "https://github.com/ouestlabs/audio-engine/tree/main/packages/audio#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ouestlabs/audio-engine.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ouestlabs/audio-engine/issues"
+  },
+  "type": "module",
+  "module": "./dist/index.js",
+  "files": [
+    "dist/**"
+  ],
+  "scripts": {
+    "build:pkg": "tsup",
+    "clean": "rm -rf .turbo node_modules dist",
+    "dev": "tsup --watch",
+    "lint": "biome check --write .",
+    "lint:fix": "biome check --write --unsafe .",
+    "prepublishOnly": "bun run build:pkg",
+    "test": "bun test"
+  },
+  "sideEffects": false,
+  "types": "./dist/index.d.ts",
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@audio-ui/typescript": "workspace:*",
+    "@audio-ui/utils": "workspace:*",
+    "@happy-dom/global-registrator": "^20.0.10",
+    "@types/bun": "1.3.1",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "tsup": "^8.5.0",
+    "typescript": "^5"
+  },
+  "keywords": [
+    "audio",
+    "html5 audio",
+    "react",
+    "web audio"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./react": {
+      "types": "./dist/react/index.d.ts",
+      "import": "./dist/react/index.js"
+    }
+  }
+}

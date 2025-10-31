@@ -1,0 +1,220 @@
+---
+title: Select
+description: A common form component for choosing a predefined value in a dropdown menu.
+
+links:
+  doc: https://base-ui.com/react/components/select#api-reference
+---
+
+<ComponentPreview
+  name="select-demo"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-64"
+/>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTab value="cli">CLI</TabsTab>
+  <TabsTab value="manual">Manual</TabsTab>
+</TabsList>
+<TabsPanel value="cli">
+
+```bash
+npx shadcn@latest add @coss/select
+```
+
+</TabsPanel>
+
+<TabsPanel value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install @base-ui-components/react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource name="select" title="components/ui/select.tsx" />
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsPanel>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  Select,
+  SelectItem,
+  SelectPopup,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+```
+
+```tsx
+const items = [
+  { label: "Select framework", value: null },
+  { label: "Next.js", value: "next" },
+  { label: "Vite", value: "vite" },
+  { label: "Astro", value: "astro" },
+]
+
+<Select items={items}>
+  <SelectTrigger>
+    <SelectValue />
+  </SelectTrigger>
+  <SelectPopup>
+    {items.map((item) => (
+      <SelectItem key={item.value} value={item}>
+        {item.label}
+      </SelectItem>
+    ))}
+  </SelectPopup>
+  </Select>
+```
+
+## Examples
+
+For accessible labelling and validation, prefer using the `Field` component to wrap selects. See the related example: [Select field](/ui/docs/components/field#select-field).
+
+### Small Size
+
+<ComponentPreview
+  name="select-sm"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-64"
+/>
+
+### Large Size
+
+<ComponentPreview
+  name="select-lg"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-64"
+/>
+
+### Disabled
+
+<ComponentPreview
+  name="select-disabled"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-64"
+/>
+
+### Without Item Alignment
+
+<ComponentPreview
+  name="select-without-alignment"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-64"
+/>
+
+### With Groups
+
+<ComponentPreview
+  name="select-with-groups"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-64"
+/>
+
+### Multiple Selection
+
+<ComponentPreview
+  name="select-multiple"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-64"
+/>
+
+### Form Integration
+
+<ComponentPreview
+  name="select-form"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-64"
+/>
+
+## Comparing with Radix / shadcn
+
+If you’re already familiar with Radix UI and shadcn/ui, this guide highlights the small differences and similarities so you can get started with **coss ui** quickly.
+
+**Important:** Base UI changes how options are provided. Instead of deriving options from children only (Radix pattern), you should pass an `items` prop (array or record) so values and labels are known before hydration. This avoids SSR pitfalls and improves mount performance. Alternatively, provide a function child to `SelectValue` to format the label. See the [Base UI Select docs](https://base-ui.com/react/components/select).
+
+### Prop Mapping
+
+| Component     | Radix UI Prop          | Base UI Prop    |
+| ------------- | ---------------------- | --------------- |
+| `Select`      | `items`                | `items`         |
+| `SelectValue` | `placeholder`          | _removed_       |
+| `SelectPopup` | `alignItemWithTrigger` | _no equivalent_ |
+
+### Quick Checklist
+
+- Set `items` prop on `Select`
+- Remove `placeholder` from `Select`
+- Prefer `SelectPopup` instead of `SelectContent`
+- If you used `asChild` on parts, switch to the `render` prop
+
+### Additional Notes
+
+**Size Comparison**
+
+**coss ui** select sizes are more compact compared to shadcn/ui, making them better suited for dense applications:
+
+| Size      | Height (shadcn/ui) | Height (coss ui) |
+| --------- | ------------------ | ---------------- |
+| `sm`      | 32px               | 28px             |
+| `default` | 36px               | 32px             |
+| `lg`      | -                  | 36px             |
+
+So, for example, if you were using the `default` size in shadcn/ui and you want to preserve the original height, you should use the `lg` size in coss ui.
+
+**New Prop**
+
+Base UI introduces the `alignItemWithTrigger` prop to control whether the `SelectContent` overlaps the `SelectTrigger` so the selected item's text is aligned with the trigger's value text.
+
+### Comparison Example
+
+<span data-lib="radix-ui">
+```tsx title="shadcn/ui"
+// [!code word:placeholder="Select a framework"]
+<Select>
+  <SelectTrigger>
+    <SelectValue placeholder="Select a framework" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="next">Next.js</SelectItem>
+    <SelectItem value="vite">Vite</SelectItem>
+    <SelectItem value="astro">Astro</SelectItem>
+  </SelectContent>
+</Select>
+```
+</span>
+
+<span data-lib="base-ui">
+```tsx title="coss ui"
+// [!code word:alignItemWithTrigger={false}]
+// [!code word:items:2]
+<Select
+  items={[
+    { label: "Select a framework", value: null },
+    { label: "Next.js", value: "next" },
+    { label: "Vite", value: "vite" },
+    { label: "Astro", value: "astro" },
+  ]}
+>
+  <SelectTrigger>
+    <SelectValue />
+  </SelectTrigger>
+  <SelectPopup alignItemWithTrigger={false}>
+    {items.map((item) => (
+      <SelectItem key={item.value} value={item}>
+        {item.label}
+      </SelectItem>
+    ))}
+  </SelectPopup>
+</Select>
+```
+</span>

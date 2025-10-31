@@ -1,0 +1,145 @@
+---
+title: Number Field
+description: A numeric input element with increment and decrement buttons, and a scrub area.
+
+links:
+  doc: https://base-ui.com/react/components/number-field#api-reference
+---
+
+<ComponentPreview
+  name="number-field-demo"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-64"
+/>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTab value="cli">CLI</TabsTab>
+  <TabsTab value="manual">Manual</TabsTab>
+</TabsList>
+<TabsPanel value="cli">
+
+```bash
+npx shadcn@latest add @coss/number-field
+```
+
+</TabsPanel>
+
+<TabsPanel value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install @base-ui-components/react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource
+  name="number-field"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-64"
+  title="components/ui/number-field.tsx"
+/>
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsPanel>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  NumberField,
+  NumberFieldDecrement,
+  NumberFieldGroup,
+  NumberFieldIncrement,
+  NumberFieldInput,
+  NumberFieldScrubArea,
+} from "@/components/ui/number-field"
+```
+
+```tsx
+<NumberField defaultValue={0}>
+  <NumberFieldScrubArea label="Quantity" />
+  <NumberFieldGroup>
+    <NumberFieldDecrement />
+    <NumberFieldInput />
+    <NumberFieldIncrement />
+  </NumberFieldGroup>
+</NumberField>
+```
+
+## Examples
+
+For accessible labelling and validation, prefer using the `Field` component to wrap number fields. See the related example: [Number field](/ui/docs/components/field#number-field).
+
+### Small Size
+
+<ComponentPreview
+  name="number-field-sm"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-64"
+/>
+
+### Large Size
+
+<ComponentPreview
+  name="number-field-lg"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-64"
+/>
+
+### Disabled
+
+<ComponentPreview
+  name="number-field-disabled"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-64"
+/>
+
+### With External Label
+
+<ComponentPreview
+  name="number-field-with-label"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-64"
+/>
+
+### With Scrub
+
+<ComponentPreview
+  name="number-field-with-scrub"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-64"
+/>
+
+### With Range
+
+<ComponentPreview
+  name="number-field-with-range"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-64"
+/>
+
+### With Formatted Value
+
+<ComponentPreview
+  name="number-field-with-formatted-value"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-64"
+/>
+
+### With Step
+
+<ComponentPreview
+  name="number-field-with-step"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-64"
+/>
+
+### Form Integration
+
+<ComponentPreview
+  name="number-field-form"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-64"
+/>

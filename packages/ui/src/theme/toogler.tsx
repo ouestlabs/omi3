@@ -1,19 +1,15 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { useTheme } from "@omi3/ui/hooks/use-theme";
-import { Moon, Sun } from "lucide-react";
+import { MoonIcon, SunIcon } from "@audio-ui/icons";
+import { Button } from "audio-ui/components/button";
+import { useTheme } from "audio-ui/hooks/use-theme";
 export function ThemeToggler() {
-  const { toggleTheme } = useTheme()
+  const { toggleTheme } = useTheme();
   return (
-    <Button
-      onClick={toggleTheme}
-      size="icon"
-      variant="outline"
-    >
-      <Moon className="dark:hidden" />
-      <Sun className="hidden dark:block" />
+    <Button onClick={toggleTheme} size="icon" variant="outline">
+      <MoonIcon className="dark:hidden" />
+      <SunIcon className="hidden dark:block" />
       <span className="sr-only">Toggle theme</span>
     </Button>
-  )
+  );
 }

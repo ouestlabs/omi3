@@ -1,0 +1,48 @@
+{
+	"name": "@audio-ui/icons",
+	"version": "0.0.0",
+	"description": "Audio UI icons",
+	"license": "MIT",
+	"homepage": "https://github.com/ouestlabs/audio-ui/tree/main/packages/icons#readme",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ouestlabs/audio-ui.git"
+	},
+	"bugs": {
+		"url": "https://github.com/ouestlabs/audio-ui/issues"
+	},
+	"type": "module",
+	"files": [
+		"dist/**"
+	],
+	"scripts": {
+		"build:pkg": "tsup",
+		"clean": "rm -rf .turbo node_modules dist",
+		"dev": "tsup --watch",
+		"lint": "biome check --write .",
+		"lint:fix": "biome check --write --unsafe .",
+		"test": "bun test",
+		"type-check": "tsc --noEmit"
+	},
+	"sideEffects": false,
+	"peerDependencies": {
+		"react": "19.2.0",
+		"react-dom": "19.2.0"
+	},
+	"devDependencies": {
+		"@audio-ui/typescript": "workspace:*",
+		"@types/react": "19.2.2",
+		"@types/react-dom": "19.2.2",
+		"tsup": "^8.5.0",
+		"typescript": "^5"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		}
+	}
+}

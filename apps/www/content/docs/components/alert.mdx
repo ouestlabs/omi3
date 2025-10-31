@@ -1,0 +1,136 @@
+---
+title: Alert
+description: A callout for displaying important information.
+---
+
+<ComponentPreview name="alert-demo" />
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTab value="cli">CLI</TabsTab>
+  <TabsTab value="manual">Manual</TabsTab>
+</TabsList>
+<TabsPanel value="cli">
+
+```bash
+npx shadcn@latest add @coss/alert
+```
+
+</TabsPanel>
+
+<TabsPanel value="manual">
+
+<Steps>
+
+<Step>Import the following variables into your CSS file</Step>
+
+```css
+@theme inline {
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+}
+
+:root {
+  --destructive-foreground: oklch(0.704 0.191 22.216);
+  --info: oklch(0.623 0.214 259.815);
+  --info-foreground: oklch(0.707 0.165 254.624);
+  --success: oklch(0.696 0.17 162.48);
+  --success-foreground: oklch(0.765 0.177 163.223);
+  --warning: oklch(0.769 0.188 70.08);
+  --warning-foreground: oklch(0.828 0.189 84.429);
+}
+
+.dark {
+  --destructive-foreground: oklch(0.704 0.191 22.216);
+  --info: oklch(0.623 0.214 259.815);
+  --info-foreground: oklch(0.707 0.165 254.624);
+  --success: oklch(0.696 0.17 162.48);
+  --success-foreground: oklch(0.765 0.177 163.223);
+  --warning: oklch(0.769 0.188 70.08);
+  --warning-foreground: oklch(0.828 0.189 84.429);
+}
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource name="alert" title="components/ui/alert.tsx" />
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsPanel>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+```
+
+```tsx
+<Alert>
+  <AlertTitle>Heads up!</AlertTitle>
+  <AlertDescription>
+    You can add components and dependencies to your app using the cli.
+  </AlertDescription>
+</Alert>
+```
+
+## Examples
+
+### With Icon
+
+<ComponentPreview name="alert-with-icon" />
+
+### With Icon and Action Buttons
+
+<ComponentPreview name="alert-with-icon-action" />
+
+### Info Alert
+
+<ComponentPreview name="alert-info" />
+
+### Success Alert
+
+<ComponentPreview name="alert-success" />
+
+### Warning Alert
+
+<ComponentPreview name="alert-warning" />
+
+### Error Alert
+
+<ComponentPreview name="alert-error" />
+
+## Comparing with shadcn
+
+**New Variants**
+
+We've added new colored variants for better semantic meaning:
+
+| Variant   | Description                       |
+| --------- | --------------------------------- |
+| `info`    | Displays an info alert (blue)     |
+| `success` | Displays a success alert (green)  |
+| `warning` | Displays a warning alert (yellow) |
+| `error`   | Displays a error alert (red)      |
+
+Ensure you have the following variables imported in your CSS file:
+
+- `--destructive-foreground`
+- `--info`
+- `--info-foreground`
+- `--success`
+- `--success-foreground`
+- `--warning`
+- `--warning-foreground`

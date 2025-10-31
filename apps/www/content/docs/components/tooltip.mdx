@@ -1,0 +1,130 @@
+---
+title: Tooltip
+description: A popup that appears when an element is hovered or focused, showing a hint for sighted users.
+
+links:
+  doc: https://base-ui.com/react/components/tooltip#api-reference
+---
+
+<ComponentPreview name="tooltip-demo" />
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTab value="cli">CLI</TabsTab>
+  <TabsTab value="manual">Manual</TabsTab>
+</TabsList>
+<TabsPanel value="cli">
+
+```bash
+npx shadcn@latest add @coss/tooltip
+```
+
+</TabsPanel>
+
+<TabsPanel value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install @base-ui-components/react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource name="tooltip" title="components/ui/tooltip.tsx" />
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsPanel>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  Tooltip,
+  TooltipPopup,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+```
+
+```tsx
+<Tooltip>
+  <TooltipTrigger render={<Button variant="outline" />}>
+    Hover me
+  </TooltipTrigger>
+  <TooltipPopup>Helpful hint</TooltipPopup>
+</Tooltip>
+```
+
+**Grouping Tooltips**
+
+To group multiple tooltips so they appear instantly after the first one is opened, wrap them in `TooltipProvider`. The grouping logic ensures that once a tooltip becomes visible, the adjacent tooltips will be shown instantly.
+
+```tsx
+<TooltipProvider>
+  <Tooltip>
+    <TooltipTrigger render={<Button variant="outline" />}>
+      Tooltip 1
+    </TooltipTrigger>
+    <TooltipPopup>Content 1</TooltipPopup>
+  </Tooltip>
+  <Tooltip>
+    <TooltipTrigger render={<Button variant="outline" />}>
+      Tooltip 2
+    </TooltipTrigger>
+    <TooltipPopup>Content 2</TooltipPopup>
+  </Tooltip>
+</TooltipProvider>
+```
+
+## Examples
+
+### Grouped Tooltips
+
+<ComponentPreview name="tooltip-grouped" />
+
+## Comparing with Radix / shadcn
+
+If you’re already familiar with Radix UI and shadcn/ui, this guide highlights the small differences and similarities so you can get started with **coss ui** quickly.
+
+### Quick Checklist
+
+- Replace `asChild` → `render` on `TooltipTrigger`
+- Prefer `TooltipPopup`; `TooltipContent` remains for legacy
+- If you used `asChild` on parts, switch to the `render` prop
+
+### Comparison Example
+
+<span data-lib="radix-ui">
+```tsx title="shadcn/ui"
+// [!code word:asChild]
+<Tooltip>
+  <TooltipTrigger asChild>
+    <Button variant="outline">Hover me</Button>
+  </TooltipTrigger>
+  <TooltipContent>Helpful hint</TooltipContent>
+</Tooltip>
+```
+</span>
+
+<span data-lib="base-ui">
+```tsx title="coss ui"
+// [!code word:render]
+<Tooltip>
+  <TooltipTrigger render={<Button variant="outline" />}>
+    Hover me
+  </TooltipTrigger>
+  <TooltipPopup>Helpful hint</TooltipPopup>
+</Tooltip>
+```
+</span>

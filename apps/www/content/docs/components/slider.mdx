@@ -1,0 +1,97 @@
+---
+title: Slider
+description: An input where the user selects a value from within a given range.
+
+links:
+  doc: https://base-ui.com/react/components/slider#api-reference
+---
+
+<ComponentPreview
+  name="slider-demo"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-64"
+/>
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTab value="cli">CLI</TabsTab>
+  <TabsTab value="manual">Manual</TabsTab>
+</TabsList>
+<TabsPanel value="cli">
+
+```bash
+npx shadcn@latest add @coss/slider
+```
+
+</TabsPanel>
+
+<TabsPanel value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install @base-ui-components/react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource name="slider" title="components/ui/slider.tsx" />
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsPanel>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { Slider, SliderValue } from "@/components/ui/slider"
+```
+
+```tsx
+<Slider />
+```
+
+## Examples
+
+For accessible labelling and validation, prefer using the `Field` component to wrap checkboxes. See the related example: [Slider field](/ui/docs/components/field#slider-field).
+
+### With Label and Value
+
+<ComponentPreview
+  name="slider-with-label-value"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-64"
+/>
+
+### Range Slider
+
+<ComponentPreview
+  name="slider-range"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-64"
+/>
+
+### Vertical
+
+<ComponentPreview name="slider-vertical" />
+
+### Form Integration
+
+<ComponentPreview
+  name="slider-form"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-64"
+/>
+
+## Comparing with Radix / shadcn
+
+If you're already familiar with Radix UI and shadcn/ui, this guide highlights the small differences and similarities so you can get started with **coss ui** quickly.
+
+### Quick Checklist
+
+- If you used `asChild` on parts, switch to the `render` prop

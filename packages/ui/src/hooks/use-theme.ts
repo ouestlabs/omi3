@@ -5,14 +5,14 @@ import React from "react";
 
 function useTheme() {
   const { setTheme, resolvedTheme } = useNextTheme();
-  const [, startTransition] = React.useTransition()
+  const [, startTransition] = React.useTransition();
   const themeActions = React.useMemo(
     () => ({
       toggleTheme: () => {
         startTransition(() => {
-          setTheme(resolvedTheme === "dark" ? "light" : "dark")
-        })
-      }
+          setTheme(resolvedTheme === "dark" ? "light" : "dark");
+        });
+      },
     }),
     [resolvedTheme, setTheme]
   );

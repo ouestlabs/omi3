@@ -1,3 +1,2 @@
-export * from './functions/audio-utils';
-export * from "./constants/domain";
-
+export * from "./constants/audio";
+export * from "./functions/audio-utils";

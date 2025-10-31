@@ -1,3 +1,2 @@
-export * from "./fonts";
-export * from "./svg";
-
+export * from "./icons";
+export * from "./logo";

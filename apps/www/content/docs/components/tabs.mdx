@@ -1,0 +1,126 @@
+---
+title: Tabs
+description: A component for toggling between related panels on the same page.
+
+links:
+  doc: https://base-ui.com/react/components/tabs#api-reference
+---
+
+<ComponentPreview name="tabs-demo" />
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTab value="cli">CLI</TabsTab>
+  <TabsTab value="manual">Manual</TabsTab>
+</TabsList>
+<TabsPanel value="cli">
+
+```bash
+npx shadcn@latest add @coss/tabs
+```
+
+</TabsPanel>
+
+<TabsPanel value="manual">
+
+<Steps>
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource name="tabs" title="components/ui/tabs.tsx" />
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsPanel>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { Tabs, TabsList, TabsPanel, TabsTab } from "@/components/ui/tabs"
+```
+
+```tsx
+<Tabs defaultValue="tab-1">
+  <TabsList>
+    <TabsTab value="tab-1">Tab 1</TabsTab>
+    <TabsTab value="tab-2">Tab 2</TabsTab>
+    <TabsTab value="tab-3">Tab 3</TabsTab>
+  </TabsList>
+  <TabsPanel value="tab-1">Tab 1 content</TabsPanel>
+  <TabsPanel value="tab-2">Tab 2 content</TabsPanel>
+  <TabsPanel value="tab-3">Tab 3 content</TabsPanel>
+</Tabs>
+```
+
+## Examples
+
+### Underline Variant
+
+<ComponentPreview name="tabs-underline" />
+
+### Vertical Orientation
+
+<ComponentPreview
+  name="tabs-vertical"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-80"
+/>
+
+### Underline with Vertical Orientation
+
+<ComponentPreview
+  name="tabs-underline-vertical"
+  className="[&_.preview>*]:w-full [&_.preview>*]:max-w-80"
+/>
+
+## Comparing with Radix / shadcn
+
+If you’re already familiar with Radix UI and shadcn/ui, this guide highlights the small differences and similarities so you can get started with **coss ui** quickly.
+
+### Quick Checklist
+
+- If you used `asChild` on any parts, switch to the `render` prop
+- Use `TabsTab` going forward; `TabsTrigger` remains for legacy
+- Use `TabsPanel` going forward; `TabsContent` remains for legacy
+
+### Additional Notes
+
+Compared to shadcn/ui, our `TabsList` component adds `variant` prop, which allows you to choose between `default` and `underline` styles.
+
+### Comparison Examples
+
+<span data-lib="radix-ui">
+```tsx title="shadcn/ui"
+<Tabs defaultValue="tab-1">
+  <TabsList>
+    <TabsTab value="tab-1">Tab 1</TabsTab>
+    <TabsTab value="tab-2">Tab 2</TabsTab>
+    <TabsTab value="tab-3">Tab 3</TabsTab>
+  </TabsList>
+  <TabsContent value="tab-1">Tab 1 content</TabsContent>
+  <TabsContent value="tab-2">Tab 2 content</TabsContent>
+  <TabsContent value="tab-3">Tab 3 content</TabsContent>
+</Tabs>
+```
+</span>
+
+<span data-lib="base-ui">
+```tsx title="coss ui"
+<Tabs defaultValue="tab-1">
+  <TabsList>
+    <TabsTab value="tab-1">Tab 1</TabsTab>
+    <TabsTab value="tab-2">Tab 2</TabsTab>
+    <TabsTab value="tab-3">Tab 3</TabsTab>
+  </TabsList>
+  <TabsPanel value="tab-1">Tab 1 content</TabsPanel>
+  <TabsPanel value="tab-2">Tab 2 content</TabsPanel>
+  <TabsPanel value="tab-3">Tab 3 content</TabsPanel>
+</Tabs>
+```
+</span>

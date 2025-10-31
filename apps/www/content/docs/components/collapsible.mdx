@@ -1,0 +1,75 @@
+---
+title: Collapsible
+description: A collapsible panel controlled by a button.
+
+links:
+  doc: https://base-ui.com/react/components/collapsible#api-reference
+---
+
+<ComponentPreview name="collapsible-demo" />
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTab value="cli">CLI</TabsTab>
+  <TabsTab value="manual">Manual</TabsTab>
+</TabsList>
+<TabsPanel value="cli">
+
+```bash
+npx shadcn@latest add @coss/collapsible
+```
+
+</TabsPanel>
+
+<TabsPanel value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install @base-ui-components/react
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource name="collapsible" title="components/ui/collapsible.tsx" />
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsPanel>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  Collapsible,
+  CollapsiblePanel,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
+```
+
+```tsx
+<Collapsible>
+  <CollapsibleTrigger>Can I access the file in the cloud?</CollapsibleTrigger>
+  <CollapsiblePanel>
+    Yes, you can access the file in the cloud.
+  </CollapsiblePanel>
+</Collapsible>
+```
+
+## Comparing with Radix / shadcn
+
+This section shows what to change when moving from shadcn/ui (Radix-based) to our Base UI–backed Collapsible. We cover only the most relevant differences.
+
+### Quick Checklist
+
+- Use `CollapsiblePanel` going forward; `CollapsibleContent` remains for legacy
+- If you used `asChild` on parts, switch to the `render` prop

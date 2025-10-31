@@ -1,0 +1,79 @@
+---
+title: Form
+description: A form wrapper component that simplifies validation and submission.
+
+links:
+  doc: https://base-ui.com/react/components/form#api-reference
+---
+
+<ComponentPreview name="form-demo" />
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTab value="cli">CLI</TabsTab>
+  <TabsTab value="manual">Manual</TabsTab>
+</TabsList>
+<TabsPanel value="cli">
+
+```bash
+npx shadcn@latest add @coss/form
+```
+
+</TabsPanel>
+
+<TabsPanel value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install @base-ui-components/react zod
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource name="form" title="components/ui/form.tsx" />
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsPanel>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import {
+  Field,
+  FieldControl,
+  FieldError,
+  FieldLabel,
+} from "@/components/ui/field"
+import { Form } from "@/components/ui/form"
+```
+
+```tsx
+<Form
+  onSubmit={(e) => {
+    /* handle submit */
+  }}
+>
+  <Field>
+    <FieldLabel>Email</FieldLabel>
+    <FieldControl name="email" type="email" required />
+    <FieldError>Please enter a valid email.</FieldError>
+  </Field>
+</Form>
+```
+
+## Examples
+
+### Using with Zod
+
+<ComponentPreview name="form-zod" />
