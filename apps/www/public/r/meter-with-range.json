@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "meter-with-range",
+  "type": "registry:example",
+  "description": "Meter with min and max values",
+  "registryDependencies": [
+    "@audio/meter"
+  ],
+  "files": [
+    {
+      "path": "registry/default/examples/meter-with-range.tsx",
+      "content": "\"use client\";\n\nimport {\n  Meter,\n  MeterIndicator,\n  MeterLabel,\n  MeterTrack,\n  MeterValue,\n} from \"@/registry/default/ui/meter\";\n\nexport default function MeterWithRangeDemo() {\n  return (\n    <Meter max={1000} min={500} value={700}>\n      <div className=\"flex items-center justify-between gap-2\">\n        <MeterLabel>Bandwidth (Mbps)</MeterLabel>\n        <MeterValue>{(_formatted, value) => value}</MeterValue>\n      </div>\n      <MeterTrack>\n        <MeterIndicator />\n      </MeterTrack>\n    </Meter>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "categories": [
+    "meter"
+  ]
+}

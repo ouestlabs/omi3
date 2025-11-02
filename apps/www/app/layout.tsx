@@ -42,6 +42,12 @@ export default function RootLayout({
 }>) {
   return (
     <html data-scroll-behavior="smooth" lang="en" suppressHydrationWarning>
+      <head>
+        {process.env.NODE_ENV === "development" && (              
+            <Script src="https://unpkg.com/react-scan/dist/auto.global.js" />
+     
+        )}
+      </head>
       <body
         className={cn(
           "bg-sidebar antialiased",
@@ -65,7 +71,6 @@ export default function RootLayout({
             {children}
           </div>
         </Providers>
-        <Script src="https://unpkg.com/react-scan/dist/auto.global.js" />
       </body>
     </html>
   );

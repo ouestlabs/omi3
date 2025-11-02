@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "waveform-demo",
+  "type": "registry:example",
+  "description": "Waveform demo",
+  "registryDependencies": [
+    "@audio/waveform"
+  ],
+  "files": [
+    {
+      "path": "registry/default/examples/waveform-demo.tsx",
+      "content": "\"use client\";\n\nimport {\n  Frame,\n  FrameDescription,\n  FrameHeader,\n  FramePanel,\n  FrameTitle,\n} from \"@/registry/default/ui/frame\";\nimport { ScrollingWaveform } from \"@/registry/default/ui/waveform\";\nexport default function WaveformDemo() {\n  return (\n    <Frame className=\"w-full\">\n      <FrameHeader className=\"mb-4\">\n        <FrameTitle>Waveform</FrameTitle>\n        <FrameDescription>\n          Real-time audio visualization with smooth scrolling animation\n        </FrameDescription>\n      </FrameHeader>\n      <FramePanel>\n        <ScrollingWaveform\n          barColor=\"gray\"\n          barGap={2}\n          barWidth={3}\n          height={80}\n          speed={30}\n        />\n      </FramePanel>\n    </Frame>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "categories": [
+    "waveform"
+  ]
+}

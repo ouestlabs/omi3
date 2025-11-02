@@ -35,6 +35,12 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
+  "dependencies": {
+    "@tanstack/store": "0.8.0",
+    "@tanstack/pacer": "0.15.4",
+    "@tanstack/react-store": "0.8.0",
+    "@tanstack/react-pacer": "0.16.4"
+  },
   "devDependencies": {
     "@audio-ui/typescript": "workspace:*",
     "@audio-ui/utils": "workspace:*",

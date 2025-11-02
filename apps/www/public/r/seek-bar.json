@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "seek-bar",
+  "type": "registry:block",
+  "description": "Audio seek bar",
+  "dependencies": [
+    "audio-engine",
+    "@audio-ui/utils"
+  ],
+  "registryDependencies": [
+    "@audio/slider"
+  ],
+  "files": [
+    {
+      "path": "registry/default/particles/particle-seek-bar.tsx",
+      "content": "\"use client\";\n\nimport {\n  Frame,\n  FrameHeader,\n  FramePanel,\n  FrameTitle,\n} from \"@/registry/default/ui/frame\";\nimport {\n  PlayerDuration,\n  PlayerProgress,\n  PlayerTime,\n} from \"@/registry/default/ui/player\";\n\nfunction PlayerSeekBar() {\n  return (\n    <Frame>\n      <FrameHeader>\n        <FrameTitle>Player Seek Bar</FrameTitle>\n      </FrameHeader>\n      <FramePanel>\n        <div className=\"flex w-full items-center justify-center gap-2\">\n          <PlayerTime className=\"text-xs\" />\n          <PlayerProgress className=\"flex-1\" />\n          <PlayerDuration className=\"text-xs\" />\n        </div>\n      </FramePanel>\n    </Frame>\n  );\n}\n\nexport default PlayerSeekBar;\n",
+      "type": "registry:block"
+    }
+  ],
+  "categories": [
+    "seek-bar"
+  ]
+}

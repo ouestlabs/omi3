@@ -1,0 +1,27 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "controls",
+  "type": "registry:block",
+  "description": "Audio controls",
+  "dependencies": [
+    "lucide-react",
+    "audio-engine"
+  ],
+  "registryDependencies": [
+    "@audio/button",
+    "@audio/tooltip",
+    "@audio/spinner",
+    "audio-engine",
+    "lucide-react"
+  ],
+  "files": [
+    {
+      "path": "registry/default/particles/particle-controls.tsx",
+      "content": "\"use client\";\n\nimport { memo } from \"react\";\nimport {\n  Frame,\n  FrameHeader,\n  FramePanel,\n  FrameTitle,\n} from \"@/registry/default/ui/frame\";\nimport {\n  NextButton,\n  PlayerSpeed,\n  PlayPauseButton,\n  PreviousButton,\n  SkipBackwardButton,\n  SkipForwardButton,\n} from \"@/registry/default/ui/player\";\n\nconst PlayerControlsParticle = memo(function _PlayerControlsParticle() {\n  return (\n    <Frame>\n      <FrameHeader>\n        <FrameTitle>Player Controls</FrameTitle>\n      </FrameHeader>\n      <FramePanel>\n        <div className=\"flex items-center justify-between gap-2\">\n          <div className=\"flex items-center justify-center gap-2\">\n            <PreviousButton />\n            <SkipBackwardButton />\n            <PlayPauseButton />\n            <SkipForwardButton />\n            <NextButton />\n          </div>\n          <div className=\"flex items-center justify-center gap-2\">\n            <PlayerSpeed />\n          </div>\n        </div>\n      </FramePanel>\n    </Frame>\n  );\n});\n\nexport default PlayerControlsParticle;\n",
+      "type": "registry:block"
+    }
+  ],
+  "categories": [
+    "controls"
+  ]
+}

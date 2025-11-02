@@ -1,13 +1,27 @@
-export { type Music, PlaybackState } from "../types";
+export { PlaybackState, type QueueItem, type Track } from "../core/types";
+export { AudioDevTools } from "./devtools";
+export type {
+  AudioEffects,
+  AudioErrorState,
+  AudioPlaybackActions,
+  AudioPlaybackState,
+  AudioQueueActions,
+  AudioQueueState,
+  AudioStatusState,
+  AudioVisualizationState,
+  AudioVolumeActions,
+  AudioVolumeState,
+  UseAudioReturn,
+} from "./hooks";
 export {
-  type AudioActions,
-  type AudioFrequencyState,
-  type AudioPlaybackState,
-  type AudioStatusState,
-  type AudioTimeState,
-  type AudioVolumeState,
   useAudio,
-  useAudioState,
+  useAudioEffects,
   useAudioTime,
-} from "./context";
-export { AudioProvider } from "./provider";
+  useQueue,
+} from "./hooks";
+export {
+  AudioProvider,
+  useActions,
+  useEffects,
+  useVisualization,
+} from "./provider";

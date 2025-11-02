@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "cover-size",
+  "type": "registry:example",
+  "description": "Covers with different sizes",
+  "registryDependencies": [
+    "@audio/cover"
+  ],
+  "files": [
+    {
+      "path": "registry/default/examples/cover-size.tsx",
+      "content": "import { Cover, CoverFallback, CoverImage } from \"@/registry/default/ui/cover\";\n\nexport default function CoverSizeDemo() {\n  return (\n    <div className=\"flex items-center gap-4\">\n      <Cover>\n        <CoverImage\n          alt=\"User\"\n          src=\"https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?w=96&h=96&dpr=2&q=80\"\n        />\n        <CoverFallback>AV</CoverFallback>\n      </Cover>\n      <Cover className=\"size-12\">\n        <CoverImage\n          alt=\"User\"\n          src=\"https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?w=144&h=144&dpr=2&q=80\"\n        />\n        <CoverFallback>AV</CoverFallback>\n      </Cover>\n      <Cover className=\"size-16\">\n        <CoverImage\n          alt=\"User\"\n          src=\"https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?w=192&h=192&dpr=2&q=80\"\n        />\n        <CoverFallback>AV</CoverFallback>\n      </Cover>\n    </div>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "categories": [
+    "cover"
+  ]
+}

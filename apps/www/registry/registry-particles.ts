@@ -2,7 +2,7 @@ import type { Registry } from "shadcn/schema";
 
 export const particles: Registry["items"] = [
   {
-    name: "audio-file-input",
+    name: "file-input",
     description: "Audio file input",
     type: "registry:block",
     registryDependencies: ["@audio/input", "@audio/label"],
@@ -13,7 +13,7 @@ export const particles: Registry["items"] = [
     categories: ["file"],
   },
   {
-    name: "audio-controls",
+    name: "controls",
     description: "Audio controls",
     type: "registry:block",
     registryDependencies: [
@@ -30,7 +30,7 @@ export const particles: Registry["items"] = [
     categories: ["controls"],
   },
   {
-    name: "audio-seek-bar",
+    name: "seek-bar",
     description: "Audio seek bar",
     type: "registry:block",
     registryDependencies: ["@audio/slider"],
@@ -41,7 +41,7 @@ export const particles: Registry["items"] = [
     categories: ["seek-bar"],
   },
   {
-    name: "audio-track-info",
+    name: "track-info",
     description: "Audio track info",
     type: "registry:block",
     registryDependencies: ["@audio/cover", "@audio/skeleton"],
@@ -52,17 +52,7 @@ export const particles: Registry["items"] = [
     categories: ["track-info"],
   },
   {
-    name: "audio-visualizer",
-    description: "Audio visualizer",
-    type: "registry:block",
-    dependencies: ["audio-engine", "@audio-ui/utils"],
-    files: [
-      { path: "particles/particle-visualizer.tsx", type: "registry:block" },
-    ],
-    categories: ["visualizer"],
-  },
-  {
-    name: "audio-volume",
+    name: "volume",
     description: "Audio volume",
     type: "registry:block",
     dependencies: ["audio-engine", "@audio-ui/utils"],
@@ -70,9 +60,10 @@ export const particles: Registry["items"] = [
     categories: ["volume"],
   },
   {
-    name: "audio-player",
+    name: "player",
     description: "Audio player",
     type: "registry:block",
+    registryDependencies: ["@audio/player"],
     dependencies: ["audio-engine", "@audio-ui/utils"],
     files: [{ path: "particles/particle-player.tsx", type: "registry:block" }],
     categories: ["player"],

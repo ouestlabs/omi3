@@ -31,10 +31,7 @@ export function MobileNav({
             size="icon"
             variant="ghost"
           >
-            <MenuIcon
-              className="size-5"
-   
-            />
+            <MenuIcon className="size-5" />
             <span className="sr-only">Toggle Menu</span>
           </Button>
         }

@@ -11,11 +11,7 @@ function DocsCopyPage({ page }: { page: string }) {
 
   return (
     <Button onClick={() => copyToClipboard(page)} size="xs" variant="outline">
-      {isCopied ? (
-        <CopySuccessIcon />
-      ) : (
-        <CopyIcon />  
-      )}
+      {isCopied ? <CopySuccessIcon /> : <CopyIcon />}
       Copy Markdown
     </Button>
   );

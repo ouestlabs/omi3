@@ -4,10 +4,14 @@
   "linter": {
     "rules": {
       "style": {
-        "useNamingConvention": "off"
+        "useNamingConvention": "off",
+        "noMagicNumbers": "off"
       },
       "performance": {
         "noBarrelFile": "off"
+      },
+      "suspicious": {
+        "noConsole": "off"
       }
     }
   }

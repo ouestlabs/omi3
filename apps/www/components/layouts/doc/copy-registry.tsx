@@ -36,10 +36,7 @@ export function CopyRegistry({
           >
             <span className="sr-only">Copy</span>
             {isCopied ? (
-              <CopySuccessIcon  
-                className="size-3.5"
-
-              />
+              <CopySuccessIcon className="size-3.5" />
             ) : (
               <Icons.Mcp className="size-3.5" />
             )}

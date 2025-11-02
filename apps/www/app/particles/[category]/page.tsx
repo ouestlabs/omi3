@@ -107,7 +107,7 @@ export default async function CategoryPage({ params }: PageProps) {
               key={particle.id}
               name={particle.id}
             >
-              <ParticleComponent/>
+              <ParticleComponent />
             </ParticleDisplay>
           );
         })}

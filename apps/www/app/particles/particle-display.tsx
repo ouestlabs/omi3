@@ -44,9 +44,7 @@ export async function ParticleDisplay({
       </div>
       <div className="flex items-center gap-3 rounded-b-xl p-2">
         <p className="flex flex-1 gap-1 truncate text-muted-foreground text-xs">
-          <InformationIcon
-            className="size-3 h-lh shrink-0"
-          />
+          <InformationIcon className="size-3 h-lh shrink-0" />
           <span className="truncate">{particle.description}</span>
         </p>
         <div className="flex items-center gap-1.5">

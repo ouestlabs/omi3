@@ -9,8 +9,8 @@ import {
   it,
   vi,
 } from "bun:test";
-import { AudioEngine } from "../core";
-import { type Music, PlaybackState } from "../types";
+import { AudioEngine } from "../core/engine/main";
+import { PlaybackState, type Track } from "../core/types";
 
 // Test constants
 const TEST_DURATION_SHORT = 60;
@@ -275,7 +275,7 @@ describe("AudioEngine", () => {
     expect(engine.isMuted).toBe(false);
     expect(engine.currentTime).toBe(0);
     expect(engine.duration).toBe(0);
-    expect(engine.currentMusic).toBeNull();
+    expect(engine.currentTrack).toBeNull();
     expect(engine.isBuffering).toBe(false);
     expect(engine.lastError).toBeNull();
     expect(engine.frequencyData).toBeNull();
@@ -304,24 +304,24 @@ describe("AudioEngine", () => {
   });
 
   describe("load", () => {
-    const testMusic: Music = { url: "test.mp3", title: "Test Title" };
+    const testTrack: Track = { url: "test.mp3", title: "Test Title" };
 
-    it("should set state to LOADING and update music info", () => {
+    it("should set state to LOADING and update track info", () => {
       const engine = new AudioEngine();
       const trackChangeCallback = vi.fn();
       const bufferingCallback = vi.fn();
       engine.addEventListener("trackChange", trackChangeCallback);
       engine.addEventListener("bufferingStateChange", bufferingCallback);
 
-      engine.load(testMusic);
+      engine.load(testTrack);
 
       expect(engine.playbackState).toBe(PlaybackState.LOADING);
-      expect(engine.currentMusic).toBe(testMusic);
+      expect(engine.currentTrack).toBe(testTrack);
       expect(engine.isBuffering).toBe(true);
-      expect(mockAudioElement.src).toBe(testMusic.url);
+      expect(mockAudioElement.src).toBe(testTrack.url);
       expect(mockAudioElement.load).toHaveBeenCalledTimes(1);
       expect(trackChangeCallback).toHaveBeenCalledWith(
-        expect.objectContaining({ detail: { music: testMusic } })
+        expect.objectContaining({ detail: { track: testTrack } })
       );
       expect(bufferingCallback).toHaveBeenCalledWith(
         expect.objectContaining({ detail: { buffering: true } })
@@ -341,7 +341,7 @@ describe("AudioEngine", () => {
       engine.addEventListener("durationChange", durationChangeCallback);
       engine.addEventListener("bufferingStateChange", bufferingCallback);
 
-      engine.load(testMusic);
+      engine.load(testTrack);
       bufferingCallback.mockClear();
 
       mockAudioElement.readyState = mockAudioElement.HAVE_FUTURE_DATA;
@@ -361,10 +361,10 @@ describe("AudioEngine", () => {
 
     it("should seek to startTime when provided and audio becomes ready", () => {
       const engine = new AudioEngine();
-      engine.load(testMusic, TEST_SEEK_TIME_NORMAL);
+      engine.load(testTrack, TEST_SEEK_TIME_NORMAL);
       expect(engine.playbackState).toBe(PlaybackState.LOADING);
       // Ensure src is set
-      expect(mockAudioElement.src).toBe(testMusic.url);
+      expect(mockAudioElement.src).toBe(testTrack.url);
 
       mockAudioElement.readyState = mockAudioElement.HAVE_METADATA;
       mockAudioElement.duration = TEST_DURATION_VERY_LONG;
@@ -374,18 +374,18 @@ describe("AudioEngine", () => {
       expect(engine.playbackState).toBe(PlaybackState.READY);
     });
 
-    it("should not reload if the same music URL is loaded again while ready", () => {
+    it("should not reload if the same track URL is loaded again while ready", () => {
       const engine = new AudioEngine();
-      engine.load(testMusic);
+      engine.load(testTrack);
       // Ensure src is set (load sets it, but we verify it's set)
-      expect(mockAudioElement.src).toBe(testMusic.url);
+      expect(mockAudioElement.src).toBe(testTrack.url);
       mockAudioElement.readyState = mockAudioElement.HAVE_ENOUGH_DATA;
       mockAudioElement.duration = TEST_DURATION_LONG;
       mockAudioElement._simulateEvent("canplay");
       expect(engine.playbackState).toBe(PlaybackState.READY);
       mockAudioElement.load.mockClear();
 
-      engine.load(testMusic);
+      engine.load(testTrack);
 
       expect(mockAudioElement.load).not.toHaveBeenCalled();
       expect(engine.playbackState).toBe(PlaybackState.READY);
@@ -717,7 +717,7 @@ describe("AudioEngine", () => {
       expect(removeListenerSpy).toHaveBeenCalledTimes(expectedListenerCount);
       expect(cleanupMediaSpy).toHaveBeenCalledTimes(1);
       expect(engine.playbackState).toBe(PlaybackState.IDLE);
-      expect(engine.currentMusic).toBeNull();
+      expect(engine.currentTrack).toBeNull();
       expect(mockCancelAnimationFrame).toHaveBeenCalled(); // Verify analysis stopped
 
       // Context cleanup checks
@@ -731,7 +731,7 @@ describe("AudioEngine", () => {
   // --- Media Session Tests ---
   describe("Media Session Integration", () => {
     let engine: AudioEngine;
-    const music: Music = {
+    const track: Track = {
       url: "media.mp3",
       title: "Media Title",
       artist: "Media Artist",
@@ -775,7 +775,7 @@ describe("AudioEngine", () => {
     });
 
     it("should update metadata on load", () => {
-      engine.load(music);
+      engine.load(track);
       expect(navigator.mediaSession.metadata).toEqual({
         title: "Media Title",
         artist: "Media Artist",
@@ -791,7 +791,7 @@ describe("AudioEngine", () => {
     });
 
     it("should update playbackState on state change", async () => {
-      engine.load(music);
+      engine.load(track);
       mockAudioElement.readyState = mockAudioElement.HAVE_ENOUGH_DATA;
       mockAudioElement._simulateEvent("canplay");
 
@@ -809,7 +809,7 @@ describe("AudioEngine", () => {
     });
 
     it("should update positionState during playback", async () => {
-      engine.load(music);
+      engine.load(track);
       mockAudioElement.readyState = mockAudioElement.HAVE_ENOUGH_DATA;
       mockAudioElement.duration = TEST_DURATION_200;
       mockAudioElement._simulateEvent("canplay");
@@ -1118,7 +1118,7 @@ describe("AudioEngine", () => {
       }) as any;
 
       const engine = new AudioEngine();
-      engine.load({ url: "networkerror.mp3" }); // Need a loaded music
+      engine.load({ url: "networkerror.mp3" }); // Need a loaded track
       const errorCallback = vi.fn();
       engine.addEventListener("error", errorCallback);
       const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {
@@ -1178,15 +1178,15 @@ describe("AudioEngine", () => {
       vi.useRealTimers();
     });
 
-    it("should handle reloadAudio when currentMusic is null", () => {
+    it("should handle reloadAudio when currentTrack is null", () => {
       const engine = new AudioEngine();
       const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {
         // Mock implementation
       });
-      // Don't load music, so _currentMusic is null
+      // Don't load track, so _currentTrack is null
       (engine as any).reloadAudio(); // Call private method
       expect(errorSpy).toHaveBeenCalledWith(
-        "AudioEngine: Cannot reload - no current source or music."
+        "AudioEngine: Cannot reload - no current source or track."
       );
       errorSpy.mockRestore();
     });
@@ -1227,8 +1227,8 @@ describe("AudioEngine", () => {
       const engine = new AudioEngine(); // Constructor calls setupMediaSessionHandlers
       // No error should be thrown
 
-      const music = { url: "nomedia.mp3", title: "No Media" };
-      engine.load(music);
+      const track = { url: "nomedia.mp3", title: "No Media" };
+      engine.load(track);
       // @ts-expect-error Accessing private method
       engine.setPlaybackState(PlaybackState.PLAYING);
       engine.seek(TEST_SEEK_TIME_SHORT); // Calls updateMediaSessionPositionState
@@ -1238,13 +1238,13 @@ describe("AudioEngine", () => {
       expect(true).toBe(true);
     });
 
-    it("should handle updateMediaSessionMetadata when _currentMusic is null", () => {
+    it("should handle updateMediaSessionMetadata when _currentTrack is null", () => {
       const engine = new AudioEngine();
       // Ensure metadata is initially something
       navigator.mediaSession.metadata = new MediaMetadata({ title: "temp" });
       expect(navigator.mediaSession.metadata).not.toBeNull();
 
-      // Don't load music
+      // Don't load track
       (engine as any).updateMediaSessionMetadata(); // Call private method
 
       expect(navigator.mediaSession.metadata).toBeNull();

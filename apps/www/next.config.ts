@@ -8,9 +8,9 @@ const nextConfig: NextConfig = {
   experimental: {
     turbopackFileSystemCacheForDev: true,
   },
-  transpilePackages: ["audio-ui"],
+  transpilePackages: ["audio-ui", "audio-engine"],
   async redirects() {
-    return await [
+    return [
       {
         source: "/",
         destination: "/docs",
@@ -19,7 +19,7 @@ const nextConfig: NextConfig = {
     ];
   },
   async rewrites() {
-    return await [
+    return [
       {
         source: "/docs/:path*.md",
         destination: "/api/raw/docs/:path*",

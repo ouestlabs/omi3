@@ -1,126 +1,328 @@
 "use client";
 
+import { useStore } from "@tanstack/react-store";
 import React from "react";
-import { AudioEngine } from "../../core";
+import { type AudioEffect, AudioEffectsProcessor } from "../../core/effects";
+import { AudioEngine, type IAudioEngine } from "../../core/engine";
+import { Queue, type QueueItem } from "../../core/queue";
+import type {
+  AudioEngineEventMap,
+  BaseMetadata,
+  Track,
+} from "../../core/types";
+import { PlaybackState } from "../../core/types";
+import { logger } from "../../core/utils/logger";
 import {
-  type AudioEngineEventMap,
-  type IAudioEngine,
-  type Music,
-  PlaybackState,
-} from "../../types";
-import {
-  AudioActionsContext,
-  AudioFrequencyContext,
-  AudioPlaybackContext,
-  AudioStatusContext,
-  AudioTimeContext,
-  AudioVolumeContext,
+  ActionsContext,
+  EffectsContext,
+  QueueContext,
+  VisualizationContext,
 } from "../context";
-import { initialState, reducer } from "./state";
+import type { VisualizationState } from "../context/types";
+import { audioStore } from "../store";
+import { audioStoreActions } from "../store/actions";
+import type { AudioEngineActions } from "../store/types";
 
 const canUseDOM = () =>
   typeof window !== "undefined" && window.document?.createElement !== undefined;
 
+const DEFAULT_WET_DRY_DURATION = 0.5;
+const MAX_BYTE_VALUE = 255;
+const FADE_OUT_CONSTANT = 0.9;
+const FADE_OUT_THRESHOLD = 0.01;
+
+/**
+ * Hook to access engine actions.
+ */
+export const useActions = (): AudioEngineActions => {
+  const context = React.useContext(ActionsContext);
+  if (!context) {
+    throw new Error("useActions must be used within an AudioProvider");
+  }
+  return context;
+};
+
+/**
+ * Hook to access audio effects.
+ */
+export const useEffects = () => {
+  const context = React.useContext(EffectsContext);
+  if (!context) {
+    throw new Error("useEffects must be used within an AudioProvider");
+  }
+  return context;
+};
+
+/**
+ * Hook to access audio visualization state.
+ */
+export const useVisualization = () => {
+  const context = React.useContext(VisualizationContext);
+  if (!context) {
+    throw new Error("useVisualization must be used within an AudioProvider");
+  }
+  return context;
+};
+
+/**
+ * Internal function to manage audio visualization logic.
+ * Handles frequency data updates and fade-out animations.
+ */
+function useVisualizationState(): VisualizationState {
+  const engine = useStore(audioStore, (state) => state.engineInstance);
+  const analyserNode = useStore(audioStore, (state) => state.analyserNode);
+  const playbackState = useStore(audioStore, (state) => state.playbackState);
+
+  const [visualizationState, setVisualizationState] =
+    React.useState<VisualizationState>({
+      frequencyData: [],
+      rawFrequencyData: null,
+      isActive: false,
+    });
+
+  const animationFrameRef = React.useRef<number | null>(null);
+  const previousFrequencyDataRef = React.useRef<number[]>([]);
+
+  const engineRef = React.useRef(engine);
+  const analyserNodeRef = React.useRef(analyserNode);
+  const playbackStateRef = React.useRef(playbackState);
+
+  React.useEffect(() => {
+    engineRef.current = engine;
+    analyserNodeRef.current = analyserNode;
+    playbackStateRef.current = playbackState;
+  }, [engine, analyserNode, playbackState]);
+
+  React.useEffect(() => {
+    const isActive =
+      engine !== null &&
+      analyserNode !== null &&
+      playbackState === PlaybackState.PLAYING;
+
+    if (!isActive) {
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+      setVisualizationState({
+        frequencyData: [],
+        rawFrequencyData: null,
+        isActive: false,
+      });
+      return;
+    }
+
+    const updateFrequencyData = () => {
+      const currentEngine = engineRef.current;
+      const currentAnalyserNode = analyserNodeRef.current;
+      const currentPlaybackState = playbackStateRef.current;
+
+      const hasValidNodes = Boolean(currentAnalyserNode && currentEngine);
+      const isPlaying = currentPlaybackState === PlaybackState.PLAYING;
+
+      if (!(hasValidNodes && isPlaying)) {
+        if (animationFrameRef.current !== null) {
+          cancelAnimationFrame(animationFrameRef.current);
+          animationFrameRef.current = null;
+        }
+        setVisualizationState({
+          frequencyData: [],
+          rawFrequencyData: null,
+          isActive: false,
+        });
+        return;
+      }
+
+      const bufferLength = currentAnalyserNode?.frequencyBinCount ?? 0;
+      const dataArray = new Uint8Array(bufferLength);
+      currentAnalyserNode?.getByteFrequencyData(dataArray);
+
+      const normalized = Array.from(dataArray).map(
+        (value) => value / MAX_BYTE_VALUE
+      );
+
+      setVisualizationState({
+        frequencyData: normalized,
+        rawFrequencyData: dataArray,
+        isActive: true,
+      });
+      previousFrequencyDataRef.current = normalized;
+
+      animationFrameRef.current = requestAnimationFrame(updateFrequencyData);
+    };
+
+    updateFrequencyData();
+
+    return () => {
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+    };
+  }, [engine, analyserNode, playbackState]);
+
+  React.useEffect(() => {
+    const shouldFadeOut =
+      playbackState !== PlaybackState.PLAYING &&
+      previousFrequencyDataRef.current.length > 0;
+
+    if (!shouldFadeOut) {
+      return;
+    }
+
+    const fadeOut = () => {
+      const faded = previousFrequencyDataRef.current.map(
+        (v) => v * FADE_OUT_CONSTANT
+      );
+
+      setVisualizationState({
+        frequencyData: faded,
+        rawFrequencyData: null,
+        isActive: false,
+      });
+      previousFrequencyDataRef.current = faded;
+
+      const hasSignificantValue = faded.some((v) => v > FADE_OUT_THRESHOLD);
+      if (hasSignificantValue) {
+        animationFrameRef.current = requestAnimationFrame(fadeOut);
+      } else {
+        setVisualizationState({
+          frequencyData: [],
+          rawFrequencyData: null,
+          isActive: false,
+        });
+        previousFrequencyDataRef.current = [];
+        if (animationFrameRef.current !== null) {
+          cancelAnimationFrame(animationFrameRef.current);
+          animationFrameRef.current = null;
+        }
+      }
+    };
+
+    animationFrameRef.current = requestAnimationFrame(fadeOut);
+
+    return () => {
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+    };
+  }, [playbackState]);
+
+  React.useEffect(
+    () => () => {
+      if (animationFrameRef.current !== null) {
+        cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = null;
+      }
+    },
+    []
+  );
+
+  return visualizationState;
+}
+
+/**
+ * Initializes the engine state by updating the store with all initial values.
+ */
+function initializeEngineState(engine: IAudioEngine): void {
+  audioStoreActions.setEngineInstance(engine);
+  audioStoreActions.setCurrentTime(engine.currentTime);
+  audioStoreActions.setDuration(engine.duration);
+  audioStoreActions.setVolume(engine.volume, engine.isMuted);
+  audioStoreActions.setPlaybackRate(engine.playbackRate);
+  audioStoreActions.setPlaybackState(engine.playbackState);
+  audioStoreActions.setBuffering(engine.isBuffering);
+  audioStoreActions.setError(engine.lastError);
+  audioStoreActions.setCurrentTrack(engine.currentTrack);
+  audioStoreActions.setQueue(engine.queue);
+  audioStoreActions.setActiveItemId(engine.activeItemId);
+  audioStoreActions.setAnalyserNode(engine.analyserNode);
+}
+
+/**
+ * Sets up event listeners for the audio engine.
+ */
+function setupEngineListeners(engine: IAudioEngine): (() => void)[] {
+  const unsubscribeCallbacks: (() => void)[] = [];
+
+  const listeners: {
+    [K in keyof AudioEngineEventMap]?: (event: AudioEngineEventMap[K]) => void;
+  } = {
+    timeUpdate: (e) => audioStoreActions.setCurrentTime(e.detail.currentTime),
+    durationChange: (e) => audioStoreActions.setDuration(e.detail.duration),
+    volumeChange: (e) =>
+      audioStoreActions.setVolume(e.detail.volume, e.detail.muted),
+    playbackRateChange: (e) =>
+      audioStoreActions.setPlaybackRate(e.detail.playbackRate),
+    playbackStateChange: (e) =>
+      audioStoreActions.setPlaybackState(e.detail.state),
+    bufferingStateChange: (e) =>
+      audioStoreActions.setBuffering(e.detail.buffering),
+    error: (e) => audioStoreActions.setError(e.detail),
+    trackChange: (e) => audioStoreActions.setCurrentTrack(e.detail.track),
+    queueChange: (e) => audioStoreActions.setQueue(e.detail.queue),
+    activeItemChange: (e) =>
+      audioStoreActions.setActiveItemId(e.detail.activeItemId),
+    frequencyDataUpdate: (e) =>
+      audioStoreActions.setFrequencyData(e.detail.data),
+    contextInitialized: (e) =>
+      audioStoreActions.setAnalyserNode(e.detail.analyserNode),
+  };
+
+  for (const [eventName, listener] of Object.entries(listeners)) {
+    if (listener && engine) {
+      const typedEventName = eventName as keyof AudioEngineEventMap;
+      engine.addEventListener(typedEventName, listener as EventListener);
+      unsubscribeCallbacks.push(() => {
+        engine.removeEventListener(typedEventName, listener as EventListener);
+      });
+    }
+  }
+
+  return unsubscribeCallbacks;
+}
+
 /**
  * Provides the audio engine contexts to its children.
- *
- * Initializes the AudioEngine instance and sets up listeners to update context states.
- * Uses multiple specialized contexts and memoized values to optimize performance
- * and prevent unnecessary re-renders in consuming components.
  */
 export function AudioProvider({ children }: { children: React.ReactNode }) {
   const engineRef = React.useRef<IAudioEngine | null>(null);
-  const [state, dispatch] = React.useReducer(reducer, initialState);
+  const audioElementRef = React.useRef<HTMLAudioElement | null>(null);
+  const effectsProcessorRef = React.useRef<AudioEffectsProcessor | null>(null);
+  const queueManagerRef = React.useRef<Queue | null>(null);
+
+  const state = useStore(audioStore);
+
+  const visualizationState = useVisualizationState();
 
   React.useEffect(() => {
     let currentEngine: IAudioEngine | null = null;
-    const unsubscribeCallbacks: (() => void)[] = [];
+    let unsubscribeCallbacks: (() => void)[] = [];
 
     if (engineRef.current === null && canUseDOM()) {
       try {
+        logger.info("Provider", "Initializing AudioEngine");
         const newEngine = new AudioEngine();
         engineRef.current = newEngine;
         currentEngine = newEngine;
-        dispatch({ type: "SET_ENGINE_INSTANCE", payload: currentEngine });
 
-        dispatch({
-          type: "SET_CURRENT_TIME",
-          payload: currentEngine.currentTime,
-        });
-        dispatch({ type: "SET_DURATION", payload: currentEngine.duration });
-        dispatch({
-          type: "SET_VOLUME",
-          payload: {
-            volume: currentEngine.volume,
-            muted: currentEngine.isMuted,
-          },
-        });
-        dispatch({
-          type: "SET_PLAYBACK_STATE",
-          payload: currentEngine.playbackState,
-        });
-        dispatch({ type: "SET_BUFFERING", payload: currentEngine.isBuffering });
-        dispatch({ type: "SET_ERROR", payload: currentEngine.lastError });
-        dispatch({
-          type: "SET_CURRENT_MUSIC",
-          payload: currentEngine.currentMusic,
-        });
-        dispatch({
-          type: "SET_ANALYSER_NODE",
-          payload: currentEngine.analyserNode,
+        queueManagerRef.current = new Queue({
+          engine: newEngine,
         });
 
-        const listeners: {
-          [K in keyof AudioEngineEventMap]?: (
-            event: AudioEngineEventMap[K]
-          ) => void;
-        } = {
-          timeUpdate: (e) =>
-            dispatch({
-              type: "SET_CURRENT_TIME",
-              payload: e.detail.currentTime,
-            }),
-          durationChange: (e) =>
-            dispatch({ type: "SET_DURATION", payload: e.detail.duration }),
-          volumeChange: (e) =>
-            dispatch({
-              type: "SET_VOLUME",
-              payload: { volume: e.detail.volume, muted: e.detail.muted },
-            }),
-          playbackStateChange: (e) =>
-            dispatch({ type: "SET_PLAYBACK_STATE", payload: e.detail.state }),
-          bufferingStateChange: (e) =>
-            dispatch({ type: "SET_BUFFERING", payload: e.detail.buffering }),
-          error: (e) => dispatch({ type: "SET_ERROR", payload: e.detail }),
-          trackChange: (e) =>
-            dispatch({ type: "SET_CURRENT_MUSIC", payload: e.detail.music }),
-          frequencyDataUpdate: (e) =>
-            dispatch({ type: "SET_FREQUENCY_DATA", payload: e.detail.data }),
-          contextInitialized: (e) =>
-            dispatch({
-              type: "SET_ANALYSER_NODE",
-              payload: e.detail.analyserNode,
-            }),
-        };
-
-        for (const [eventName, listener] of Object.entries(listeners)) {
-          if (listener && currentEngine) {
-            const typedEventName = eventName as keyof AudioEngineEventMap;
-            currentEngine.addEventListener(
-              typedEventName,
-              listener as EventListener
-            );
-            unsubscribeCallbacks.push(() => {
-              currentEngine?.removeEventListener(
-                typedEventName,
-                listener as EventListener
-              );
-            });
-          }
+        audioElementRef.current = currentEngine.audioElement;
+        if (audioElementRef.current && !audioElementRef.current.parentElement) {
+          audioElementRef.current.setAttribute("aria-label", "Audio Engine");
+          audioElementRef.current.style.display = "none";
+          document.body.appendChild(audioElementRef.current);
         }
+        initializeEngineState(currentEngine);
+        unsubscribeCallbacks = setupEngineListeners(currentEngine);
+        logger.info("Provider", "AudioEngine initialized successfully");
       } catch (err) {
-        console.error("Failed to initialize AudioEngine:", err);
-        dispatch({ type: "SET_ENGINE_INSTANCE", payload: null });
+        logger.error("Provider", "Failed to initialize AudioEngine", { err });
+        audioStoreActions.setEngineInstance(null);
       }
     }
 
@@ -128,123 +330,163 @@ export function AudioProvider({ children }: { children: React.ReactNode }) {
       for (const callback of unsubscribeCallbacks) {
         callback();
       }
+      if (effectsProcessorRef.current) {
+        effectsProcessorRef.current.dispose();
+        effectsProcessorRef.current = null;
+      }
+      if (audioElementRef.current?.parentElement) {
+        audioElementRef.current.parentElement.removeChild(
+          audioElementRef.current
+        );
+      }
       if (engineRef.current) {
         engineRef.current.dispose();
         engineRef.current = null;
       }
-      dispatch({ type: "RESET_STATE" });
+      queueManagerRef.current = null;
+      audioElementRef.current = null;
+      audioStoreActions.reset();
     };
   }, []);
 
-  const load = React.useCallback((music: Music, startTime?: number) => {
-    if (engineRef.current) {
-      engineRef.current.load(music, startTime);
+  React.useEffect(() => {
+    const engine = state.engineInstance;
+    if (
+      !(
+        engine?.audioContext &&
+        engine.sourceNode &&
+        engine.analyserNode &&
+        !effectsProcessorRef.current
+      )
+    ) {
+      return;
+    }
+
+    effectsProcessorRef.current = new AudioEffectsProcessor(
+      engine.audioContext,
+      engine.sourceNode,
+      engine.analyserNode
+    );
+
+    return () => {
+      if (effectsProcessorRef.current) {
+        effectsProcessorRef.current.dispose();
+        effectsProcessorRef.current = null;
+      }
+    };
+  }, [state.engineInstance]);
+
+  const engineActions = React.useMemo(
+    (): AudioEngineActions => ({
+      load: (track: Track, startTime?: number) => {
+        if (engineRef.current) {
+          engineRef.current.load(track, startTime);
+        }
+      },
+      play: <TData = unknown, TMetadata extends BaseMetadata = BaseMetadata>(
+        item?: QueueItem<TData, TMetadata> | null
+      ) => {
+        if (engineRef.current) {
+          return engineRef.current.play(item);
+        }
+        return Promise.resolve();
+      },
+      pause: () => {
+        if (engineRef.current) {
+          engineRef.current.pause();
+        }
+      },
+      seek: (time: number) => {
+        if (engineRef.current) {
+          engineRef.current.seek(time);
+        }
+      },
+      setVolume: (newVolume: number) => {
+        if (engineRef.current) {
+          engineRef.current.setVolume(newVolume);
+        }
+      },
+      setPlaybackRate: (rate: number) => {
+        if (engineRef.current) {
+          engineRef.current.setPlaybackRate(rate);
+        }
+      },
+      setQueue: <
+        TData = unknown,
+        TMetadata extends BaseMetadata = BaseMetadata,
+      >(
+        queue: QueueItem<TData, TMetadata>[] | null
+      ) => {
+        if (engineRef.current) {
+          engineRef.current.setQueue(queue);
+        }
+      },
+      setActiveItem: (id: string | number | null) => {
+        if (engineRef.current) {
+          return engineRef.current.setActiveItem(id);
+        }
+        return Promise.resolve();
+      },
+      isItemActive: (id: string | number | null) => {
+        if (engineRef.current) {
+          return engineRef.current.isItemActive(id);
+        }
+        return false;
+      },
+    }),
+    []
+  );
+
+  const applyEffects = React.useCallback((effects: AudioEffect[]) => {
+    if (effectsProcessorRef.current) {
+      effectsProcessorRef.current.applyEffects(effects);
     }
   }, []);
 
-  const play = React.useCallback(() => {
-    if (engineRef.current) {
-      engineRef.current.play();
+  const updateEffect = React.useCallback((effect: AudioEffect) => {
+    if (effectsProcessorRef.current) {
+      effectsProcessorRef.current.updateEffect(effect);
     }
   }, []);
 
-  const pause = React.useCallback(() => {
-    if (engineRef.current) {
-      engineRef.current.pause();
-    }
-  }, []);
-
-  const seek = React.useCallback((time: number) => {
-    if (engineRef.current) {
-      engineRef.current.seek(time);
-    }
-  }, []);
-
-  const setEngineVolume = React.useCallback((newVolume: number) => {
-    if (engineRef.current) {
-      engineRef.current.setVolume(newVolume);
-    }
-  }, []);
-
-  const isEngineInitialized = state.engineInstance !== null;
-  const isLoading = state.playbackState === PlaybackState.LOADING;
-  const isPlaying = state.playbackState === PlaybackState.PLAYING;
-
-  const timeContextValue = React.useMemo(
-    () => ({
-      currentTime: state.currentTime,
-      duration: state.duration,
-    }),
-    [state.currentTime, state.duration]
+  const updateWetDry = React.useCallback(
+    (
+      effectId: string,
+      wet: number,
+      dry: number,
+      duration = DEFAULT_WET_DRY_DURATION
+    ) => {
+      if (effectsProcessorRef.current) {
+        effectsProcessorRef.current.updateWetDry(effectId, wet, dry, duration);
+      }
+    },
+    []
   );
 
-  const playbackContextValue = React.useMemo(
+  const effectsContextValue = React.useMemo(
     () => ({
-      playbackState: state.playbackState,
-      currentMusic: state.currentMusic,
-      isBuffering: state.isBuffering,
-      error: state.error,
-      isLoading,
-      isPlaying,
+      processor: effectsProcessorRef.current,
+      applyEffects,
+      updateEffect,
+      updateWetDry,
     }),
-    [
-      state.playbackState,
-      state.currentMusic,
-      state.isBuffering,
-      state.error,
-      isLoading,
-      isPlaying,
-    ]
+    [applyEffects, updateEffect, updateWetDry]
   );
 
-  const volumeContextValue = React.useMemo(
-    () => ({
-      volume: state.volume,
-      isMuted: state.isMuted,
-    }),
-    [state.volume, state.isMuted]
-  );
-
-  const frequencyContextValue = React.useMemo(
-    () => ({
-      frequencyData: state.frequencyData,
-    }),
-    [state.frequencyData]
-  );
-
-  const actionsContextValue = React.useMemo(
-    () => ({
-      load,
-      play,
-      pause,
-      seek,
-      setVolume: setEngineVolume,
-    }),
-    [load, play, pause, seek, setEngineVolume]
-  );
-
-  const statusContextValue = React.useMemo(
-    () => ({
-      engine: state.engineInstance,
-      isEngineInitialized,
-      analyserNode: state.analyserNode,
-    }),
-    [state.engineInstance, isEngineInitialized, state.analyserNode]
+  const visualizationContextValue = React.useMemo(
+    () => visualizationState,
+    [visualizationState]
   );
 
   return (
-    <AudioActionsContext.Provider value={actionsContextValue}>
-      <AudioStatusContext.Provider value={statusContextValue}>
-        <AudioVolumeContext.Provider value={volumeContextValue}>
-          <AudioPlaybackContext.Provider value={playbackContextValue}>
-            <AudioFrequencyContext.Provider value={frequencyContextValue}>
-              <AudioTimeContext.Provider value={timeContextValue}>
-                {children}
-              </AudioTimeContext.Provider>
-            </AudioFrequencyContext.Provider>
-          </AudioPlaybackContext.Provider>
-        </AudioVolumeContext.Provider>
-      </AudioStatusContext.Provider>
-    </AudioActionsContext.Provider>
+    <ActionsContext.Provider value={engineActions}>
+      <QueueContext.Provider value={queueManagerRef.current}>
+        <EffectsContext.Provider value={effectsContextValue}>
+          <VisualizationContext.Provider value={visualizationContextValue}>
+            {children}
+          </VisualizationContext.Provider>
+        </EffectsContext.Provider>
+      </QueueContext.Provider>
+    </ActionsContext.Provider>
   );
 }

@@ -80,7 +80,7 @@ export default async function Page(props: {
                     <Button
                       render={
                         <Link href={links.doc} rel="noreferrer" target="_blank">
-                          <LinkIcon/>
+                          <LinkIcon />
                           API Reference
                         </Link>
                       }
@@ -101,8 +101,7 @@ export default async function Page(props: {
                   className="shadow-none"
                   render={
                     <Link href={neighbours.previous.url}>
-                      <ArrowLeftIcon/>{" "}
-                      {neighbours.previous.name}
+                      <ArrowLeftIcon /> {neighbours.previous.name}
                     </Link>
                   }
                   variant="outline"
@@ -113,8 +112,7 @@ export default async function Page(props: {
                   className="ms-auto shadow-none"
                   render={
                     <Link href={neighbours.next.url}>
-                      {neighbours.next.name}{" "}
-                      <ArrowRightIcon/>
+                      {neighbours.next.name} <ArrowRightIcon />
                     </Link>
                   }
                   variant="outline"

@@ -4,15 +4,15 @@
     "jsx": "react-jsx"
   },
   "files": [
-    "./src/core/index.ts"
+    "src/core/engine/main.ts"
   ],
   "include": [
     "src/**/*.ts",
-    "src/**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules",
+    "src/**/*.tsx",
     "**/*.test.ts",
     "__tests__"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

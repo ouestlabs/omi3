@@ -1,0 +1,11 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "ui",
+  "type": "registry:ui",
+  "registryDependencies": [
+    "@audio/cover",
+    "@audio/meter",
+    "@audio/waveform",
+    "@audio/player"
+  ]
+}

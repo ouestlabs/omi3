@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "file-input",
+  "type": "registry:block",
+  "description": "Audio file input",
+  "dependencies": [],
+  "registryDependencies": [
+    "@audio/input",
+    "@audio/label"
+  ],
+  "files": [
+    {
+      "path": "registry/default/particles/particle-file-input.tsx",
+      "content": "\"use client\";\n\nimport {\n  Frame,\n  FrameHeader,\n  FramePanel,\n  FrameTitle,\n} from \"@/registry/default/ui/frame\";\nimport { PlayerFileInput } from \"@/registry/default/ui/player\";\n\nfunction PlayerFileInputParticle() {\n  return (\n    <Frame>\n      <FrameHeader>\n        <FrameTitle>Player File Input</FrameTitle>\n      </FrameHeader>\n      <FramePanel>\n        <PlayerFileInput />\n      </FramePanel>\n    </Frame>\n  );\n}\n\nexport default PlayerFileInputParticle;\n",
+      "type": "registry:block"
+    }
+  ],
+  "categories": [
+    "file"
+  ]
+}

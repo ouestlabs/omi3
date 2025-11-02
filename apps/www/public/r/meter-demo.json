@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "meter-demo",
+  "type": "registry:example",
+  "description": "Basic meter",
+  "registryDependencies": [
+    "@audio/meter"
+  ],
+  "files": [
+    {
+      "path": "registry/default/examples/meter-demo.tsx",
+      "content": "import {\n  Meter,\n  MeterIndicator,\n  MeterLabel,\n  MeterTrack,\n  MeterValue,\n} from \"@/registry/default/ui/meter\";\n\nexport default function MeterDemo() {\n  return (\n    <Meter value={75}>\n      <div className=\"flex items-center justify-between gap-2\">\n        <MeterLabel>Storage usage</MeterLabel>\n        <MeterValue />\n      </div>\n      <MeterTrack>\n        <MeterIndicator />\n      </MeterTrack>\n    </Meter>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "categories": [
+    "meter"
+  ]
+}

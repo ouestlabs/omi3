@@ -1,0 +1,24 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "track-info",
+  "type": "registry:block",
+  "description": "Audio track info",
+  "dependencies": [
+    "audio-engine",
+    "lucide-react"
+  ],
+  "registryDependencies": [
+    "@audio/cover",
+    "@audio/skeleton"
+  ],
+  "files": [
+    {
+      "path": "registry/default/particles/particle-track-info.tsx",
+      "content": "\"use client\";\n\nimport {\n  Frame,\n  FrameHeader,\n  FramePanel,\n  FrameTitle,\n} from \"@/registry/default/ui/frame\";\nimport { PlayerTrackInfo } from \"@/registry/default/ui/player\";\n\nfunction PlayerTrackInfoParticle() {\n  return (\n    <Frame>\n      <FrameHeader>\n        <FrameTitle>Player Track Info</FrameTitle>\n      </FrameHeader>\n      <FramePanel>\n        <PlayerTrackInfo />\n      </FramePanel>\n    </Frame>\n  );\n}\n\nexport default PlayerTrackInfoParticle;\n",
+      "type": "registry:block"
+    }
+  ],
+  "categories": [
+    "track-info"
+  ]
+}
