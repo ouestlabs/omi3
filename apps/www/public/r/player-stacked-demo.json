@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "player-stacked-demo",
+  "type": "registry:example",
+  "description": "Audio player with stacked layout",
+  "registryDependencies": [
+    "@audio/player"
+  ],
+  "files": [
+    {
+      "path": "src/registry/default/examples/player-stacked-demo.tsx",
+      "content": "import {\n  AudioControlBar,\n  AudioControlGroup,\n  AudioPlay,\n  AudioPlayer,\n  AudioSeekBar,\n  AudioSkipBack,\n  AudioSkipForward,\n  AudioTimeDisplay,\n  AudioVolume,\n} from \"@/registry/default/ui/audio/player\";\n\nexport default function AudioPlayerStackedDemo() {\n  return (\n    <AudioPlayer>\n      <AudioControlBar variant=\"stacked\">\n        <AudioControlGroup>\n          <AudioTimeDisplay />\n          <AudioSeekBar />\n          <AudioTimeDisplay remaining />\n        </AudioControlGroup>\n        <AudioControlGroup className=\"justify-between\">\n          <AudioControlGroup>\n            <AudioSkipBack />\n            <AudioPlay />\n            <AudioSkipForward />\n          </AudioControlGroup>\n          <AudioVolume />\n        </AudioControlGroup>\n      </AudioControlBar>\n    </AudioPlayer>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "categories": [
+    "player"
+  ]
+}

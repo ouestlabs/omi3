@@ -28,7 +28,7 @@ export default defineConfig({
 });
 
 export const docs = defineDocs({
-  dir: "content/docs",
+  dir: "src/content/docs",
   docs: {
     schema: frontmatterSchema.extend({
       links: z
@@ -38,5 +38,8 @@ export const docs = defineDocs({
         })
         .optional(),
     }),
+    postprocess: {
+      includeProcessedMarkdown: true,
+    },
   },
 });

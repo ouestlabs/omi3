@@ -4,11 +4,20 @@ import type { NextConfig } from "next";
 const withMDX = createMDX();
 
 const nextConfig: NextConfig = {
+  devIndicators: false,
+  pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
   reactCompiler: true,
   experimental: {
     turbopackFileSystemCacheForDev: true,
   },
-  transpilePackages: ["audio-ui", "audio-engine"],
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "avatar.vercel.sh",
+      },
+    ],
+  },
   async redirects() {
     return [
       {

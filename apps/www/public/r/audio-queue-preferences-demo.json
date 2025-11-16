@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "audio-queue-preferences-demo",
+  "type": "registry:example",
+  "description": "Minimal queue with preferences dropdown",
+  "registryDependencies": [
+    "@audio/player",
+    "@audio/queue"
+  ],
+  "files": [
+    {
+      "path": "src/registry/default/examples/audio-queue-preferences-demo.tsx",
+      "content": "import {\n  AudioControlBar,\n  AudioPlayer,\n} from \"@/registry/default/ui/audio/player\";\nimport {\n  AudioQueue,\n  AudioQueuePreferences,\n} from \"@/registry/default/ui/audio/queue\";\n\nexport default function AudioQueuePreferencesDemo() {\n  return (\n    <AudioPlayer>\n      <AudioControlBar>\n        <AudioQueuePreferences />\n        <AudioQueue />\n      </AudioControlBar>\n    </AudioPlayer>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "categories": [
+    "queue"
+  ]
+}

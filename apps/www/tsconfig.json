@@ -5,10 +5,14 @@
     "declarationMap": false,
     "esModuleInterop": true,
     "paths": {
-      "@/*": ["./*"],
-      "@source/*": ["./.source/*"],
-      "audio-ui/*": ["../../packages/ui/src/*"]
-    }
+      "@/*": [
+        "./src/*"
+      ],
+      "@source/*": [
+        "./.source/*"
+      ]
+    },
+    "strictNullChecks": true
   },
   "include": [
     "next-env.d.ts",
@@ -17,5 +21,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

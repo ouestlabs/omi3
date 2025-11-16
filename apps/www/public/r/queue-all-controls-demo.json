@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "queue-all-controls-demo",
+  "type": "registry:example",
+  "description": "Queue with all controls (shuffle, repeat, preferences)",
+  "registryDependencies": [
+    "@audio/player",
+    "@audio/queue"
+  ],
+  "files": [
+    {
+      "path": "src/registry/default/examples/queue-all-controls-demo.tsx",
+      "content": "import {\n  AudioQueue,\n  AudioQueuePreferences,\n  AudioQueueRepeatMode,\n  AudioQueueShuffle,\n} from \"@/registry/default/ui/audio/queue\";\nimport { AudioControlBar, AudioPlayer } from \"../ui/audio/player\";\n\nexport default function AudioQueueAllControlsDemo() {\n  return (\n    <AudioPlayer className=\"w-max\">\n      <AudioControlBar>\n        <AudioQueueShuffle />\n        <AudioQueueRepeatMode />\n        <AudioQueuePreferences />\n        <AudioQueue />\n      </AudioControlBar>\n    </AudioPlayer>\n  );\n}\n",
+      "type": "registry:example"
+    }
+  ],
+  "categories": [
+    "queue"
+  ]
+}

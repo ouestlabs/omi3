@@ -6,229 +6,154 @@
       "name": "ui",
       "type": "registry:ui",
       "registryDependencies": [
-        "@audio/cover",
-        "@audio/meter",
-        "@audio/waveform",
         "@audio/player"
       ]
     },
     {
-      "name": "cover",
+      "name": "slider",
       "type": "registry:ui",
       "dependencies": [
-        "@base-ui-components/react"
+        "radix-ui"
       ],
+      "registryDependencies": [],
       "files": [
         {
-          "path": "registry/default/ui/cover.tsx",
+          "path": "src/registry/default/ui/slider.tsx",
           "type": "registry:ui"
         }
       ]
     },
     {
-      "name": "meter",
+      "name": "empty",
       "type": "registry:ui",
       "dependencies": [
-        "@base-ui-components/react"
+        "class-variance-authority",
+        "clsx",
+        "tailwind-merge"
       ],
+      "registryDependencies": [],
       "files": [
         {
-          "path": "registry/default/ui/meter.tsx",
+          "path": "src/registry/default/ui/empty.tsx",
           "type": "registry:ui"
         }
       ]
     },
     {
-      "name": "skeleton",
-      "type": "registry:ui",
-      "files": [
-        {
-          "path": "registry/default/ui/skeleton.tsx",
-          "type": "registry:ui"
-        }
-      ],
-      "cssVars": {
-        "theme": {
-          "--animate-skeleton": "skeleton 2s -1s infinite linear"
-        }
-      },
-      "css": {
-        "@keyframes skeleton": {
-          "to": {
-            "background-position": "-200% 0"
-          }
-        }
-      }
-    },
-    {
-      "name": "waveform",
+      "name": "sortable-list",
       "type": "registry:ui",
       "dependencies": [
-        "@base-ui-components/react"
+        "@dnd-kit/core",
+        "@dnd-kit/sortable",
+        "@dnd-kit/utilities",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "@shadcn/button"
       ],
       "files": [
         {
-          "path": "registry/default/ui/waveform.tsx",
+          "path": "src/registry/default/ui/sortable-list.tsx",
           "type": "registry:ui"
         }
       ]
     },
     {
-      "name": "cover-demo",
-      "description": "Cover with image and fallback",
-      "type": "registry:example",
+      "name": "player",
+      "type": "registry:ui",
+      "dependencies": [
+        "zustand",
+        "lucide-react"
+      ],
       "registryDependencies": [
-        "@audio/cover"
+        "@audio/store",
+        "@audio/audio",
+        "@audio/slider",
+        "@audio/empty",
+        "@shadcn/button",
+        "@shadcn/dialog",
+        "@shadcn/dropdown-menu",
+        "@shadcn/input",
+        "@shadcn/item",
+        "@shadcn/scroll-area",
+        "@shadcn/toggle",
+        "@shadcn/tooltip"
       ],
       "files": [
         {
-          "path": "registry/default/examples/cover-demo.tsx",
-          "type": "registry:example"
+          "path": "src/registry/default/ui/audio/player.tsx",
+          "type": "registry:ui"
         }
-      ],
-      "categories": [
-        "cover"
       ]
     },
     {
-      "name": "cover-fallback",
-      "description": "Fallback-only cover",
-      "type": "registry:example",
+      "name": "track",
+      "type": "registry:ui",
+      "dependencies": [
+        "lucide-react"
+      ],
       "registryDependencies": [
-        "@audio/cover"
+        "@audio/empty",
+        "@audio/sortable-list",
+        "@shadcn/avatar",
+        "@shadcn/button",
+        "@shadcn/item",
+        "@shadcn/scroll-area"
       ],
       "files": [
         {
-          "path": "registry/default/examples/cover-fallback.tsx",
-          "type": "registry:example"
+          "path": "src/registry/default/ui/audio/track.tsx",
+          "type": "registry:ui"
         }
-      ],
-      "categories": [
-        "cover"
       ]
     },
     {
-      "name": "cover-group",
-      "description": "Overlapping cover group",
-      "type": "registry:example",
+      "name": "queue",
+      "type": "registry:ui",
+      "dependencies": [
+        "zustand",
+        "lucide-react"
+      ],
       "registryDependencies": [
-        "@audio/cover"
+        "@audio/store",
+        "@audio/track",
+        "@audio/empty",
+        "@shadcn/button",
+        "@shadcn/command",
+        "@shadcn/dialog",
+        "@shadcn/dropdown-menu",
+        "@shadcn/input",
+        "@shadcn/item",
+        "@shadcn/scroll-area",
+        "@shadcn/toggle",
+        "@shadcn/tooltip"
       ],
       "files": [
         {
-          "path": "registry/default/examples/cover-group.tsx",
-          "type": "registry:example"
+          "path": "src/registry/default/ui/audio/queue.tsx",
+          "type": "registry:ui"
         }
-      ],
-      "categories": [
-        "cover",
-        "cover group"
       ]
     },
     {
-      "name": "cover-radius",
-      "description": "Covers with different radii",
-      "type": "registry:example",
+      "name": "provider",
+      "type": "registry:ui",
+      "dependencies": [
+        "zustand"
+      ],
       "registryDependencies": [
-        "@audio/cover"
+        "@audio/store",
+        "@audio/audio"
       ],
       "files": [
         {
-          "path": "registry/default/examples/cover-radius.tsx",
-          "type": "registry:example"
+          "path": "src/registry/default/ui/audio/provider.tsx",
+          "type": "registry:ui"
         }
-      ],
-      "categories": [
-        "cover"
       ]
     },
     {
-      "name": "cover-size",
-      "description": "Covers with different sizes",
-      "type": "registry:example",
-      "registryDependencies": [
-        "@audio/cover"
-      ],
-      "files": [
-        {
-          "path": "registry/default/examples/cover-size.tsx",
-          "type": "registry:example"
-        }
-      ],
-      "categories": [
-        "cover"
-      ]
-    },
-    {
-      "name": "meter-demo",
-      "description": "Basic meter",
-      "type": "registry:example",
-      "registryDependencies": [
-        "@audio/meter"
-      ],
-      "files": [
-        {
-          "path": "registry/default/examples/meter-demo.tsx",
-          "type": "registry:example"
-        }
-      ],
-      "categories": [
-        "meter"
-      ]
-    },
-    {
-      "name": "meter-simple",
-      "description": "Meter without label and value",
-      "type": "registry:example",
-      "registryDependencies": [
-        "@audio/meter"
-      ],
-      "files": [
-        {
-          "path": "registry/default/examples/meter-simple.tsx",
-          "type": "registry:example"
-        }
-      ],
-      "categories": [
-        "meter"
-      ]
-    },
-    {
-      "name": "meter-with-formatted-value",
-      "description": "Meter with a custom formatted value",
-      "type": "registry:example",
-      "registryDependencies": [
-        "@audio/meter"
-      ],
-      "files": [
-        {
-          "path": "registry/default/examples/meter-with-formatted-value.tsx",
-          "type": "registry:example"
-        }
-      ],
-      "categories": [
-        "meter"
-      ]
-    },
-    {
-      "name": "meter-with-range",
-      "description": "Meter with min and max values",
-      "type": "registry:example",
-      "registryDependencies": [
-        "@audio/meter"
-      ],
-      "files": [
-        {
-          "path": "registry/default/examples/meter-with-range.tsx",
-          "type": "registry:example"
-        }
-      ],
-      "categories": [
-        "meter"
-      ]
-    },
-    {
-      "name": "audio-player-demo",
+      "name": "player-demo",
       "description": "Audio player demo",
       "type": "registry:example",
       "registryDependencies": [
@@ -237,7 +162,7 @@
       ],
       "files": [
         {
-          "path": "registry/default/examples/audio-player-demo.tsx",
+          "path": "src/registry/default/examples/player-demo.tsx",
           "type": "registry:example"
         }
       ],
@@ -246,142 +171,35 @@
       ]
     },
     {
-      "name": "waveform-demo",
-      "description": "Waveform demo",
+      "name": "player-queue-demo",
+      "description": "Audio player with queue demo",
       "type": "registry:example",
       "registryDependencies": [
-        "@audio/waveform"
+        "@audio/player",
+        "@audio/queue"
       ],
       "files": [
         {
-          "path": "registry/default/examples/waveform-demo.tsx",
+          "path": "src/registry/default/examples/player-queue-demo.tsx",
           "type": "registry:example"
         }
       ],
       "categories": [
-        "waveform"
+        "player",
+        "queue"
       ]
     },
     {
-      "name": "file-input",
-      "description": "Audio file input",
-      "type": "registry:block",
-      "registryDependencies": [
-        "@audio/input",
-        "@audio/label"
-      ],
-      "dependencies": [],
-      "files": [
-        {
-          "path": "registry/default/particles/particle-file-input.tsx",
-          "type": "registry:block"
-        }
-      ],
-      "categories": [
-        "file"
-      ]
-    },
-    {
-      "name": "controls",
-      "description": "Audio controls",
-      "type": "registry:block",
-      "registryDependencies": [
-        "@audio/button",
-        "@audio/tooltip",
-        "@audio/spinner",
-        "audio-engine",
-        "lucide-react"
-      ],
-      "dependencies": [
-        "lucide-react",
-        "audio-engine"
-      ],
-      "files": [
-        {
-          "path": "registry/default/particles/particle-controls.tsx",
-          "type": "registry:block"
-        }
-      ],
-      "categories": [
-        "controls"
-      ]
-    },
-    {
-      "name": "seek-bar",
-      "description": "Audio seek bar",
-      "type": "registry:block",
-      "registryDependencies": [
-        "@audio/slider"
-      ],
-      "dependencies": [
-        "audio-engine",
-        "@audio-ui/utils"
-      ],
-      "files": [
-        {
-          "path": "registry/default/particles/particle-seek-bar.tsx",
-          "type": "registry:block"
-        }
-      ],
-      "categories": [
-        "seek-bar"
-      ]
-    },
-    {
-      "name": "track-info",
-      "description": "Audio track info",
-      "type": "registry:block",
-      "registryDependencies": [
-        "@audio/cover",
-        "@audio/skeleton"
-      ],
-      "dependencies": [
-        "audio-engine",
-        "lucide-react"
-      ],
-      "files": [
-        {
-          "path": "registry/default/particles/particle-track-info.tsx",
-          "type": "registry:block"
-        }
-      ],
-      "categories": [
-        "track-info"
-      ]
-    },
-    {
-      "name": "volume",
-      "description": "Audio volume",
-      "type": "registry:block",
-      "dependencies": [
-        "audio-engine",
-        "@audio-ui/utils"
-      ],
-      "files": [
-        {
-          "path": "registry/default/particles/particle-volume.tsx",
-          "type": "registry:block"
-        }
-      ],
-      "categories": [
-        "volume"
-      ]
-    },
-    {
-      "name": "player",
-      "description": "Audio player",
-      "type": "registry:block",
+      "name": "player-stacked-demo",
+      "description": "Audio player with stacked layout",
+      "type": "registry:example",
       "registryDependencies": [
         "@audio/player"
       ],
-      "dependencies": [
-        "audio-engine",
-        "@audio-ui/utils"
-      ],
       "files": [
         {
-          "path": "registry/default/particles/particle-player.tsx",
-          "type": "registry:block"
+          "path": "src/registry/default/examples/player-stacked-demo.tsx",
+          "type": "registry:example"
         }
       ],
       "categories": [
@@ -389,64 +207,246 @@
       ]
     },
     {
-      "name": "colors-zinc",
-      "type": "registry:style",
-      "cssVars": {
-        "light": {
-          "background": "oklch(1 0 0)",
-          "foreground": "oklch(0.21 0.006 285.885)",
-          "card": "oklch(1 0 0)",
-          "card-foreground": "oklch(0.21 0.006 285.885)",
-          "popover": "oklch(1 0 0)",
-          "popover-foreground": "oklch(0.21 0.006 285.885)",
-          "primary": "oklch(0.274 0.006 286.033)",
-          "primary-foreground": "oklch(0.985 0 0)",
-          "secondary": "oklch(0 0 0 / 4%)",
-          "secondary-foreground": "oklch(0.21 0.006 285.885)",
-          "muted": "oklch(0 0 0 / 4%)",
-          "muted-foreground": "oklch(0.442 0.017 285.786)",
-          "accent": "oklch(0 0 0 / 4%)",
-          "accent-foreground": "oklch(0.21 0.006 285.885)",
-          "destructive": "oklch(0.637 0.237 25.331)",
-          "destructive-foreground": "oklch(0.505 0.213 27.518)",
-          "info": "oklch(0.623 0.214 259.815)",
-          "info-foreground": "oklch(0.488 0.243 264.376)",
-          "success": "oklch(0.696 0.17 162.48)",
-          "success-foreground": "oklch(0.508 0.118 165.612)",
-          "warning": "oklch(0.769 0.188 70.08)",
-          "warning-foreground": "oklch(0.555 0.163 48.998)",
-          "border": "oklch(0 0 0 / 10%)",
-          "input": "oklch(0 0 0 / 10%)",
-          "ring": "oklch(0.705 0.015 286.067)"
-        },
-        "dark": {
-          "background": "oklch(0.141 0.005 285.823)",
-          "foreground": "oklch(0.967 0.001 286.375)",
-          "card": "color-mix(in srgb, oklch(0.21 0.006 285.885) 80%, oklch(0.141 0.005 285.823))",
-          "card-foreground": "oklch(0.967 0.001 286.375)",
-          "popover": "oklch(0.21 0.006 285.885)",
-          "popover-foreground": "oklch(0.967 0.001 286.375)",
-          "primary": "oklch(0.967 0.001 286.375)",
-          "primary-foreground": "oklch(0.21 0.006 285.885)",
-          "secondary": "oklch(1 0 0 / 8%)",
-          "secondary-foreground": "oklch(0.967 0.001 286.375)",
-          "muted": "oklch(1 0 0 / 8%)",
-          "muted-foreground": "oklch(0.705 0.015 286.067)",
-          "accent": "oklch(1 0 0 / 8%)",
-          "accent-foreground": "oklch(0.967 0.001 286.375)",
-          "destructive": "oklch(0.637 0.237 25.331)",
-          "destructive-foreground": "oklch(0.704 0.191 22.216)",
-          "info": "oklch(0.623 0.214 259.815)",
-          "info-foreground": "oklch(0.707 0.165 254.624)",
-          "success": "oklch(0.696 0.17 162.48)",
-          "success-foreground": "oklch(0.765 0.177 163.223)",
-          "warning": "oklch(0.769 0.188 70.08)",
-          "warning-foreground": "oklch(0.828 0.189 84.429)",
-          "border": "oklch(1 0 0 / 12%)",
-          "input": "oklch(1 0 0 / 12%)",
-          "ring": "oklch(0.552 0.016 285.938)"
+      "name": "queue-shuffle-repeat-demo",
+      "description": "Minimal queue with shuffle and repeat controls",
+      "type": "registry:example",
+      "registryDependencies": [
+        "@audio/player",
+        "@audio/queue"
+      ],
+      "files": [
+        {
+          "path": "src/registry/default/examples/queue-shuffle-repeat-demo.tsx",
+          "type": "registry:example"
         }
-      }
+      ],
+      "categories": [
+        "queue"
+      ]
+    },
+    {
+      "name": "queue-preferences-demo",
+      "description": "Minimal queue with preferences dropdown",
+      "type": "registry:example",
+      "registryDependencies": [
+        "@audio/player",
+        "@audio/queue"
+      ],
+      "files": [
+        {
+          "path": "src/registry/default/examples/queue-preferences-demo.tsx",
+          "type": "registry:example"
+        }
+      ],
+      "categories": [
+        "queue"
+      ]
+    },
+    {
+      "name": "queue-all-controls-demo",
+      "description": "Queue with all controls (shuffle, repeat, preferences)",
+      "type": "registry:example",
+      "registryDependencies": [
+        "@audio/player",
+        "@audio/queue"
+      ],
+      "files": [
+        {
+          "path": "src/registry/default/examples/queue-all-controls-demo.tsx",
+          "type": "registry:example"
+        }
+      ],
+      "categories": [
+        "queue"
+      ]
+    },
+    {
+      "name": "track-demo",
+      "description": "Minimal track component example",
+      "type": "registry:example",
+      "registryDependencies": [
+        "@audio/player",
+        "@audio/track"
+      ],
+      "files": [
+        {
+          "path": "src/registry/default/examples/track-demo.tsx",
+          "type": "registry:example"
+        }
+      ],
+      "categories": [
+        "track"
+      ]
+    },
+    {
+      "name": "track-list-demo",
+      "description": "Track list with selection example",
+      "type": "registry:example",
+      "registryDependencies": [
+        "@audio/player",
+        "@audio/track"
+      ],
+      "files": [
+        {
+          "path": "src/registry/default/examples/track-list-demo.tsx",
+          "type": "registry:example"
+        }
+      ],
+      "categories": [
+        "track"
+      ]
+    },
+    {
+      "name": "track-list-grid-demo",
+      "description": "Track list with grid layout example",
+      "type": "registry:example",
+      "registryDependencies": [
+        "@audio/player",
+        "@audio/track"
+      ],
+      "files": [
+        {
+          "path": "src/registry/default/examples/track-list-grid-demo.tsx",
+          "type": "registry:example"
+        }
+      ],
+      "categories": [
+        "track",
+        "grid"
+      ]
+    },
+    {
+      "name": "track-sortable-list-demo",
+      "description": "Track list with sortable selection example",
+      "type": "registry:example",
+      "registryDependencies": [
+        "@audio/player",
+        "@audio/track"
+      ],
+      "files": [
+        {
+          "path": "src/registry/default/examples/track-sortable-list-demo.tsx",
+          "type": "registry:example"
+        }
+      ],
+      "categories": [
+        "track",
+        "sortable"
+      ]
+    },
+    {
+      "name": "track-sortable-list-grid-demo",
+      "description": "Track list with sortable selection and grid layout example",
+      "type": "registry:example",
+      "registryDependencies": [
+        "@audio/player",
+        "@audio/track"
+      ],
+      "files": [
+        {
+          "path": "src/registry/default/examples/track-sortable-list-grid-demo.tsx",
+          "type": "registry:example"
+        }
+      ],
+      "categories": [
+        "track",
+        "sortable",
+        "grid"
+      ]
+    },
+    {
+      "name": "particle-player",
+      "description": "Audio player",
+      "type": "registry:block",
+      "registryDependencies": [
+        "@audio/player",
+        "@audio/queue",
+        "@audio/store",
+        "@audio/audio"
+      ],
+      "files": [
+        {
+          "path": "src/registry/default/particles/particle-player.tsx",
+          "type": "registry:block"
+        }
+      ],
+      "categories": [
+        "player",
+        "queue"
+      ]
+    },
+    {
+      "name": "particle-player-widget",
+      "description": "Audio player widget",
+      "type": "registry:block",
+      "registryDependencies": [
+        "@audio/player",
+        "@audio/track",
+        "@audio/store",
+        "@audio/audio"
+      ],
+      "files": [
+        {
+          "path": "src/registry/default/particles/particle-player-widget.tsx",
+          "type": "registry:block"
+        }
+      ],
+      "categories": [
+        "player",
+        "widget"
+      ]
+    },
+    {
+      "name": "hooks",
+      "type": "registry:hook",
+      "registryDependencies": []
+    },
+    {
+      "name": "lib",
+      "type": "registry:lib",
+      "registryDependencies": [
+        "@audio/store",
+        "@audio/audio"
+      ]
+    },
+    {
+      "name": "audio",
+      "description": "Audio Lib",
+      "type": "registry:lib",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "src/registry/default/lib/audio.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "categories": [
+        "lib",
+        "audio"
+      ]
+    },
+    {
+      "name": "store",
+      "description": "Audio store",
+      "type": "registry:lib",
+      "dependencies": [
+        "zustand"
+      ],
+      "registryDependencies": [
+        "@audio/audio"
+      ],
+      "files": [
+        {
+          "path": "src/registry/default/lib/audio-store.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "categories": [
+        "lib",
+        "audio",
+        "store"
+      ]
     }
   ]
 }

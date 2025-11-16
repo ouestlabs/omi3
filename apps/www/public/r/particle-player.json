@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "particle-player",
+  "type": "registry:block",
+  "description": "Audio player",
+  "registryDependencies": [
+    "@audio/player",
+    "@audio/queue",
+    "@audio/store",
+    "@audio/audio"
+  ],
+  "files": [
+    {
+      "path": "src/registry/default/particles/particle-player.tsx",
+      "content": "\"use client\";\n\nimport {\n  AudioControlBar,\n  AudioControlGroup,\n  AudioPlay,\n  AudioPlayer,\n  AudioSeekBar,\n  AudioSkipBack,\n  AudioSkipForward,\n  AudioTimeDisplay,\n  AudioVolume,\n} from \"@/registry/default/ui/audio/player\";\nimport {\n  AudioQueue,\n  AudioQueueRepeatMode,\n  AudioQueueShuffle,\n} from \"@/registry/default/ui/audio/queue\";\n\nexport default function ParticleAudioPlayer() {\n  return (\n    <AudioPlayer>\n      <AudioControlBar variant=\"stacked\">\n        <AudioControlGroup>\n          <AudioTimeDisplay />\n          <AudioSeekBar />\n          <AudioTimeDisplay remaining />\n        </AudioControlGroup>\n        <AudioControlGroup>\n          <AudioControlGroup>\n            <AudioSkipBack />\n            <AudioPlay />\n            <AudioSkipForward />\n          </AudioControlGroup>\n          <AudioQueueShuffle />\n          <AudioQueueRepeatMode />\n          <AudioVolume />\n          <AudioQueue />\n        </AudioControlGroup>\n      </AudioControlBar>\n    </AudioPlayer>\n  );\n}\n",
+      "type": "registry:block"
+    }
+  ],
+  "categories": [
+    "player",
+    "queue"
+  ]
+}
