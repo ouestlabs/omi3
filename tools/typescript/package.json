@@ -1,13 +1,13 @@
 {
-	"name": "@audio-ui/typescript",
-	"version": "0.0.0",
-	"license": "MIT",
-	"files": [
-		"base.json",
-		"nextjs.json",
-		"react-library.json"
-	],
-	"publishConfig": {
-		"access": "public"
-	}
+  "name": "@audio-ui/typescript",
+  "version": "0.0.0",
+  "license": "MIT",
+  "files": [
+    "base.json",
+    "nextjs.json",
+    "react-library.json"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }
