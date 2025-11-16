@@ -1,5 +1,2 @@
 [install]
 linker = "isolated"
-[test]
-preload = ["test.setup.ts"]
-coverage = true
