@@ -16,7 +16,7 @@
     "editor.defaultFormatter": "biomejs.biome"
   },
   "[jsonc]": {
-    "editor.defaultFormatter": "vscode.json-language-features"
+    "editor.defaultFormatter": "biomejs.biome"
   },
   "[css]": {
     "editor.defaultFormatter": "biomejs.biome"
@@ -31,5 +31,9 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.biome": "explicit",
     "source.organizeImports.biome": "explicit"
-  }
+  },
+  "tailwindCSS.classFunctions": [
+    "cva",
+    "cn"
+  ]
 }
