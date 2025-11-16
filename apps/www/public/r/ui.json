@@ -3,9 +3,6 @@
   "name": "ui",
   "type": "registry:ui",
   "registryDependencies": [
-    "@audio/cover",
-    "@audio/meter",
-    "@audio/waveform",
     "@audio/player"
   ]
 }
