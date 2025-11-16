@@ -1,11 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalEnv": [
-    "NODE_ENV",
-    "CI",
-    "VERCEL",
-    "NEXT_PUBLIC_MAIN_DOMAIN"
-  ],
+  "globalEnv": [],
   "tasks": {
     "build": {
       "dependsOn": [
@@ -21,41 +16,6 @@
         "dist/**"
       ]
     },
-    "build:pkg": {
-      "dependsOn": [
-        "^build:pkg"
-      ],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        ".env*"
-      ],
-      "outputs": [
-        "dist/**"
-      ]
-    },
-    "build:registry": {
-      "dependsOn": [
-        "^build:pkg",
-        "^build:registry"
-      ],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        ".env*"
-      ],
-      "outputs": [
-        ".next/**",
-        "!.next/cache/**"
-      ]
-    },
-    "serve:registry": {
-      "dependsOn": [
-        "^serve:registry"
-      ],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        ".env*"
-      ]
-    },
     "lint": {
       "dependsOn": [
         "^lint"
@@ -65,7 +25,11 @@
       "cache": false,
       "persistent": true
     },
-    "test": {},
+    "lint:fix": {
+      "dependsOn": [
+        "^lint:fix"
+      ]
+    },
     "clean": {
       "cache": false
     }
