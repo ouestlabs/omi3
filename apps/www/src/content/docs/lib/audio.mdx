@@ -1,0 +1,395 @@
+---
+title: Audio
+description: Core audio library for managing HTML5 audio playback with utilities.
+---
+
+## Installation
+
+The audio library is part of the audio player component. Import it from the audio file:
+
+```tsx
+import { $audio, formatDuration, type Track } from "@/lib/audio"
+```
+
+## Audio Library Instance
+
+### $audio
+
+The main audio library instance. It's a singleton that manages the HTML5 audio element.
+
+```tsx
+import { $audio } from "@/lib/audio"
+
+// Initialize the audio library
+$audio.init()
+
+// Load and play audio
+await $audio.load("https://example.com/audio.mp3", 0)
+await $audio.play()
+```
+
+## Methods
+
+### init()
+
+Initialize the audio library. Must be called before using other methods.
+
+```tsx
+$audio.init()
+```
+
+**Returns:** `void`
+
+### load(url, startTime?)
+
+Load an audio file from a URL.
+
+```tsx
+await $audio.load("https://example.com/audio.mp3", 0)
+```
+
+**Parameters:**
+
+- `url` - `string` - The URL of the audio file to load
+- `startTime` - `number` (optional) - The time in seconds to start playback from (default: 0)
+
+**Returns:** `Promise<void>`
+
+**Throws:** `Error` if the audio fails to load or times out (30s timeout)
+
+### play()
+
+Start or resume audio playback.
+
+```tsx
+await $audio.play()
+```
+
+**Returns:** `Promise<void>`
+
+**Throws:** `Error` if playback fails
+
+### pause()
+
+Pause audio playback.
+
+```tsx
+$audio.pause()
+```
+
+**Returns:** `void`
+
+### setVolume(volume, fadeTime?)
+
+Set the audio volume.
+
+```tsx
+$audio.setVolume(0.5) // Set volume to 50%
+$audio.setVolume(0.8, 500) // Fade to 80% volume over 500ms
+```
+
+**Parameters:**
+
+- `volume` - `number` - Volume level between 0 and 1
+- `fadeTime` - `number` (optional) - Fade duration in milliseconds (default: 0, no fade)
+
+**Returns:** `void`
+
+### getVolume()
+
+Get the current audio volume.
+
+```tsx
+const volume = $audio.getVolume() // Returns number between 0 and 1
+```
+
+**Returns:** `number` - Volume level between 0 and 1
+
+### setMuted(muted)
+
+Set the muted state of the audio.
+
+```tsx
+$audio.setMuted(true) // Mute audio
+$audio.setMuted(false) // Unmute audio
+```
+
+**Parameters:**
+
+- `muted` - `boolean` - Whether to mute the audio
+
+**Returns:** `void`
+
+### getDuration()
+
+Get the duration of the currently loaded audio in seconds.
+
+```tsx
+const duration = $audio.getDuration()
+```
+
+**Returns:** `number` - Duration in seconds, or 0 if not available
+
+### getCurrentTime()
+
+Get the current playback position in seconds.
+
+```tsx
+const currentTime = $audio.getCurrentTime()
+```
+
+**Returns:** `number` - Current time in seconds
+
+### setCurrentTime(time)
+
+Seek to a specific time in the audio.
+
+```tsx
+$audio.setCurrentTime(30) // Seek to 30 seconds
+```
+
+**Parameters:**
+
+- `time` - `number` - Time in seconds to seek to
+
+**Returns:** `void`
+
+### getAudioElement()
+
+Get the underlying HTML5 audio element.
+
+```tsx
+const audioElement = $audio.getAudioElement()
+```
+
+**Returns:** `HTMLAudioElement | null` - The audio element, or null if not available
+
+### getSource()
+
+Get the current audio source URL.
+
+```tsx
+const source = $audio.getSource()
+```
+
+**Returns:** `string` - The current audio source URL, or empty string if not available
+
+### isPaused()
+
+Check if the audio is currently paused.
+
+```tsx
+const paused = $audio.isPaused()
+```
+
+**Returns:** `boolean` - `true` if paused, `false` if playing
+
+### getBufferedRanges()
+
+Get the buffered time ranges of the audio.
+
+```tsx
+const buffered = $audio.getBufferedRanges()
+```
+
+**Returns:** `TimeRanges | null` - The buffered ranges, or null if not available
+
+### cleanup()
+
+Clean up the audio library and reset state.
+
+```tsx
+$audio.cleanup()
+```
+
+**Returns:** `void`
+
+### addEventListener(type, listener, options?)
+
+Add an event listener for custom audio events.
+
+```tsx
+$audio.addEventListener("bufferingStart", () => {
+  console.log("Buffering started")
+})
+```
+
+**Available events:**
+
+- `bufferingStart` - Fired when buffering starts
+- `bufferingEnd` - Fired when buffering ends
+- `playbackStarted` - Fired when playback starts
+- `audioError` - Fired when an audio error occurs
+- `bufferUpdate` - Fired when buffer updates (detail: `{ bufferedTime: number }`)
+
+**Parameters:**
+
+- `type` - `string` - Event type
+- `listener` - `EventListenerOrEventListenerObject | null` - Event listener
+- `options` - `boolean | AddEventListenerOptions` (optional) - Event listener options
+
+**Returns:** `void`
+
+### removeEventListener(type, callback, options?)
+
+Remove an event listener.
+
+```tsx
+$audio.removeEventListener("bufferingStart", handler)
+```
+
+**Parameters:**
+
+- `type` - `string` - Event type
+- `callback` - `EventListenerOrEventListenerObject | null` - Event listener to remove
+- `options` - `EventListenerOptions | boolean` (optional) - Event listener options
+
+**Returns:** `void`
+
+## Utilities
+
+### formatDuration(seconds)
+
+Format seconds to MM:SS format.
+
+```tsx
+import { formatDuration } from "@/lib/audio"
+
+const formatted = formatDuration(125) // "2:05"
+const formatted2 = formatDuration(3661) // "61:01"
+```
+
+**Parameters:**
+
+- `seconds` - `number` - The number of seconds to format
+
+**Returns:** `string` - Formatted duration in MM:SS format
+
+**Example:**
+
+```tsx
+import { formatDuration } from "@/lib/audio"
+
+function TimeDisplay() {
+  const currentTime = 125 // seconds
+  const duration = 300 // seconds
+
+  return (
+    <div>
+      {formatDuration(currentTime)} / {formatDuration(duration)}
+      {/* Output: "2:05" / "5:00" */}
+    </div>
+  )
+}
+```
+
+## Types
+
+### Track
+
+Type definition for audio tracks.
+
+```tsx
+import type { Track } from "@/lib/audio"
+
+const track: Track = {
+  id: "1",
+  url: "https://example.com/audio.mp3",
+  title: "My Song",
+  artist: "Artist Name",
+}
+```
+
+**Properties:**
+
+- `id?` - `string | number` - Optional track identifier
+- `url` - `string` - The URL of the audio file (required)
+- `title?` - `string` - Optional track title
+- `artist?` - `string` - Optional artist name
+- `[key: string]` - `unknown` - Additional properties allowed
+
+## Examples
+
+### Basic Usage
+
+```tsx
+import { $audio } from "@/lib/audio"
+
+// Initialize
+$audio.init()
+
+// Load and play
+async function playAudio() {
+  try {
+    await $audio.load("https://example.com/audio.mp3", 0)
+    await $audio.play()
+  } catch (error) {
+    console.error("Error playing audio:", error)
+  }
+}
+```
+
+### Volume Control
+
+```tsx
+import { $audio } from "@/lib/audio"
+
+// Set volume immediately
+$audio.setVolume(0.5)
+
+// Fade volume over time
+$audio.setVolume(0.8, 1000) // Fade to 80% over 1 second
+```
+
+### Event Listeners
+
+```tsx
+import { $audio } from "@/lib/audio"
+
+$audio.addEventListener("bufferingStart", () => {
+  console.log("Audio is buffering")
+})
+
+$audio.addEventListener("bufferingEnd", () => {
+  console.log("Audio finished buffering")
+})
+
+$audio.addEventListener("playbackStarted", () => {
+  console.log("Playback started")
+})
+
+$audio.addEventListener("audioError", () => {
+  console.error("Audio error occurred")
+})
+
+$audio.addEventListener("bufferUpdate", (e) => {
+  if (e instanceof CustomEvent) {
+    console.log("Buffered time:", e.detail.bufferedTime)
+  }
+})
+```
+
+### Formatting Time
+
+```tsx
+import { formatDuration } from "@/lib/audio"
+
+function TimeDisplay({ seconds }: { seconds: number }) {
+  return <div>{formatDuration(seconds)}</div>
+}
+
+// Usage
+<TimeDisplay seconds={125} /> {/* Output: "2:05" */}
+<TimeDisplay seconds={3661} /> {/* Output: "61:01" */}
+```
+
+## Notes
+
+- The audio library uses a singleton pattern (`$audio`) for global audio management
+- All methods are safe to call on the server side (they check for client-side availability)
+- The library handles audio errors automatically with retry logic (max 3 retries)
+- Volume fading is done smoothly using requestAnimationFrame
+- The library dispatches custom events for buffering, playback, and errors
+- `formatDuration` handles invalid values (NaN, Infinity, negative) by returning "0:00"
+- The audio element is automatically initialized when needed, but you can call `init()` explicitly
+

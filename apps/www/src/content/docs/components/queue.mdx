@@ -1,0 +1,299 @@
+---
+title: Audio Queue
+description: Composable queue management components for audio players with shuffle, repeat, and track selection.
+featured: true
+component: true
+---
+
+A comprehensive queue management system for audio players. Includes shuffle, repeat modes, track selection, search, and drag-and-drop reordering.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add @audio/queue
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install zustand lucide-react
+```
+
+<Step>Install the required shadcn/ui components:</Step>
+
+```bash
+npx shadcn@latest add button dialog dropdown-menu input item scroll-area toggle tooltip
+```
+
+<Step>Install the custom components from this registry:</Step>
+
+```bash
+npx shadcn@latest add @audio/empty
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource name="queue" title="components/ui/audio/queue.tsx" />
+
+<Step>Copy the required store file.</Step>
+
+<ComponentSource name="audio-store" title="lib/audio-store.ts" />
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+Import the components you need:
+
+```tsx showLineNumbers
+import {
+  AudioQueue,
+  AudioQueueButton,
+  AudioQueuePreferences,
+  AudioQueueRepeatMode,
+  AudioQueueShuffle,
+} from "@/components/ui/audio/queue"
+```
+
+### Basic Queue
+
+The `AudioQueue` component opens a dialog showing the current queue with search functionality and track selection.
+
+```tsx
+<AudioPlayer>
+  <AudioControlBar>
+    <AudioQueue />
+  </AudioControlBar>
+</AudioPlayer>
+```
+
+### Queue with Shuffle and Repeat
+
+Use this when you want quick access to shuffle and repeat controls. The toggle buttons provide fast switching between modes.
+
+<ComponentPreview name="queue-shuffle-repeat-demo" />
+
+```tsx
+<AudioPlayer>
+  <AudioControlBar>
+    <AudioQueueShuffle />
+    <AudioQueueRepeatMode />
+    <AudioQueue />
+  </AudioControlBar>
+</AudioPlayer>
+```
+
+### Queue with Preferences
+
+Use this when you want a compact interface with all queue settings in a dropdown menu. Ideal for space-constrained layouts.
+
+<ComponentPreview name="queue-preferences-demo" />
+
+```tsx
+<AudioPlayer>
+  <AudioControlBar>
+    <AudioQueuePreferences />
+    <AudioQueue />
+  </AudioControlBar>
+</AudioPlayer>
+```
+
+### Queue with All Controls
+
+Use this when you want both quick access buttons and a preferences menu. Provides the most comprehensive queue management interface.
+
+<ComponentPreview name="queue-all-controls-demo" />
+
+```tsx
+<AudioPlayer tracks={tracks}>
+  <AudioControlBar>
+    <AudioQueueShuffle />
+    <AudioQueueRepeatMode />
+    <AudioQueuePreferences />
+    <AudioQueue />
+  </AudioControlBar>
+</AudioPlayer>
+```
+
+## API Reference
+
+### AudioQueue
+
+A dialog component that displays the current queue and allows track selection, search, and reordering.
+
+#### Props
+
+| Prop              | Type                      | Default                    | Description                        |
+| ----------------- | ------------------------- | -------------------------- | ---------------------------------- |
+| onTrackSelect     | `(index: number) => void` | `undefined`                | Callback when a track is selected  |
+| searchPlaceholder | `string`                  | `"Search for a track..."`  | Placeholder text for search input  |
+| emptyLabel        | `string`                  | `"No tracks found"`        | Label shown when no tracks found   |
+| emptyDescription  | `string`                  | `"Try searching for a different track"` | Description when no tracks found   |
+
+#### Features
+
+- **Search**: Filter tracks by title or artist
+- **Track selection**: Click to play or pause current track
+- **Drag and drop**: Reorder tracks when not searching
+- **Remove tracks**: Remove individual tracks from queue
+- **Clear queue**: Button to clear all tracks
+
+#### Example
+
+```tsx
+<AudioQueue
+  onTrackSelect={(index) => {
+    console.log("Selected track at index:", index);
+  }}
+  searchPlaceholder="Search tracks..."
+  emptyLabel="Queue is empty"
+  emptyDescription="Add tracks to the queue to see them here"
+/>
+```
+
+### AudioQueueButton
+
+A button component with optional tooltip support, used internally by queue components.
+
+#### Props
+
+| Prop        | Type      | Default | Description                    |
+| ----------- | --------- | ------- | ------------------------------ |
+| tooltip     | `boolean` | `false` | Whether to show a tooltip      |
+| tooltipLabel | `string`  | `undefined` | Tooltip text                   |
+
+Inherits all props from `Button` component.
+
+#### Example
+
+```tsx
+<AudioQueueButton
+  tooltip
+  tooltipLabel="Open queue"
+  variant="outline"
+  size="icon"
+>
+  <ListMusicIcon />
+</AudioQueueButton>
+```
+
+### AudioQueueRepeatMode
+
+A toggle button that cycles through repeat modes: none, one, all.
+
+#### Props
+
+Inherits all props from `Toggle` component.
+
+#### Behavior
+
+- **None**: No repeat (default)
+- **One**: Repeat current track indefinitely
+- **All**: Repeat entire queue
+
+The button shows different icons based on the current mode:
+- `RepeatIcon` for "all" mode
+- `Repeat1Icon` for "one" mode
+- No icon when disabled (none mode)
+
+#### Example
+
+```tsx
+<AudioQueueRepeatMode />
+```
+
+### AudioQueueShuffle
+
+A toggle button that enables/disables shuffle mode. When enabled, the queue is shuffled randomly.
+
+#### Props
+
+Inherits all props from `Toggle` component (except `onPressedChange`).
+
+#### Behavior
+
+- When **enabled**: Queue is shuffled randomly
+- When **disabled**: Queue maintains original order
+
+The shuffle state persists until manually disabled.
+
+#### Example
+
+```tsx
+<AudioQueueShuffle />
+```
+
+### AudioQueuePreferences
+
+A dropdown menu that combines repeat mode and insert mode controls in a compact interface.
+
+#### Props
+
+Inherits all props from `AudioQueueButton` component.
+
+#### Features
+
+- **Repeat mode selection**: None, One, All
+- **Insert mode selection**: First, Last, After Current
+
+#### Insert Modes
+
+- **First**: New tracks are added at the beginning of the queue
+- **Last**: New tracks are added at the end of the queue (default)
+- **After Current**: New tracks are added after the currently playing track
+
+#### Example
+
+```tsx
+<AudioQueuePreferences />
+```
+
+## Integration with AudioPlayer
+
+Queue components are designed to work seamlessly with the `AudioPlayer` component:
+
+```tsx
+<AudioPlayer>
+  <AudioControlBar>
+    <AudioControlGroup>
+      <AudioPlay />
+      <AudioSeekBar />
+      <AudioTimeDisplay />
+    </AudioControlGroup>
+    <AudioControlGroup>
+      <AudioQueueShuffle />
+      <AudioQueueRepeatMode />
+      <AudioQueue />
+    </AudioControlGroup>
+  </AudioControlBar>
+</AudioPlayer>
+```
+
+## Notes
+
+- All queue components are self-contained and read state directly from the global store
+- `AudioProvider` must be present in the component tree for components to work
+- The `AudioQueue` component includes built-in search functionality
+- Track reordering is disabled when search is active
+- The queue dialog automatically closes when a track is selected
+- Queue components are optimized to prevent unnecessary re-renders

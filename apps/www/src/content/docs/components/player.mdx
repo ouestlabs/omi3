@@ -1,0 +1,311 @@
+---
+title: Audio Player
+description: A composable, shadcn/ui styled audio player component built with React and Zustand.
+featured: true
+component: true
+---
+
+A fully composable audio player component system. Build custom audio interfaces by combining individual control components.
+
+<ComponentPreview name="player-demo" />
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add @audio/player
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install zustand lucide-react
+```
+
+<Step>Install the required shadcn/ui components:</Step>
+
+```bash
+npx shadcn@latest add button dialog dropdown-menu empty input item scroll-area toggle tooltip
+```
+
+<Step>Install the custom components from this registry:</Step>
+
+```bash
+npx shadcn@latest add @audio/slider
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource name="player" title="components/ui/audio/player.tsx" />
+
+<Step>Copy the required store file.</Step>
+
+<ComponentSource name="audio-store" title="lib/audio-store.ts" />
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Setup
+
+First, wrap your app with `AudioProvider` at the root level. This provides the audio context to all components:
+
+```tsx showLineNumbers
+// app/layout.tsx or _app.tsx
+import { AudioProvider } from "@/components/ui/audio/provider"
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>
+        <AudioProvider tracks={initialTracks}>
+          {children}
+        </AudioProvider>
+      </body>
+    </html>
+  )
+}
+```
+
+## Usage
+
+Import the components you need:
+
+```tsx showLineNumbers
+import {
+  AudioPlayer,
+  AudioControlBar,
+  AudioControlGroup,
+  AudioPlay,
+  AudioSkipBack,
+  AudioSkipForward,
+  AudioRewind,
+  AudioFastForward,
+  AudioSeekBar,
+  AudioTimeDisplay,
+  AudioVolume,
+} from "@/components/ui/audio/player"
+```
+
+```tsx
+<AudioPlayer>
+  <AudioControlBar>
+    <AudioControlGroup>
+      <AudioRewind />
+      <AudioSkipBack />
+      <AudioPlay />
+      <AudioSkipForward />
+      <AudioFastForward />
+      <AudioTimeDisplay />
+      <AudioSeekBar />
+      <AudioTimeDisplay remaining />
+      <AudioVolume />
+    </AudioControlGroup>
+  </AudioControlBar>
+</AudioPlayer>
+```
+
+### Stacked Layout
+
+A player with stacked variant, showing time displays above and below the seek bar.
+
+<ComponentPreview name="player-stacked-demo" />
+
+### Player with Queue
+
+A full-featured player with queue management, shuffle, and repeat controls. Uses `AudioControlGroup` for flexible layout management.
+
+<ComponentPreview name="player-queue-demo" />
+
+For more queue management options, see the [Audio Queue documentation](/docs/components/queue).
+
+## API Reference
+
+### AudioProvider
+
+The root provider component that manages audio state and playback. Must be placed at the app level to provide context to all audio components.
+
+#### Props
+
+| Prop     | Type       | Default | Description                         |
+| -------- | ---------- | ------- | ----------------------------------- |
+| tracks   | `Track[]?` | `[]`    | Initial tracks to load in the queue |
+
+Inherits all props from `HTMLDivElement`.
+
+#### Example
+
+```tsx
+// At the root of your app
+import { AudioProvider } from "@/components/ui/audio/provider"
+
+<AudioProvider tracks={myTracks}>
+  <App />
+</AudioProvider>
+```
+
+### AudioPlayer
+
+A styled container component for audio controls. This is a presentational wrapper that provides consistent styling. All audio components are self-contained and read state from the global store.
+
+#### Props
+
+Inherits all props from `HTMLDivElement`.
+
+#### Example
+
+```tsx
+<AudioPlayer>
+  {/* Your audio controls */}
+</AudioPlayer>
+```
+
+### AudioControlBar
+
+A container component that holds audio player controls. Use it to wrap your control components.
+
+#### Props
+
+| Prop    | Type                        | Default   | Description                    |
+| ------- | --------------------------- | --------- | ------------------------------ |
+| variant | `"compact"` \| `"stacked"` | `"compact"` | Layout variant of controls |
+
+Inherits all props from `HTMLDivElement`.
+
+#### Example
+
+```tsx
+<AudioControlBar>
+  <AudioPlay />
+  <AudioSeekBar />
+  <AudioTimeDisplay />
+</AudioControlBar>
+```
+
+#### Stacked Layout
+
+```tsx
+<AudioControlBar variant="stacked">
+  <AudioControlGroup>
+    <AudioTimeDisplay />
+    <AudioSeekBar />
+    <AudioTimeDisplay remaining />
+  </AudioControlGroup>
+</AudioControlBar>
+```
+
+### AudioControlGroup
+
+A flexible wrapper component for grouping audio controls and managing flex layouts. Useful for creating custom layouts with `flex-col`, `justify-between`, etc.
+
+#### Props
+
+| Prop    | Type                        | Default   | Description                    |
+| ------- | --------------------------- | --------- | ------------------------------ |
+| variant | `"compact"` \| `"stacked"` | `"compact"` | Layout variant of controls |
+
+Inherits all props from `HTMLDivElement`.
+
+#### Example
+
+```tsx showLineNumbers
+<AudioControlBar variant="stacked">
+  <AudioControlGroup>
+    <AudioTimeDisplay />
+    <AudioSeekBar />
+    <AudioTimeDisplay remaining />
+  </AudioControlGroup>
+  <AudioControlGroup className="justify-between">
+    <AudioControlGroup>
+      <AudioSkipBack />
+      <AudioPlay />
+      <AudioSkipForward />
+    </AudioControlGroup>
+      <AudioVolume />
+  </AudioControlGroup>
+</AudioControlBar>
+```
+
+### AudioPlay
+
+A button that toggles play/pause state. Shows a loading spinner when buffering or loading, and automatically handles keyboard shortcuts (Space bar to play/pause).
+
+Inherits all props from `AudioButton` (which extends shadcn/ui's `Button` component).
+
+### AudioSkipBack
+
+A button that navigates to the previous track.
+
+Inherits all props from `AudioButton` (which extends shadcn/ui's `Button` component).
+
+### AudioSkipForward
+
+A button that navigates to the next track.
+
+Inherits all props from `AudioButton` (which extends shadcn/ui's `Button` component).
+
+### AudioRewind
+
+A button that seeks backward by 10 seconds.
+
+Inherits all props from `AudioButton` (which extends shadcn/ui's `Button` component).
+
+### AudioFastForward
+
+A button that seeks forward by 10 seconds.
+
+Inherits all props from `AudioButton` (which extends shadcn/ui's `Button` component).
+
+### AudioSeekBar
+
+A slider component that shows playback progress and allows seeking. Automatically syncs with the current track's playback position.
+
+Inherits all props from `Slider` component (except `value`, `onValueChange`, `min`, `max`, `bufferValue`).
+
+### AudioTimeDisplay
+
+Displays the current playback time or remaining time.
+
+#### Props
+
+| Prop     | Type           | Description                        |
+| -------- | -------------- | ---------------------------------- |
+| remaining | `boolean?`     | If true, shows remaining time      |
+
+Inherits all props from `HTMLTimeElement`.
+
+### AudioVolume
+
+A dropdown menu button with a slider to control volume. Click to open the volume control menu.
+
+Inherits all props from `DropdownMenu` component.
+
+### Queue Components
+
+For queue management components (`AudioQueue`, `AudioQueueRepeatMode`, `AudioQueueShuffle`, `AudioQueuePreferences`), see the [Audio Queue documentation](/docs/components/queue).
+
+## Notes
+
+- All audio components are self-contained and read state directly from the global store
+- `AudioProvider` must be present in the component tree for components to work
+- The audio player uses the HTML5 audio element under the hood
+- Queue functionality includes shuffle and repeat modes (none, all, one)
+- Previous button restarts track if played more than 3 seconds, otherwise goes to previous track
+- All hooks are optimized to prevent unnecessary re-renders

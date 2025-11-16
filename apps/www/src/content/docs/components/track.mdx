@@ -1,0 +1,214 @@
+---
+title: Audio Track
+description: Track display components for audio players with list management and track information.
+featured: true
+component: true
+---
+
+Track components for displaying and managing audio tracks. Supports both store-based (self-contained) and controlled (external data) modes.
+
+## Installation
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
+<TabsContent value="cli">
+
+```bash
+npx shadcn@latest add @audio/track
+```
+
+</TabsContent>
+
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Install the following dependencies:</Step>
+
+```bash
+npm install zustand lucide-react class-variance-authority
+```
+
+<Step>Install the required shadcn/ui components:</Step>
+
+```bash
+npx shadcn@latest add avatar badge button item scroll-area empty
+```
+
+<Step>Install the custom components from this registry:</Step>
+
+```bash
+npx shadcn@latest add @audio/sortable-list
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource name="track" title="components/ui/audio/track.tsx" />
+
+<Step>Copy the required store and utility files.</Step>
+
+<ComponentSource name="audio-store" title="lib/audio-store.ts" />
+<ComponentSource name="audio" title="lib/audio.ts" />
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
+
+## Usage
+
+```tsx
+import { AudioTrack, AudioTrackList } from "@/components/ui/audio/track"
+```
+
+### AudioTrack
+
+Display a single track with cover art, metadata, and playback controls.
+
+<ComponentPreview name="track-demo" />
+
+```tsx
+// Store mode - loads from global queue
+<AudioTrack trackId={track.id} />
+
+// Controlled mode - uses provided data
+<AudioTrack track={customTrack} onClick={() => handlePlay(customTrack)} />
+```
+
+### AudioTrackList
+
+Display a list of tracks with filtering, reordering, and selection.
+
+<ComponentPreview name="track-list-demo" />
+
+```tsx
+// Store mode - displays global queue
+<AudioTrackList onTrackSelect={(index) => console.log(index)} />
+
+// Controlled mode - displays custom tracks
+<AudioTrackList tracks={searchResults} onTrackSelect={handleSelect} />
+```
+
+#### Grid Layout
+
+<ComponentPreview name="track-list-grid-demo" />
+
+#### Sortable
+
+<ComponentPreview name="track-sortable-list-demo" />
+
+#### Sortable Grid
+
+<ComponentPreview name="track-sortable-list-grid-demo" />
+
+## API Reference
+
+### AudioTrack
+
+| Prop            | Type                      | Default | Description                          |
+| --------------- | ------------------------- | ------- | ------------------------------------ |
+| trackId         | `string \| number`        | -       | Track ID to load from store          |
+| track           | `Track`                   | -       | Track object (controlled mode)       |
+| index           | `number`                  | -       | Display index                        |
+| onClick         | `() => void`              | -       | Click handler                        |
+| onRemove        | `(id: string) => void`    | -       | Remove handler                       |
+| showRemove      | `boolean`                 | `false` | Show remove button                   |
+| showPlayPause   | `boolean`                 | `true`  | Show play/pause button               |
+| showDragHandle  | `boolean`                 | `false` | Show drag handle                     |
+| showCover       | `boolean`                 | `true`  | Show cover image                     |
+| className       | `string`                  | -       | Additional classes                   |
+
+**Note:** Provide either `trackId` (store mode) or `track` (controlled mode), not both.
+
+### AudioTrackList
+
+| Prop              | Type                      | Default                | Description                          |
+| ----------------- | ------------------------- | ---------------------- | ------------------------------------ |
+| tracks            | `Track[]`                 | -                      | Custom tracks (controlled mode)      |
+| onTrackSelect     | `(index: number) => void` | -                      | Selection handler                    |
+| onTrackRemove     | `(id: string) => void`    | -                      | Remove handler                       |
+| sortable          | `boolean`                 | `false`                | Enable drag-and-drop                 |
+| showCover         | `boolean`                 | `true`                 | Show cover images                    |
+| variant           | `"default" \| "grid"`     | `"default"`            | Layout variant                       |
+| filterQuery       | `string`                  | -                      | Filter by title/artist               |
+| filterFn          | `(track: Track) => boolean` | -                    | Custom filter function               |
+| emptyLabel        | `string`                  | `"No tracks found"`    | Empty state label                    |
+| emptyDescription  | `string`                  | `"Try adding some tracks"` | Empty state description          |
+| className         | `string`                  | -                      | Additional classes                   |
+
+## Modes
+
+### Store Mode
+Reads from and syncs with the global audio store. Use for main queue displays.
+
+```tsx
+<AudioTrackList sortable onTrackSelect={(i) => console.log(i)} />
+```
+
+### Controlled Mode
+Uses provided track data without store integration. Use for search results, browsing, or custom lists.
+
+```tsx
+<AudioTrackList
+  tracks={externalTracks}
+  onTrackSelect={(i) => handleAddToQueue(externalTracks[i])}
+/>
+```
+
+## Examples
+
+### With Filtering
+
+```tsx
+<AudioTrackList
+  filterQuery="jazz"
+  // or
+  filterFn={(track) => track.genre === "jazz"}
+/>
+```
+
+### With Removal
+
+```tsx
+<AudioTrackList
+  onTrackRemove={(id) => removeFromQueue(id)}
+/>
+```
+
+### Full Integration
+
+```tsx
+<AudioProvider tracks={initialTracks}>
+  <AudioPlayer>
+    <AudioControlBar>
+      <AudioPlay />
+      <AudioSeekBar />
+    </AudioControlBar>
+    
+    {/* Main queue */}
+    <AudioTrackList sortable variant="default" />
+    
+    {/* Search results */}
+    <AudioTrackList
+      tracks={searchResults}
+      variant="grid"
+      onTrackSelect={handleAddToQueue}
+    />
+  </AudioPlayer>
+</AudioProvider>
+```
+
+## Notes
+
+- `AudioProvider` required for store mode
+- Cover images sourced from `track.artwork` or `track.images[0]`
+- Live tracks display "LIVE" badge and hide duration
+- Sortable disabled when filtering active
+- Grid layout responsive (1 column mobile, 2 desktop)
