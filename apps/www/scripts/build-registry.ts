@@ -5,7 +5,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { rimraf } from "rimraf";
 import type { RegistryItem } from "shadcn/schema";
-import { registry } from "../registry/index.js";
+import { registry } from "../src/registry";
 
 async function buildRegistryIndex() {
   let index = `
@@ -19,7 +19,8 @@ export const Index: Record<string, any> = {`;
   for (const item of registry.items) {
     const resolveFiles =
       item.files?.map(
-        (file: (typeof item.files)[number]) => `registry/default/${file.path}`
+        (file: (typeof item.files)[number]) =>
+          `src/registry/default/${file.path}`
       ) ?? [];
     if (!resolveFiles) {
       continue;
@@ -36,7 +37,7 @@ export const Index: Record<string, any> = {`;
     type: "${item.type}",
     registryDependencies: ${JSON.stringify(item.registryDependencies)},
     files: [${item.files?.map((file: (typeof item.files)[number]) => {
-      const filePath = `registry/default/${typeof file === "string" ? file : file.path}`;
+      const filePath = `src/registry/default/${typeof file === "string" ? file : file.path}`;
       const resolvedFilePath = path.resolve(filePath);
       return typeof file === "string"
         ? `"${resolvedFilePath}"`
@@ -65,8 +66,11 @@ export const Index: Record<string, any> = {`;
 
   console.log(`#️⃣  ${Object.keys(registry.items).length} items found`);
 
-  rimraf.sync(path.join(process.cwd(), "registry/__index__.tsx"));
-  await fs.writeFile(path.join(process.cwd(), "registry/__index__.tsx"), index);
+  rimraf.sync(path.join(process.cwd(), "src/registry/__index__.tsx"));
+  await fs.writeFile(
+    path.join(process.cwd(), "src/registry/__index__.tsx"),
+    index
+  );
 }
 
 async function buildRegistryJsonFile() {
@@ -75,7 +79,7 @@ async function buildRegistryJsonFile() {
     items: registry.items.map((item: RegistryItem) => {
       const files = item.files?.map((file: (typeof item.files)[number]) => ({
         ...file,
-        path: `registry/default/${file.path}`,
+        path: `src/registry/default/${file.path}`,
       }));
 
       return {
@@ -113,7 +117,7 @@ async function buildRegistry() {
 }
 
 try {
-  console.log("🗂️ Building registry/__index__.tsx...");
+  console.log("🗂️ Building src/registry/__index__.tsx...");
   await buildRegistryIndex();
 
   console.log("💅 Building registry.json...");
