@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <div className="container w-full">
+    <div className="container flex h-full w-full grow flex-col items-center justify-center">
       <PageHeader>
         <PageHeaderHeading>Page Not Found</PageHeaderHeading>
         <PageHeaderDescription>
@@ -25,7 +25,7 @@ export default function NotFound() {
           moved.
         </PageHeaderDescription>
         <div className="mt-4">
-          <Button asChild className="group" size="lg">
+          <Button asChild className="group">
             <Link href="/">
               <ArrowLeftIcon
                 aria-hidden="true"

@@ -63,7 +63,6 @@ type AudioTrackProps = {
   | { trackId?: never; track?: never }
 );
 
-// Helper function to get play/pause button title
 function getPlayPauseTitle(isCurrent: boolean, isPlaying: boolean): string {
   if (!isCurrent) {
     return "Play this track";
@@ -74,14 +73,12 @@ function getPlayPauseTitle(isCurrent: boolean, isPlaying: boolean): string {
   return "Play";
 }
 
-// Helper function to render track media (cover, drag handle, or index)
 function renderTrackMedia(
   showDragHandle: boolean,
   showCover: boolean,
   track: Track,
   index?: number
 ) {
-  // For sortable items, show drag handle alongside cover (not replacing it)
   if (showDragHandle && showCover) {
     const coverImage = track.artwork || track.images?.[0];
     return (
@@ -107,7 +104,6 @@ function renderTrackMedia(
     );
   }
 
-  // For non-sortable: just show drag handle
   if (showDragHandle) {
     return <SortableDragHandle />;
   }
@@ -160,7 +156,6 @@ function AudioTrack({
   const togglePlay = useAudioStore((state) => state.togglePlay);
   const setQueueAndPlay = useAudioStore((state) => state.setQueueAndPlay);
 
-  // Resolve track: use provided track or find from queue by trackId
   const track =
     externalTrack ??
     (trackId ? queue.find((t) => String(t.id) === String(trackId)) : undefined);
@@ -201,6 +196,7 @@ function AudioTrack({
     <Item
       className={cn(
         "w-full cursor-pointer transition-all hover:bg-secondary/50",
+        isCurrent && "bg-secondary",
         className
       )}
       onClick={(e) => {
@@ -310,7 +306,6 @@ function AudioTrackList({
   const setQueue = useAudioStore((state) => state.setQueue);
   const currentQueueIndex = useAudioStore((state) => state.currentQueueIndex);
 
-  // Use provided tracks or fallback to store queue
   let tracks = externalTracks ?? queue;
 
   if (filterFn) {
@@ -328,7 +323,6 @@ function AudioTrackList({
   const isExternalTracks = !!externalTracks;
 
   const handleAutoReorder = (reorderedTracks: Track[]) => {
-    // Only update store queue if not using external tracks and not filtered
     if (!(isFiltered || isExternalTracks)) {
       const newIndex =
         currentTrack?.id !== undefined

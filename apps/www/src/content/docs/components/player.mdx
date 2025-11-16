@@ -1,6 +1,6 @@
 ---
 title: Audio Player
-description: A composable, shadcn/ui styled audio player component built with React and Zustand.
+description: A composable audio player component system.
 featured: true
 component: true
 ---
@@ -29,19 +29,19 @@ npx shadcn@latest add @audio/player
 
 <Steps>
 
-<Step>Install the following dependencies:</Step>
+<Step>Install the runtime dependencies:</Step>
 
 ```bash
 npm install zustand lucide-react
 ```
 
-<Step>Install the required shadcn/ui components:</Step>
+<Step>Install the required shadcn/ui primitives:</Step>
 
 ```bash
 npx shadcn@latest add button dialog dropdown-menu empty input item scroll-area toggle tooltip
 ```
 
-<Step>Install the custom components from this registry:</Step>
+<Step>Install the slider components from this registry:</Step>
 
 ```bash
 npx shadcn@latest add @audio/slider
@@ -137,29 +137,6 @@ A full-featured player with queue management, shuffle, and repeat controls. Uses
 For more queue management options, see the [Audio Queue documentation](/docs/components/queue).
 
 ## API Reference
-
-### AudioProvider
-
-The root provider component that manages audio state and playback. Must be placed at the app level to provide context to all audio components.
-
-#### Props
-
-| Prop     | Type       | Default | Description                         |
-| -------- | ---------- | ------- | ----------------------------------- |
-| tracks   | `Track[]?` | `[]`    | Initial tracks to load in the queue |
-
-Inherits all props from `HTMLDivElement`.
-
-#### Example
-
-```tsx
-// At the root of your app
-import { AudioProvider } from "@/components/ui/audio/provider"
-
-<AudioProvider tracks={myTracks}>
-  <App />
-</AudioProvider>
-```
 
 ### AudioPlayer
 
@@ -297,15 +274,10 @@ A dropdown menu button with a slider to control volume. Click to open the volume
 
 Inherits all props from `DropdownMenu` component.
 
-### Queue Components
-
-For queue management components (`AudioQueue`, `AudioQueueRepeatMode`, `AudioQueueShuffle`, `AudioQueuePreferences`), see the [Audio Queue documentation](/docs/components/queue).
-
 ## Notes
 
-- All audio components are self-contained and read state directly from the global store
-- `AudioProvider` must be present in the component tree for components to work
-- The audio player uses the HTML5 audio element under the hood
-- Queue functionality includes shuffle and repeat modes (none, all, one)
-- Previous button restarts track if played more than 3 seconds, otherwise goes to previous track
-- All hooks are optimized to prevent unnecessary re-renders
+- `AudioProvider` (or the project's audio store) is required for player components to work correctly.
+- All audio components are self-contained and read state directly from the global store.
+- The audio player uses the HTML5 audio element under the hood.
+- Previous button restarts the track if played more than 3 seconds, otherwise goes to the previous track.
+- Live streams disable seeking, rewind, and fast-forward controls.

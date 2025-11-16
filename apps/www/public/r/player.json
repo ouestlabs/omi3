@@ -10,7 +10,7 @@
     "@audio/store",
     "@audio/audio",
     "@audio/slider",
-    "@audio/empty",
+    "@shadcn/empty",
     "@shadcn/button",
     "@shadcn/dialog",
     "@shadcn/dropdown-menu",

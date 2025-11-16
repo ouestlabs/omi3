@@ -19,8 +19,8 @@ export default function AudioPlayerStackedDemo() {
           <AudioSeekBar />
           <AudioTimeDisplay remaining />
         </AudioControlGroup>
-        <AudioControlGroup className="justify-between">
-          <AudioControlGroup>
+        <AudioControlGroup>
+          <AudioControlGroup className="justify-between md:justify-start">
             <AudioSkipBack />
             <AudioPlay />
             <AudioSkipForward />

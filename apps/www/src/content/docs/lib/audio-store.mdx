@@ -1,13 +1,15 @@
 ---
 title: Audio Store
-description: Zustand store for managing audio state with persistence.
+description: Zustand-based store and helper actions for queue and playback management.
 ---
+
+A Zustand store providing reactive state management for audio playback, queue control, and player UI. Persists essential state to localStorage automatically.
 
 ## Installation
 
 ### Dependencies
 
-The audio store requires the following dependencies:
+The store uses Zustand. Install it if your app doesn't already include it:
 
 ```bash
 npm install zustand
@@ -15,7 +17,7 @@ npm install zustand
 
 ### Import
 
-Import the store and types from the store file:
+Import the store hook and types:
 
 ```tsx
 import {
@@ -29,33 +31,30 @@ import {
 } from "@/lib/audio-store"
 ```
 
-## Store Hook
+## Core Concepts
 
-### useAudioStore
+### useAudioStore Hook
 
-Access the Zustand store directly. Use selectors to subscribe to specific state slices.
+Access the store with granular selectors for better performance:
 
 ```tsx
-const currentTime = useAudioStore((state) => state.currentTime)
-const duration = useAudioStore((state) => state.duration)
-const isPlaying = useAudioStore((state) => state.isPlaying)
-const currentTrack = useAudioStore((state) => state.currentTrack)
-const queue = useAudioStore((state) => state.queue)
+// Recommended: selector-based subscriptions
+const currentTime = useAudioStore((s) => s.currentTime)
+const isPlaying = useAudioStore((s) => s.isPlaying)
 ```
 
-#### Example
+For multiple values, extract them inside your component:
 
 ```tsx
-function CustomTimeDisplay() {
-  const currentTime = useAudioStore((state) => state.currentTime)
-  const duration = useAudioStore((state) => state.duration)
-  const currentTrack = useAudioStore((state) => state.currentTrack)
-
+function PlayerStatus() {
+  const currentTrack = useAudioStore((s) => s.currentTrack)
+  const duration = useAudioStore((s) => s.duration)
+  const isPlaying = useAudioStore((s) => s.isPlaying)
+  
   return (
-    <div>
-      <p>{currentTrack?.title ?? "No track"}</p>
-      <p>{currentTime} / {duration}</p>
-    </div>
+    <p>
+      {currentTrack?.title} ({duration}s) — {isPlaying ? "▶" : "⏸"}
+    </p>
   )
 }
 ```
@@ -64,85 +63,57 @@ function CustomTimeDisplay() {
 
 ### Track
 
-Represents an audio track. Import from `@/lib/audio`:
+Common audio track object. See [Audio library](/docs/lib/audio#track) for full definition.
 
 ```tsx
-import { type Track } from "@/lib/audio"
-```
+import type { Track } from "@/lib/audio"
 
-```tsx
 type Track = {
   id?: string | number
   url: string
   title?: string
   artist?: string
-  [key: string]: unknown
+  artwork?: string
+  duration?: number
+  live?: boolean
 }
 ```
 
-### AudioStore
+### AudioStore State
 
-The complete store type including state and actions.
+The store exposes state organized by concern:
 
-```tsx
-type AudioStore = {
-  // State
-  currentTrack: Track | null
-  queue: Track[]
-  history: Track[]
-  isPlaying: boolean
-  isLoading: boolean
-  isBuffering: boolean
-  volume: number
-  isMuted: boolean
-  repeatMode: RepeatMode
-  shuffleEnabled: boolean
-  currentTime: number
-  duration: number
-  progress: number
-  bufferedTime: number
-  insertMode: InsertMode
-  isError: boolean
-  errorMessage: string | null
-  currentQueueIndex: number
+**Playback**
 
-  // Playback Actions
-  play: () => void
-  pause: () => void
-  togglePlay: () => void
-  next: () => void
-  previous: () => void
-  seek: (time: number) => void
-  setQueueAndPlay: (tracks: Track[], startIndex: number) => Promise<void>
-  handleTrackEnd: () => void
+- `isPlaying` — currently playing
+- `isLoading` — loading track
+- `isBuffering` — buffering audio
+- `isError` — error state
+- `errorMessage` — error details
 
-  // Queue Actions
-  addToQueue: (track: Track, mode?: InsertMode) => void
-  removeFromQueue: (trackId: string) => void
-  clearQueue: () => void
-  moveInQueue: (fromIndex: number, toIndex: number) => void
-  setQueue: (tracks: Track[], startIndex?: number) => void
-  getCurrentQueueIndex: () => number
-  addTracksToEndOfQueue: (tracksToAdd: Track[]) => void
+**Current Track**
 
-  // Control Actions
-  setVolume: (volume: number) => void
-  toggleMute: () => void
-  changeRepeatMode: () => void
-  setInsertMode: (mode: InsertMode) => void
-  shuffle: () => void
-  unshuffle: () => void
-  setRepeatMode: (mode: RepeatMode) => void
+- `currentTrack` — active track object
+- `currentTime` — playback position (seconds)
+- `duration` — track length
+- `progress` — normalized progress 0–1
+- `bufferedTime` — buffered amount
 
-  // State Actions
-  setCurrentTrack: (track: Track | null) => void
-  setError: (message: string | null) => void
-}
-```
+**Queue**
+
+- `queue` — array of tracks
+- `history` — previously played tracks
+- `currentQueueIndex` — active track index
+
+**Controls**
+
+- `volume` — volume 0–1
+- `isMuted` — mute state
+- `repeatMode` — none | one | all
+- `shuffleEnabled` — shuffle state
+- `insertMode` — insertion position for queue
 
 ### RepeatMode
-
-The repeat mode type.
 
 ```tsx
 type RepeatMode = "none" | "one" | "all"
@@ -150,7 +121,7 @@ type RepeatMode = "none" | "one" | "all"
 
 ### InsertMode
 
-The insert mode type for adding tracks to the queue.
+Determines where new tracks are added to the queue:
 
 ```tsx
 type InsertMode = "first" | "last" | "after"
@@ -158,9 +129,9 @@ type InsertMode = "first" | "last" | "after"
 
 ## Utility Functions
 
-### calculateNextIndex
+### calculateNextIndex(queue, currentIndex, shuffleEnabled, repeatMode)
 
-Calculate the next track index based on repeat mode and shuffle.
+Calculate the next track index based on playback mode.
 
 ```tsx
 const nextIndex = calculateNextIndex(
@@ -169,364 +140,192 @@ const nextIndex = calculateNextIndex(
   shuffleEnabled,
   repeatMode
 )
+// Returns: number (track index or -1 if none)
 ```
 
-#### Parameters
+### calculatePreviousIndex(queue, currentIndex, shuffleEnabled, repeatMode)
 
-- `queue` - `Track[]` - The queue of tracks
-- `currentQueueIndex` - `number` - The current track index
-- `shuffleEnabled` - `boolean` - Whether shuffle is enabled
-- `repeatMode` - `RepeatMode` - The repeat mode
-
-#### Returns
-
-- `number` - The next track index, or -1 if no next track
-
-### calculatePreviousIndex
-
-Calculate the previous track index based on repeat mode and shuffle.
+Calculate the previous track index based on playback mode.
 
 ```tsx
-const previousIndex = calculatePreviousIndex(
+const prevIndex = calculatePreviousIndex(
   queue,
   currentQueueIndex,
   shuffleEnabled,
   repeatMode
 )
+// Returns: number (track index or -1 if none)
 ```
 
-#### Parameters
+### canUseDOM()
 
-- `queue` - `Track[]` - The queue of tracks
-- `currentQueueIndex` - `number` - The current track index
-- `shuffleEnabled` - `boolean` - Whether shuffle is enabled
-- `repeatMode` - `RepeatMode` - The repeat mode
-
-#### Returns
-
-- `number` - The previous track index, or -1 if no previous track
-
-### canUseDOM
-
-Check if the code is running in a DOM environment.
+Check if code runs in a DOM environment (not SSR).
 
 ```tsx
 if (canUseDOM()) {
-  // DOM-specific code
+  // Browser-only code
 }
 ```
 
-## Playback Actions
+## Actions
 
-### play
-
-Start playback.
+### Playback Control
 
 ```tsx
-const play = useAudioStore((state) => state.play)
+const play = useAudioStore((s) => s.play)
 await play()
-```
 
-### pause
-
-Pause playback.
-
-```tsx
-const pause = useAudioStore((state) => state.pause)
+const pause = useAudioStore((s) => s.pause)
 pause()
-```
 
-### togglePlay
-
-Toggle play/pause state.
-
-```tsx
-const togglePlay = useAudioStore((state) => state.togglePlay)
+const togglePlay = useAudioStore((s) => s.togglePlay)
 togglePlay()
-```
 
-### next
-
-Navigate to the next track.
-
-```tsx
-const next = useAudioStore((state) => state.next)
-await next()
-```
-
-### previous
-
-Navigate to the previous track. If the current track has played for more than 3 seconds, it restarts the track. Otherwise, it goes to the previous track.
-
-```tsx
-const previous = useAudioStore((state) => state.previous)
-await previous()
-```
-
-### seek
-
-Seek to a specific time in the current track.
-
-```tsx
-const seek = useAudioStore((state) => state.seek)
+const seek = useAudioStore((s) => s.seek)
 seek(60) // Seek to 60 seconds
 ```
 
-### setQueueAndPlay
-
-Set the queue and start playing from a specific index.
+### Navigation
 
 ```tsx
-const setQueueAndPlay = useAudioStore((state) => state.setQueueAndPlay)
-await setQueueAndPlay(tracks, 0)
-```
+const next = useAudioStore((s) => s.next)
+await next() // Play next track
 
-### handleTrackEnd
+const previous = useAudioStore((s) => s.previous)
+await previous() // Play previous track
 
-Handle when a track ends. Automatically plays the next track.
-
-```tsx
-const handleTrackEnd = useAudioStore((state) => state.handleTrackEnd)
-handleTrackEnd()
-```
-
-## Queue Actions
-
-### setQueue
-
-Set the entire queue of tracks.
-
-```tsx
-const setQueue = useAudioStore((state) => state.setQueue)
-setQueue(tracks, 0) // Set queue and start at index 0
-```
-
-### addToQueue
-
-Add a track to the queue.
-
-```tsx
-const addToQueue = useAudioStore((state) => state.addToQueue)
-addToQueue(track, "last") // Add to end
-addToQueue(track, "first") // Add to beginning
-addToQueue(track, "after") // Add after current track
-```
-
-### removeFromQueue
-
-Remove a track from the queue by ID.
-
-```tsx
-const removeFromQueue = useAudioStore((state) => state.removeFromQueue)
-removeFromQueue("track-id")
-```
-
-### clearQueue
-
-Clear the entire queue.
-
-```tsx
-const clearQueue = useAudioStore((state) => state.clearQueue)
-clearQueue()
-```
-
-### moveInQueue
-
-Move a track from one position to another in the queue.
-
-```tsx
-const moveInQueue = useAudioStore((state) => state.moveInQueue)
-moveInQueue(0, 2) // Move track from index 0 to index 2
-```
-
-### getCurrentQueueIndex
-
-Get the current track index in the queue.
-
-```tsx
-const getCurrentQueueIndex = useAudioStore((state) => state.getCurrentQueueIndex)
-const index = getCurrentQueueIndex()
-```
-
-### addTracksToEndOfQueue
-
-Add multiple tracks to the end of the queue, avoiding duplicates.
-
-```tsx
-const addTracksToEndOfQueue = useAudioStore((state) => state.addTracksToEndOfQueue)
-addTracksToEndOfQueue([track1, track2, track3])
-```
-
-## Control Actions
-
-### setVolume
-
-Set the volume (0-1).
-
-```tsx
-const setVolume = useAudioStore((state) => state.setVolume)
-setVolume(0.5) // Set volume to 50%
-```
-
-### toggleMute
-
-Toggle mute state.
-
-```tsx
-const toggleMute = useAudioStore((state) => state.toggleMute)
-toggleMute()
-```
-
-### changeRepeatMode
-
-Cycle through repeat modes: none → one → all → none.
-
-```tsx
-const changeRepeatMode = useAudioStore((state) => state.changeRepeatMode)
-changeRepeatMode()
-```
-
-### setRepeatMode
-
-Set the repeat mode directly.
-
-```tsx
-const setRepeatMode = useAudioStore((state) => state.setRepeatMode)
-setRepeatMode("all") // Repeat all tracks
-```
-
-### setInsertMode
-
-Set the insert mode for adding tracks to the queue.
-
-```tsx
-const setInsertMode = useAudioStore((state) => state.setInsertMode)
-setInsertMode("after") // Add tracks after current track
-```
-
-### shuffle
-
-Enable shuffle mode and shuffle the queue.
-
-```tsx
-const shuffle = useAudioStore((state) => state.shuffle)
-shuffle()
-```
-
-### unshuffle
-
-Disable shuffle mode.
-
-```tsx
-const unshuffle = useAudioStore((state) => state.unshuffle)
-unshuffle()
-```
-
-## State Actions
-
-### setCurrentTrack
-
-Set the current track. This will load and play the track.
-
-```tsx
-const setCurrentTrack = useAudioStore((state) => state.setCurrentTrack)
-setCurrentTrack(track)
+const setCurrentTrack = useAudioStore((s) => s.setCurrentTrack)
+await setCurrentTrack(track) // Load and play specific track
 setCurrentTrack(null) // Clear current track
-```
 
-### setError
-
-Set an error message.
-
-```tsx
-const setError = useAudioStore((state) => state.setError)
-setError("Error loading track")
-setError(null) // Clear error
-```
-
-## Persistence
-
-The store uses Zustand's `persist` middleware to save certain state to localStorage:
-
-- `currentTrack` - Saved
-- `queue` - Saved
-- `history` - Saved
-- `volume` - Saved
-- `isMuted` - Saved
-- `repeatMode` - Saved
-- `shuffleEnabled` - Saved
-- `currentTime` - Saved
-- `insertMode` - Saved
-- `currentQueueIndex` - Saved
-
-The store key is `"audio:ui:store"`.
-
-## Examples
-
-### Accessing State
-
-```tsx
-function PlayerStatus() {
-  const currentTrack = useAudioStore((state) => state.currentTrack)
-  const currentTime = useAudioStore((state) => state.currentTime)
-  const duration = useAudioStore((state) => state.duration)
-  const isPlaying = useAudioStore((state) => state.isPlaying)
-  const queue = useAudioStore((state) => state.queue)
-  const currentQueueIndex = useAudioStore((state) => state.currentQueueIndex)
-
-  return (
-    <div>
-      <p>Playing: {currentTrack?.title ?? "None"}</p>
-      <p>Time: {currentTime} / {duration}</p>
-      <p>Status: {isPlaying ? "Playing" : "Paused"}</p>
-      <p>Queue: {queue.length} tracks</p>
-      <p>Current: {currentQueueIndex + 1} / {queue.length}</p>
-    </div>
-  )
-}
-```
-
-### Using Actions
-
-```tsx
-function CustomControls() {
-  const play = useAudioStore((state) => state.play)
-  const pause = useAudioStore((state) => state.pause)
-  const togglePlay = useAudioStore((state) => state.togglePlay)
-  const next = useAudioStore((state) => state.next)
-  const previous = useAudioStore((state) => state.previous)
-  const seek = useAudioStore((state) => state.seek)
-
-  return (
-    <div className="flex gap-2">
-      <button onClick={previous}>Previous</button>
-      <button onClick={togglePlay}>Toggle</button>
-      <button onClick={next}>Next</button>
-      <button onClick={() => seek(0)}>Restart</button>
-    </div>
-  )
-}
+const setQueueAndPlay = useAudioStore((s) => s.setQueueAndPlay)
+await setQueueAndPlay(tracks, startIndex)
 ```
 
 ### Queue Management
 
 ```tsx
-function QueueManager() {
-  const queue = useAudioStore((state) => state.queue)
-  const addToQueue = useAudioStore((state) => state.addToQueue)
-  const removeFromQueue = useAudioStore((state) => state.removeFromQueue)
-  const clearQueue = useAudioStore((state) => state.clearQueue)
+const addToQueue = useAudioStore((s) => s.addToQueue)
+addToQueue(track, "last") // Supports: "first" | "last" | "after"
+
+const removeFromQueue = useAudioStore((s) => s.removeFromQueue)
+removeFromQueue(trackId)
+
+const moveInQueue = useAudioStore((s) => s.moveInQueue)
+moveInQueue(fromIndex, toIndex)
+
+const setQueue = useAudioStore((s) => s.setQueue)
+setQueue(newTracks, startIndex)
+
+const clearQueue = useAudioStore((s) => s.clearQueue)
+clearQueue()
+```
+
+### Volume & Mute
+
+```tsx
+const setVolume = useAudioStore((s) => s.setVolume)
+setVolume(0.5)
+
+const toggleMute = useAudioStore((s) => s.toggleMute)
+toggleMute()
+```
+
+### Playback Modes
+
+```tsx
+const changeRepeatMode = useAudioStore((s) => s.changeRepeatMode)
+changeRepeatMode() // Cycles: none → one → all → none
+
+const setRepeatMode = useAudioStore((s) => s.setRepeatMode)
+setRepeatMode("one")
+
+const shuffle = useAudioStore((s) => s.shuffle)
+shuffle() // Randomize queue order
+
+const unshuffle = useAudioStore((s) => s.unshuffle)
+unshuffle() // Restore original order
+
+const setInsertMode = useAudioStore((s) => s.setInsertMode)
+setInsertMode("after")
+```
+
+### Error Handling
+
+```tsx
+const setError = useAudioStore((s) => s.setError)
+setError("Failed to load track")
+setError(null) // Clear error
+```
+
+## Examples
+
+### Status Display
+
+```tsx
+import { useAudioStore } from "@/lib/audio-store"
+import { formatDuration } from "@/lib/audio"
+
+function PlayerStatus() {
+  const currentTrack = useAudioStore((s) => s.currentTrack)
+  const currentTime = useAudioStore((s) => s.currentTime)
+  const duration = useAudioStore((s) => s.duration)
+  const isPlaying = useAudioStore((s) => s.isPlaying)
 
   return (
     <div>
-      <button onClick={() => addToQueue(newTrack, "last")}>Add Track</button>
-      <button onClick={clearQueue}>Clear Queue</button>
-      {queue.map((track) => (
-        <div key={track.id}>
-          {track.title}
-          <button onClick={() => removeFromQueue(track.id)}>Remove</button>
-        </div>
-      ))}
+      <p>Track: {currentTrack?.title ?? "None"}</p>
+      <p>Time: {formatDuration(currentTime)} / {formatDuration(duration)}</p>
+      <p>Status: {isPlaying ? "▶" : "⏸"}</p>
+    </div>
+  )
+}
+```
+
+### Custom Controls
+
+```tsx
+function CustomControls() {
+  const togglePlay = useAudioStore((s) => s.togglePlay)
+  const next = useAudioStore((s) => s.next)
+  const previous = useAudioStore((s) => s.previous)
+  const isPlaying = useAudioStore((s) => s.isPlaying)
+
+  return (
+    <div className="flex gap-2">
+      <button onClick={previous}>◀ Prev</button>
+      <button onClick={togglePlay}>{isPlaying ? "⏸" : "▶"}</button>
+      <button onClick={next}>Next ▶</button>
+    </div>
+  )
+}
+```
+
+### Queue Manager
+
+```tsx
+function QueueManager() {
+  const queue = useAudioStore((s) => s.queue)
+  const addToQueue = useAudioStore((s) => s.addToQueue)
+  const removeFromQueue = useAudioStore((s) => s.removeFromQueue)
+  const clearQueue = useAudioStore((s) => s.clearQueue)
+
+  return (
+    <div>
+      <div className="flex gap-2 mb-4">
+        <button onClick={() => addToQueue(newTrack, "last")}>Add Track</button>
+        <button onClick={clearQueue} className="text-red-500">
+          Clear
+        </button>
+      </div>
+      <div className="space-y-1">
+        {queue.map((track) => (
+          <div key={track.id} className="flex justify-between">
+            <span>{track.title}</span>
+            <button onClick={() => removeFromQueue(track.id)}>Remove</button>
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
@@ -537,27 +336,50 @@ function QueueManager() {
 ```tsx
 import { useAudioStore } from "@/lib/audio-store"
 
-// Get state without subscribing
+// Read state without React subscriptions
 const state = useAudioStore.getState()
 console.log(state.isPlaying)
 
 // Call actions directly
-useAudioStore.getState().play()
+await useAudioStore.getState().play()
 
-// Subscribe outside React
+// Subscribe to changes (returns unsubscribe function)
 const unsubscribe = useAudioStore.subscribe(
-  (state) => state.isPlaying,
-  (isPlaying) => {
-    console.log("Playing state changed:", isPlaying)
-  }
+  (s) => s.isPlaying,
+  (isPlaying) => console.log("Playing:", isPlaying)
 )
 ```
 
+## Persistence
+
+The store automatically persists a subset of state to localStorage using Zustand's `persist` middleware:
+
+**Persisted State**
+
+- Playback: `currentTrack`, `currentTime`, `currentQueueIndex`
+- Queue: `queue`, `history`
+- Settings: `volume`, `isMuted`, `repeatMode`, `shuffleEnabled`, `insertMode`
+
+**Storage Key**
+
+```
+audio:ui:store
+```
+
+This allows users to resume playback and maintain queue state across page refreshes.
+
+## Related
+
+- [Audio Library](/docs/lib/audio) — Core audio playback singleton
+- [Audio Player](/docs/components/player) — Player UI components
+- [Audio Queue](/docs/components/queue) — Queue management UI
+
 ## Notes
 
-- The store uses Zustand for state management
-- State is persisted to localStorage for multiple properties
-- Use selectors to subscribe to specific state slices for optimal performance
-- The store is global and can be accessed from anywhere in your app
-- Some actions are async (play, next, previous, setQueueAndPlay, setCurrentTrack)
-- The store automatically handles track loading and playback management
+- Prefer selector subscriptions for performance (subscribe to specific slices of state)
+- Async actions (`play`, `next`, `setCurrentTrack`) wait for audio loading
+- `addToQueue` supports "first", "last", and "after" insert modes
+- Queue shuffling randomizes order but preserves track identity
+- `setQueueAndPlay` and similar actions trigger audio loading via the [Audio library](/docs/lib/audio)
+- Persistence is automatic; no manual save required
+- Direct store access via `getState()` is useful for non-React code or imperative operations

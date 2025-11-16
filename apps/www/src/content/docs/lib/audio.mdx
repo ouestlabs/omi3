@@ -1,285 +1,106 @@
 ---
 title: Audio
-description: Core audio library for managing HTML5 audio playback with utilities.
+description: Core audio helper and singleton for loading and controlling HTML5 audio.
 ---
+
+The `$audio` singleton manages playback of HTML5 audio with automatic retry logic, event handling, and volume fading. Use it alongside the [Audio Store](/docs/lib/audio-store) for full player functionality.
 
 ## Installation
 
-The audio library is part of the audio player component. Import it from the audio file:
+Import the singleton and helpers from the audio library:
 
 ```tsx
-import { $audio, formatDuration, type Track } from "@/lib/audio"
+import { $audio, formatDuration, isLive, type Track } from "@/lib/audio"
 ```
 
-## Audio Library Instance
+## Core API
 
-### $audio
+### $audio (Singleton)
 
-The main audio library instance. It's a singleton that manages the HTML5 audio element.
+Manages the underlying `HTMLAudioElement`, playback state, retries, and events. Initialize on client start — the instance is server-safe.
 
 ```tsx
 import { $audio } from "@/lib/audio"
 
-// Initialize the audio library
+// Initialize on the client
 $audio.init()
 
-// Load and play audio
+// Load and play
 await $audio.load("https://example.com/audio.mp3", 0)
 await $audio.play()
 ```
 
-## Methods
+#### Lifecycle
 
-### init()
+| Method | Description |
+|--------|-------------|
+| `init()` | Initialize on the client. Safe to call multiple times. |
+| `cleanup()` | Reset and release the audio element (pause, clear src). |
 
-Initialize the audio library. Must be called before using other methods.
+#### Playback
 
-```tsx
-$audio.init()
-```
+| Method | Description |
+|--------|-------------|
+| `load(url, startTime?, isLive?)` | Load an audio source and wait for readiness. Pass `isLive` for live streams (longer timeout, no seek). Returns `Promise<void>`. |
+| `play()` | Start or resume playback. Returns promise that resolves when browser allows playback. |
+| `pause()` | Pause playback immediately. |
+| `seek(time)` | Seek when metadata is available. Ignored for live streams. |
 
-**Returns:** `void`
+#### Volume
 
-### load(url, startTime?)
+| Method | Description |
+|--------|-------------|
+| `setVolume(volume, fadeTime?)` | Set or fade volume (0–1). If `fadeTime` > 0, animates smoothly. |
+| `getVolume()` | Return current volume (0–1). |
+| `setMuted(muted)` | Mute or unmute. Restores previous volume when unmuting. |
 
-Load an audio file from a URL.
+#### State
 
-```tsx
-await $audio.load("https://example.com/audio.mp3", 0)
-```
+| Method | Description |
+|--------|-------------|
+| `getDuration()` | Return loaded source duration (seconds) or `0` if unavailable. |
+| `getCurrentTime()` | Return current playback position (seconds). |
+| `isPaused()` | Return boolean — is playback paused. |
+| `getBufferedRanges()` | Return underlying `TimeRanges` or `null`. |
+| `getSource()` | Return current source URL string. |
+| `getAudioElement()` | Return raw `HTMLAudioElement` or `null` on server. |
 
-**Parameters:**
+#### Events
 
-- `url` - `string` - The URL of the audio file to load
-- `startTime` - `number` (optional) - The time in seconds to start playback from (default: 0)
-
-**Returns:** `Promise<void>`
-
-**Throws:** `Error` if the audio fails to load or times out (30s timeout)
-
-### play()
-
-Start or resume audio playback.
-
-```tsx
-await $audio.play()
-```
-
-**Returns:** `Promise<void>`
-
-**Throws:** `Error` if playback fails
-
-### pause()
-
-Pause audio playback.
+The library emits custom events via an internal `EventTarget`:
 
 ```tsx
-$audio.pause()
-```
-
-**Returns:** `void`
-
-### setVolume(volume, fadeTime?)
-
-Set the audio volume.
-
-```tsx
-$audio.setVolume(0.5) // Set volume to 50%
-$audio.setVolume(0.8, 500) // Fade to 80% volume over 500ms
-```
-
-**Parameters:**
-
-- `volume` - `number` - Volume level between 0 and 1
-- `fadeTime` - `number` (optional) - Fade duration in milliseconds (default: 0, no fade)
-
-**Returns:** `void`
-
-### getVolume()
-
-Get the current audio volume.
-
-```tsx
-const volume = $audio.getVolume() // Returns number between 0 and 1
-```
-
-**Returns:** `number` - Volume level between 0 and 1
-
-### setMuted(muted)
-
-Set the muted state of the audio.
-
-```tsx
-$audio.setMuted(true) // Mute audio
-$audio.setMuted(false) // Unmute audio
-```
-
-**Parameters:**
-
-- `muted` - `boolean` - Whether to mute the audio
-
-**Returns:** `void`
-
-### getDuration()
-
-Get the duration of the currently loaded audio in seconds.
-
-```tsx
-const duration = $audio.getDuration()
-```
-
-**Returns:** `number` - Duration in seconds, or 0 if not available
-
-### getCurrentTime()
-
-Get the current playback position in seconds.
-
-```tsx
-const currentTime = $audio.getCurrentTime()
-```
-
-**Returns:** `number` - Current time in seconds
-
-### setCurrentTime(time)
-
-Seek to a specific time in the audio.
-
-```tsx
-$audio.setCurrentTime(30) // Seek to 30 seconds
-```
-
-**Parameters:**
-
-- `time` - `number` - Time in seconds to seek to
-
-**Returns:** `void`
-
-### getAudioElement()
-
-Get the underlying HTML5 audio element.
-
-```tsx
-const audioElement = $audio.getAudioElement()
-```
-
-**Returns:** `HTMLAudioElement | null` - The audio element, or null if not available
-
-### getSource()
-
-Get the current audio source URL.
-
-```tsx
-const source = $audio.getSource()
-```
-
-**Returns:** `string` - The current audio source URL, or empty string if not available
-
-### isPaused()
-
-Check if the audio is currently paused.
-
-```tsx
-const paused = $audio.isPaused()
-```
-
-**Returns:** `boolean` - `true` if paused, `false` if playing
-
-### getBufferedRanges()
-
-Get the buffered time ranges of the audio.
-
-```tsx
-const buffered = $audio.getBufferedRanges()
-```
-
-**Returns:** `TimeRanges | null` - The buffered ranges, or null if not available
-
-### cleanup()
-
-Clean up the audio library and reset state.
-
-```tsx
-$audio.cleanup()
-```
-
-**Returns:** `void`
-
-### addEventListener(type, listener, options?)
-
-Add an event listener for custom audio events.
-
-```tsx
-$audio.addEventListener("bufferingStart", () => {
-  console.log("Buffering started")
+$audio.addEventListener("bufferingStart", () => console.log("Buffering..."))
+$audio.addEventListener("bufferingEnd", () => console.log("Ready to play"))
+$audio.addEventListener("playbackStarted", () => console.log("Playing"))
+$audio.addEventListener("audioError", () => console.error("Error"))
+$audio.addEventListener("bufferUpdate", (e) => {
+  if (e instanceof CustomEvent) console.log("Buffered:", e.detail.bufferedTime)
 })
 ```
-
-**Available events:**
-
-- `bufferingStart` - Fired when buffering starts
-- `bufferingEnd` - Fired when buffering ends
-- `playbackStarted` - Fired when playback starts
-- `audioError` - Fired when an audio error occurs
-- `bufferUpdate` - Fired when buffer updates (detail: `{ bufferedTime: number }`)
-
-**Parameters:**
-
-- `type` - `string` - Event type
-- `listener` - `EventListenerOrEventListenerObject | null` - Event listener
-- `options` - `boolean | AddEventListenerOptions` (optional) - Event listener options
-
-**Returns:** `void`
-
-### removeEventListener(type, callback, options?)
-
-Remove an event listener.
-
-```tsx
-$audio.removeEventListener("bufferingStart", handler)
-```
-
-**Parameters:**
-
-- `type` - `string` - Event type
-- `callback` - `EventListenerOrEventListenerObject | null` - Event listener to remove
-- `options` - `EventListenerOptions | boolean` (optional) - Event listener options
-
-**Returns:** `void`
 
 ## Utilities
 
 ### formatDuration(seconds)
 
-Format seconds to MM:SS format.
+Format seconds to `MM:SS` string. Handles invalid input by returning `"0:00"`.
 
 ```tsx
 import { formatDuration } from "@/lib/audio"
 
-const formatted = formatDuration(125) // "2:05"
-const formatted2 = formatDuration(3661) // "61:01"
+formatDuration(125) // "2:05"
+formatDuration(3661) // "61:01"
 ```
 
-**Parameters:**
+### isLive(track)
 
-- `seconds` - `number` - The number of seconds to format
-
-**Returns:** `string` - Formatted duration in MM:SS format
-
-**Example:**
+Heuristic check for live streams based on URL patterns or `track.live` flag.
 
 ```tsx
-import { formatDuration } from "@/lib/audio"
+import { isLive } from "@/lib/audio"
 
-function TimeDisplay() {
-  const currentTime = 125 // seconds
-  const duration = 300 // seconds
-
-  return (
-    <div>
-      {formatDuration(currentTime)} / {formatDuration(duration)}
-      {/* Output: "2:05" / "5:00" */}
-    </div>
-  )
+if (isLive(track)) {
+  // Handle live stream (no seeking)
 }
 ```
 
@@ -287,109 +108,109 @@ function TimeDisplay() {
 
 ### Track
 
-Type definition for audio tracks.
+Common audio track object with optional fields:
 
 ```tsx
 import type { Track } from "@/lib/audio"
 
-const track: Track = {
-  id: "1",
-  url: "https://example.com/audio.mp3",
-  title: "My Song",
-  artist: "Artist Name",
+type Track = {
+  id?: string | number
+  url: string
+  title?: string
+  artist?: string
+  artwork?: string
+  images?: string[]
+  duration?: number
+  album?: string
+  genre?: string
+  live?: boolean
+  [key: string]: unknown
 }
 ```
 
-**Properties:**
-
-- `id?` - `string | number` - Optional track identifier
-- `url` - `string` - The URL of the audio file (required)
-- `title?` - `string` - Optional track title
-- `artist?` - `string` - Optional artist name
-- `[key: string]` - `unknown` - Additional properties allowed
-
 ## Examples
 
-### Basic Usage
+### Basic Playback
 
 ```tsx
 import { $audio } from "@/lib/audio"
 
-// Initialize
 $audio.init()
 
-// Load and play
-async function playAudio() {
+async function playTrack(url: string) {
   try {
-    await $audio.load("https://example.com/audio.mp3", 0)
+    await $audio.load(url, 0)
     await $audio.play()
   } catch (error) {
-    console.error("Error playing audio:", error)
+    console.error("Playback failed:", error)
   }
 }
 ```
 
-### Volume Control
+### Volume Management
 
 ```tsx
 import { $audio } from "@/lib/audio"
 
-// Set volume immediately
+// Immediate change
 $audio.setVolume(0.5)
 
-// Fade volume over time
-$audio.setVolume(0.8, 1000) // Fade to 80% over 1 second
+// Smooth fade over 1 second
+$audio.setVolume(0.8, 1000)
+
+// Mute with memory
+$audio.setMuted(true)
+$audio.setMuted(false) // Restores previous volume
 ```
 
-### Event Listeners
+### React Component
+
+```tsx
+import { $audio, formatDuration } from "@/lib/audio"
+import { useEffect, useState } from "react"
+
+function TimeDisplay() {
+  const [time, setTime] = useState(0)
+
+  useEffect(() => {
+    const updateTime = () => setTime($audio.getCurrentTime())
+    const interval = setInterval(updateTime, 100)
+    return () => clearInterval(interval)
+  }, [])
+
+  return <span>{formatDuration(time)}</span>
+}
+```
+
+### Event Monitoring
 
 ```tsx
 import { $audio } from "@/lib/audio"
 
 $audio.addEventListener("bufferingStart", () => {
-  console.log("Audio is buffering")
+  console.log("Loading audio...")
 })
 
 $audio.addEventListener("bufferingEnd", () => {
-  console.log("Audio finished buffering")
+  console.log("Ready to play")
 })
 
-$audio.addEventListener("playbackStarted", () => {
-  console.log("Playback started")
-})
-
-$audio.addEventListener("audioError", () => {
-  console.error("Audio error occurred")
-})
-
-$audio.addEventListener("bufferUpdate", (e) => {
-  if (e instanceof CustomEvent) {
-    console.log("Buffered time:", e.detail.bufferedTime)
-  }
+$audio.addEventListener("audioError", (event) => {
+  console.error("Audio error:", event)
 })
 ```
 
-### Formatting Time
+## Related
 
-```tsx
-import { formatDuration } from "@/lib/audio"
-
-function TimeDisplay({ seconds }: { seconds: number }) {
-  return <div>{formatDuration(seconds)}</div>
-}
-
-// Usage
-<TimeDisplay seconds={125} /> {/* Output: "2:05" */}
-<TimeDisplay seconds={3661} /> {/* Output: "61:01" */}
-```
+- [Audio Store](/docs/lib/audio-store) — Zustand store for queue and playback state management
+- [Audio Player](/docs/components/player) — Composable player UI components
 
 ## Notes
 
-- The audio library uses a singleton pattern (`$audio`) for global audio management
-- All methods are safe to call on the server side (they check for client-side availability)
-- The library handles audio errors automatically with retry logic (max 3 retries)
-- Volume fading is done smoothly using requestAnimationFrame
-- The library dispatches custom events for buffering, playback, and errors
-- `formatDuration` handles invalid values (NaN, Infinity, negative) by returning "0:00"
-- The audio element is automatically initialized when needed, but you can call `init()` explicitly
+- Singleton pattern: All methods access the same `$audio` instance
+- Server-safe: Methods check for client-side availability before executing
+- Automatic retries: Handles load/play errors with exponential backoff (max 3 attempts)
+- Volume fading: Animations use `requestAnimationFrame` for smooth transitions
+- Live streams: Disable seeking and use extended timeout for reliability
+- `formatDuration` handles edge cases (NaN, Infinity, negative values)
 

@@ -9,7 +9,7 @@
   "registryDependencies": [
     "@audio/store",
     "@audio/track",
-    "@audio/empty",
+    "@shadcn/empty",
     "@shadcn/button",
     "@shadcn/command",
     "@shadcn/dialog",

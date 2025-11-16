@@ -74,7 +74,7 @@ export const Index: Record<string, any> = {
     name: "player",
     description: "",
     type: "registry:ui",
-    registryDependencies: ["@audio/store","@audio/audio","@audio/slider","@audio/empty","@shadcn/button","@shadcn/dialog","@shadcn/dropdown-menu","@shadcn/input","@shadcn/item","@shadcn/scroll-area","@shadcn/toggle","@shadcn/tooltip"],
+    registryDependencies: ["@audio/store","@audio/audio","@audio/slider","@shadcn/empty","@shadcn/button","@shadcn/dialog","@shadcn/dropdown-menu","@shadcn/input","@shadcn/item","@shadcn/scroll-area","@shadcn/toggle","@shadcn/tooltip"],
     files: [{
       path: "src/registry/default/ui/audio/player.tsx",
       type: "registry:ui",
@@ -92,7 +92,7 @@ export const Index: Record<string, any> = {
     name: "track",
     description: "",
     type: "registry:ui",
-    registryDependencies: ["@audio/empty","@audio/sortable-list","@shadcn/avatar","@shadcn/button","@shadcn/item","@shadcn/scroll-area"],
+    registryDependencies: ["@audio/sortable-list","@shadcn/empty","@shadcn/avatar","@shadcn/button","@shadcn/item","@shadcn/scroll-area"],
     files: [{
       path: "src/registry/default/ui/audio/track.tsx",
       type: "registry:ui",
@@ -110,7 +110,7 @@ export const Index: Record<string, any> = {
     name: "queue",
     description: "",
     type: "registry:ui",
-    registryDependencies: ["@audio/store","@audio/track","@audio/empty","@shadcn/button","@shadcn/command","@shadcn/dialog","@shadcn/dropdown-menu","@shadcn/input","@shadcn/item","@shadcn/scroll-area","@shadcn/toggle","@shadcn/tooltip"],
+    registryDependencies: ["@audio/store","@audio/track","@shadcn/empty","@shadcn/button","@shadcn/command","@shadcn/dialog","@shadcn/dropdown-menu","@shadcn/input","@shadcn/item","@shadcn/scroll-area","@shadcn/toggle","@shadcn/tooltip"],
     files: [{
       path: "src/registry/default/ui/audio/queue.tsx",
       type: "registry:ui",

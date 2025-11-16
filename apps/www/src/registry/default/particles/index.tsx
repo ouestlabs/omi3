@@ -1,4 +1,5 @@
 import type React from "react";
+import AudioQueueSimpleDemo from "../examples/queue-simple-demo";
 import AudioTrackDemo from "../examples/track-demo";
 import AudioTrackListDemo from "../examples/track-list-demo";
 import AudioTrackListGridDemo from "../examples/track-list-grid-demo";
@@ -28,6 +29,12 @@ export const particles: ParticleItem[] = [
     id: "particle-player-widget",
     component: ParticlePlayerWidget,
     category: ["player", "track"],
+    className: "**:data-[slot=particle-wrapper]:w-full",
+  },
+  {
+    id: "queue-simple-demo",
+    component: AudioQueueSimpleDemo,
+    category: ["player", "queue"],
     className: "**:data-[slot=particle-wrapper]:w-full",
   },
   {

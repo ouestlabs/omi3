@@ -55,7 +55,7 @@ export const ui: Registry["items"] = [
       "@audio/store",
       "@audio/audio",
       "@audio/slider",
-      "@audio/empty",
+      "@shadcn/empty",
       "@shadcn/button",
       "@shadcn/dialog",
       "@shadcn/dropdown-menu",
@@ -77,8 +77,8 @@ export const ui: Registry["items"] = [
     type: "registry:ui",
     dependencies: ["lucide-react"],
     registryDependencies: [
-      "@audio/empty",
       "@audio/sortable-list",
+      "@shadcn/empty",
       "@shadcn/avatar",
       "@shadcn/button",
       "@shadcn/item",
@@ -98,7 +98,7 @@ export const ui: Registry["items"] = [
     registryDependencies: [
       "@audio/store",
       "@audio/track",
-      "@audio/empty",
+      "@shadcn/empty",
       "@shadcn/button",
       "@shadcn/command",
       "@shadcn/dialog",
@@ -120,10 +120,7 @@ export const ui: Registry["items"] = [
     name: "provider",
     type: "registry:ui",
     dependencies: ["zustand"],
-    registryDependencies: [
-      "@audio/store",
-      "@audio/audio",
-    ],
+    registryDependencies: ["@audio/store", "@audio/audio"],
     files: [
       {
         path: "ui/audio/provider.tsx",

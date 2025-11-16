@@ -1,11 +1,11 @@
 ---
 title: Audio Queue
-description: Composable queue management components for audio players with shuffle, repeat, and track selection.
+description: Composable queue management components with shuffle, repeat, and track selection.
 featured: true
 component: true
 ---
 
-A comprehensive queue management system for audio players. Includes shuffle, repeat modes, track selection, search, and drag-and-drop reordering.
+A comprehensive queue management system. Includes shuffle, repeat modes, track selection, search, and drag-and-drop reordering.
 
 ## Installation
 
@@ -27,30 +27,27 @@ npx shadcn@latest add @audio/queue
 
 <Steps>
 
-<Step>Install the following dependencies:</Step>
+<Step>Install the runtime dependencies:</Step>
 
 ```bash
 npm install zustand lucide-react
 ```
 
-<Step>Install the required shadcn/ui components:</Step>
+<Step>Install the required shadcn/ui primitives:</Step>
 
 ```bash
-npx shadcn@latest add button dialog dropdown-menu input item scroll-area toggle tooltip
+npx shadcn@latest add button dialog dropdown-menu input empty item scroll-area toggle tooltip
 ```
 
-<Step>Install the custom components from this registry:</Step>
+<Step>Install the track component used by the queue:</Step>
 
 ```bash
-npx shadcn@latest add @audio/empty
+npx shadcn@latest add @audio/track
 ```
 
-<Step>Copy and paste the following code into your project.</Step>
+<Step>Copy the component and supporting files into your project (see registry sources):</Step>
 
 <ComponentSource name="queue" title="components/ui/audio/queue.tsx" />
-
-<Step>Copy the required store file.</Step>
-
 <ComponentSource name="audio-store" title="lib/audio-store.ts" />
 
 <Step>Update the import paths to match your project setup.</Step>
@@ -291,9 +288,8 @@ Queue components are designed to work seamlessly with the `AudioPlayer` componen
 
 ## Notes
 
-- All queue components are self-contained and read state directly from the global store
-- `AudioProvider` must be present in the component tree for components to work
-- The `AudioQueue` component includes built-in search functionality
-- Track reordering is disabled when search is active
-- The queue dialog automatically closes when a track is selected
-- Queue components are optimized to prevent unnecessary re-renders
+- `AudioProvider` (or the project's audio store) is required for queue components to work correctly.
+- Search functionality filters tracks by title or artist.
+- Track reordering is disabled when search is active.
+- The queue dialog automatically closes when a track is selected.
+- All components read from and update the global audio store state.
