@@ -37,7 +37,7 @@
   "devDependencies": {
     "@omi3/typescript": "workspace:*",
     "@types/node": "^22",
-    "tsup": "^8.4.0",
+    "tsup": "^8.5.1",
     "typescript": "^5",
     "vitest": "^3.1.2"
   }
