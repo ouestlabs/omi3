@@ -17,7 +17,7 @@
     "next": "^15.3.1",
     "next-intl": "^4.1.0",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.2.0"
   },
   "devDependencies": {
     "@omi3/typescript": "workspace:*",
