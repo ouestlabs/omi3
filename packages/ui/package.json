@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.0",
-    "@mdx-js/react": "^3.1.0",
+    "@mdx-js/react": "^3.1.1",
     "@next/mdx": "^15.3.1",
     "@omi3/audio": "workspace:*",
     "@omi3/utils": "workspace:*",
