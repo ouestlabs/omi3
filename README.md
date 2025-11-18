@@ -8,7 +8,7 @@ We think shadcn/ui is the best foundation for modern web applications. We've tak
 
 We're always looking for contributors to help improve our UI components. Whether it's a bug report, a new feature, or a documentation update, we appreciate your help.
 
-Please see our [Contributing Guidelines](../../CONTRIBUTING.md) for more information on how to get involved.
+Please see our [Contributing Guidelines](CONTRIBUTING.md) for more information on how to get involved.
 
 ## Getting Started
 
