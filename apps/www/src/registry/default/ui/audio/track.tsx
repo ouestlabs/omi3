@@ -46,7 +46,11 @@ import {
   SortableList,
 } from "@/registry/default/ui/sortable-list";
 
-type AudioTrackProps = {
+/**
+ * Props for the AudioTrack component.
+ * Supports two modes: store mode (using trackId) or controlled mode (using track).
+ */
+export type AudioTrackProps = {
   trackId?: string | number;
   track?: Track;
   index?: number;
@@ -273,7 +277,11 @@ const audioTrackListVariants = cva("w-full", {
   },
 });
 
-type AudioTrackListProps = {
+/**
+ * Props for the AudioTrackList component.
+ * Can operate in store mode (reads from global queue) or controlled mode (uses provided tracks).
+ */
+export type AudioTrackListProps = {
   tracks?: Track[];
   onTrackSelect?: (index: number, track?: Track) => void;
   onTrackRemove?: (trackId: string) => void;

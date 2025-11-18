@@ -90,12 +90,17 @@ const audioControlBarVariants = cva(
   }
 );
 
+/**
+ * Props for the AudioControlBar component.
+ */
+export type AudioControlBarProps = React.ComponentProps<"div"> &
+  VariantProps<typeof audioControlBarVariants>;
+
 const AudioControlBar = ({
   className,
   variant,
   ...props
-}: React.ComponentProps<"div"> &
-  VariantProps<typeof audioControlBarVariants>) => (
+}: AudioControlBarProps) => (
   <div
     className={cn(audioControlBarVariants({ variant }), className)}
     data-slot="audio-control-bar"
@@ -104,10 +109,15 @@ const AudioControlBar = ({
   />
 );
 
+/**
+ * Props for the AudioControlGroup component.
+ */
+export type AudioControlGroupProps = React.ComponentProps<"div">;
+
 const AudioControlGroup = ({
   className,
   ...props
-}: React.ComponentProps<"div">) => (
+}: AudioControlGroupProps) => (
   <div
     className={cn("flex w-full items-center gap-1.5", className)}
     data-slot="audio-control-group"
@@ -115,11 +125,18 @@ const AudioControlGroup = ({
   />
 );
 
+/**
+ * Props for the AudioTimeDisplay component.
+ */
+export type AudioTimeDisplayProps = React.ComponentProps<"time"> & {
+  remaining?: boolean;
+};
+
 const AudioTimeDisplay = ({
   className,
   remaining,
   ...props
-}: React.ComponentProps<"time"> & { remaining?: boolean }) => {
+}: AudioTimeDisplayProps) => {
   const { currentTime, duration, currentTrack } = useAudioStore();
   const isLiveStream = currentTrack ? isLive(currentTrack) : false;
 

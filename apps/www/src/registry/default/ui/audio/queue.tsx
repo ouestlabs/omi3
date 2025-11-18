@@ -47,7 +47,10 @@ import {
   TooltipTrigger,
 } from "@/registry/default/ui/tooltip";
 
-interface AudioQueueButtonProps extends ComponentProps<typeof Button> {
+/**
+ * Props for the AudioQueueButton component.
+ */
+export interface AudioQueueButtonProps extends ComponentProps<typeof Button> {
   tooltip?: boolean;
   tooltipLabel?: string;
 }
@@ -225,7 +228,10 @@ const AudioQueuePreferences = ({
   );
 };
 
-type AudioQueueProps = {
+/**
+ * Props for the AudioQueue component.
+ */
+export type AudioQueueProps = {
   onTrackSelect?: (index: number) => void;
   searchPlaceholder?: string;
   emptyLabel?: string;

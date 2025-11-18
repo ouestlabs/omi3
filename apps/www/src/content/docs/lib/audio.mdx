@@ -30,6 +30,13 @@ await $audio.load("https://example.com/audio.mp3", 0)
 await $audio.play()
 ```
 
+<Callout variant="info">
+  <strong>Client initialization:</strong> The <code>$audio</code> singleton must be initialized on the client. Call
+  <code>$audio.init()</code> from a client component or inside
+  <code>useEffect()</code> so the underlying <code>HTMLAudioElement</code> is
+  created only in the browser environment.
+</Callout>
+
 #### Lifecycle
 
 | Method | Description |
@@ -37,6 +44,32 @@ await $audio.play()
 | `init()` | Initialize on the client. Safe to call multiple times. |
 | `cleanup()` | Reset and release the audio element (pause, clear src). |
 
+```mermaid
+sequenceDiagram
+    participant App
+    participant AudioLib
+    participant HTMLAudio
+    
+    App->>AudioLib: init()
+    AudioLib->>HTMLAudio: new Audio()
+    AudioLib->>HTMLAudio: setupEventListeners()
+    Note over AudioLib,HTMLAudio: Ready for playback
+    
+    App->>AudioLib: load(url, startTime)
+    AudioLib->>HTMLAudio: src = url
+    AudioLib->>HTMLAudio: load()
+    HTMLAudio-->>AudioLib: loadedmetadata
+    AudioLib-->>App: Promise resolved
+    
+    App->>AudioLib: play()
+    AudioLib->>HTMLAudio: play()
+    HTMLAudio-->>AudioLib: playing event
+    AudioLib-->>App: Promise resolved
+    
+    App->>AudioLib: cleanup()
+    AudioLib->>HTMLAudio: pause()
+    AudioLib->>HTMLAudio: src = ""
+```
 
 #### Playback
 
@@ -44,8 +77,21 @@ await $audio.play()
 |--------|-------------|
 | `load(url, startTime?, isLive?)` | Load an audio source and wait for readiness. Pass `isLive` for live streams (longer timeout, no seek). Returns `Promise<void>`. |
 | `play()` | Start or resume playback. Returns promise that resolves when browser allows playback. |
+
+<Callout variant="warning">
+  <strong>Browser autoplay restrictions:</strong> The <code>play()</code> call returns a promise which may be rejected by
+  browser autoplay policies if there was no user gesture. Wrap calls to
+  <code>play()</code> in a try/catch and provide a fallback UI so your app
+  handles playback interruptions gracefully.
+</Callout>
 | `pause()` | Pause playback immediately. |
 | `seek(time)` | Seek when metadata is available. Ignored for live streams. |
+
+<Callout variant="info">
+  <strong>Live streams:</strong> For live streams (when <code>isLive</code> is true) seeking is disabled and
+  long timeouts are used. Live streams are best handled with a separate
+  code-path because the playback semantics differ from on-demand audio files.
+</Callout>
 
 #### Volume
 
@@ -111,7 +157,19 @@ if (isLive(track)) {
 
 Common audio track object with optional fields:
 
-<AutoTypeTable path="src/registry/default/lib/audio.ts" name="Track"  />
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `id` | `string \| number` | - | Unique identifier for the track. |
+| `url` | `string` | - | URL of the audio file or stream. |
+| `title` | `string` | - | Track title. |
+| `artist` | `string` | - | Artist name. |
+| `artwork` | `string` | - | Album artwork URL. |
+| `images` | `string[]` | - | Array of image URLs. |
+| `duration` | `number` | - | Track duration in seconds. |
+| `album` | `string` | - | Album name. |
+| `genre` | `string` | - | Genre. |
+| `live` | `boolean` | - | Whether this is a live stream. |
+| `[key: string]` | `unknown` | - | Additional properties. |
 
 
 ## Examples
@@ -199,4 +257,3 @@ $audio.addEventListener("audioError", (event) => {
 - Volume fading: Animations use `requestAnimationFrame` for smooth transitions
 - Live streams: Disable seeking and use extended timeout for reliability
 - `formatDuration` handles edge cases (NaN, Infinity, negative values)
-

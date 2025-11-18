@@ -121,45 +121,58 @@ Key features:
 
 ### AudioTrack
 
+#### Props
+
 | Prop | Type | Default | Description |
-| ---- | ---- | ------- | ----------- |
-| `trackId` | `string | number` | — | Load a track from the global queue (store mode). Do not use together with `track`. |
-| `track` | `Track` | — | Render a provided track object (controlled mode). Do not use together with `trackId`. |
-| `index` | `number` | — | Display index (one-based when shown). |
-| `onClick` | `() => void` | — | Click handler invoked when the item is clicked. |
-| `onRemove` | `(trackId: string) => void` | — | Called when the remove action is used. Receives the track id as string. |
+|------|------|---------|-------------|
+| `trackId` | `string \| number` | - | Load a track from the global queue (store mode). Do not use together with `track`. |
+| `track` | `Track` | - | Render a provided track object (controlled mode). Do not use together with `trackId`. |
+| `index` | `number` | - | Display index (one-based when shown). |
+| `onClick` | `() => void` | - | Click handler invoked when the item is clicked. |
+| `onRemove` | `(trackId: string) => void` | - | Called when the remove action is used. Receives the track id as string. |
 | `showRemove` | `boolean` | `false` | Whether to show the remove (X) button. Hidden for the current playing track. |
 | `showPlayPause` | `boolean` | `true` | Show play / pause control. |
 | `showDragHandle` | `boolean` | `false` | Show a drag handle (used together with sortable lists). |
 | `showCover` | `boolean` | `true` | Show album artwork (falls back to default icon). |
-| `className` | `string` | — | Additional CSS classes. |
+| `className` | `string` | - | Additional CSS classes. |
 
-Notes:
-
-- Prefer providing either `trackId` (store mode) or `track` (controlled mode). Both may be omitted for some internal uses, but passing both is not supported.
-- Cover images are taken from `track.artwork` or `track.images[0]`.
-- Live tracks show a "Live" badge and the duration is hidden.
+<Callout variant="info">
+  <strong>Important Information:</strong>
+  
+  - **Operating Modes:** Use either <code>trackId</code> (store mode) or <code>track</code> (controlled mode). Both should not be used together. Store mode requires <code>AudioProvider</code> to be set up.
+  - **Track Display:** Cover images are taken from <code>track.artwork</code> or <code>track.images[0]</code>. Live tracks show a "Live" badge and the duration is hidden.
+</Callout>
 
 ### AudioTrackList
 
+#### Props
+
 | Prop | Type | Default | Description |
-| ---- | ---- | ------- | ----------- |
-| `tracks` | `Track[]` | — | Controlled list of tracks. When omitted the component reads from the global queue. |
-| `onTrackSelect` | `(index: number, track?: Track) => void` | — | Called when a track is selected or played. In store mode the index is the queue index. In controlled mode the index refers to the provided `tracks` array. |
-| `onTrackRemove` | `(trackId: string) => void` | — | Remove handler used by the per-item remove button. |
+|------|------|---------|-------------|
+| `tracks` | `Track[]` | - | Controlled list of tracks. When omitted the component reads from the global queue. |
+| `onTrackSelect` | `(index: number, track?: Track) => void` | - | Called when a track is selected or played. In store mode the index is the queue index. In controlled mode the index refers to the provided `tracks` array. |
+| `onTrackRemove` | `(trackId: string) => void` | - | Remove handler used by the per-item remove button. |
 | `sortable` | `boolean` | `false` | Enable drag-and-drop reordering. Reordering will update the store queue only when not filtered and when `tracks` is not provided. |
 | `showCover` | `boolean` | `true` | Show track cover image. |
-| `variant` | `"default" | "grid"` | `"default"` | Layout variant: stacked list or responsive grid. |
-| `filterQuery` | `string` | — | Simple text filter (matches title or artist). |
-| `filterFn` | `(track: Track) => boolean` | — | Custom filter function. When provided, `filterQuery` is ignored. |
+| `variant` | `"default" \| "grid"` | `"default"` | Layout variant: stacked list or responsive grid. |
+| `filterQuery` | `string` | - | Simple text filter (matches title or artist). |
+| `filterFn` | `(track: Track) => boolean` | - | Custom filter function. When provided, `filterQuery` is ignored. |
 | `emptyLabel` | `string` | `"No tracks found"` | Label shown when the list is empty. |
 | `emptyDescription` | `string` | `"Try adding some tracks"` | Description shown in the empty state. |
-| `className` | `string` | — | Additional CSS classes. |
+| `className` | `string` | - | Additional CSS classes. |
 
-Behavior notes:
+<Callout variant="info">
+  <strong>Store vs Controlled Mode:</strong> When <code>tracks</code> is omitted, the component reads from the global queue (store mode).
+  When <code>tracks</code> is provided, it operates in controlled mode using the provided array.
+</Callout>
 
-- When `sortable` is true, reordering will call the store `setQueue` only if the list is not filtered and not controlled by the `tracks` prop.
-- Sortable grid/list rendering uses the registry's `SortableList`, `SortableItem`, and `SortableDragHandle` components.
+<Callout variant="warning">
+  <strong>Sortable Behavior:</strong> When <code>sortable</code> is enabled, reordering will update the store queue only when:
+  - The list is not filtered (<code>filterQuery</code> and <code>filterFn</code> are not used)
+  - The component is in store mode (<code>tracks</code> prop is not provided)
+  
+  Keep <code>sortable</code> disabled while filtering to avoid confusing reordering behavior.
+</Callout>
 
 ## Examples
 
@@ -193,9 +206,11 @@ Behavior notes:
 <AudioTrackList onTrackRemove={(id) => removeFromQueue(id)} />
 ```
 
-## Notes and recommendations
+## Notes
 
-- `AudioProvider` (or the project's audio store) is required for store mode to work correctly.
-- Live tracks hide duration and show a prominent badge.
-- When building UI around these components, keep `sortable` off while filtering to avoid confusing reordering behavior.
-- If you localize strings (e.g., empty labels), pass `emptyLabel` / `emptyDescription` to the list.
+<Callout variant="info">
+  <strong>Important Information:</strong>
+  
+  - **AudioProvider Requirement:** <code>AudioProvider</code> (or the project's audio store) is required for store mode to work correctly. Make sure to wrap your app with the provider at the root level.
+  - **Localization:** If you localize strings (e.g., empty labels), pass <code>emptyLabel</code> and <code>emptyDescription</code> to the list component.
+</Callout>

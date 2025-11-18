@@ -1,6 +1,3 @@
-/**
- * AudioLib: A comprehensive audio playback library for web applications.
- */
 export type Track = {
   id?: string | number;
   url: string;

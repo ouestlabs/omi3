@@ -65,7 +65,11 @@ npx shadcn@latest add @audio/slider
 
 ## Setup
 
-First, wrap your app with `AudioProvider` at the root level. This provides the audio context to all components:
+<Callout variant="info">
+  <strong>AudioProvider Required:</strong> Wrap your app with <code>AudioProvider</code> at the root level. This provides the audio context to all components.
+</Callout>
+
+First, wrap your app with `AudioProvider` at the root level:
 
 ```tsx showLineNumbers
 // app/layout.tsx or _app.tsx
@@ -160,11 +164,10 @@ A container component that holds audio player controls. Use it to wrap your cont
 
 #### Props
 
-| Prop    | Type                        | Default   | Description                    |
-| ------- | --------------------------- | --------- | ------------------------------ |
-| variant | `"compact"` \| `"stacked"` | `"compact"` | Layout variant of controls |
-
-Inherits all props from `HTMLDivElement`.
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `"compact" \| "stacked"` | `"compact"` | Layout variant for the control bar. |
+| `className` | `string` | - | Additional CSS classes. |
 
 #### Example
 
@@ -194,11 +197,9 @@ A flexible wrapper component for grouping audio controls and managing flex layou
 
 #### Props
 
-| Prop    | Type                        | Default   | Description                    |
-| ------- | --------------------------- | --------- | ------------------------------ |
-| variant | `"compact"` \| `"stacked"` | `"compact"` | Layout variant of controls |
-
-Inherits all props from `HTMLDivElement`.
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `className` | `string` | - | Additional CSS classes. |
 
 #### Example
 
@@ -225,6 +226,11 @@ Inherits all props from `HTMLDivElement`.
 A button that toggles play/pause state. Shows a loading spinner when buffering or loading, and automatically handles keyboard shortcuts (Space bar to play/pause).
 
 Inherits all props from `AudioButton` (which extends shadcn/ui's `Button` component).
+
+<Callout variant="info">
+  <strong>Keyboard Shortcuts:</strong> The <code>AudioPlay</code> component automatically handles the Space bar keyboard shortcut for play/pause.
+  This works when the focus is on the document body.
+</Callout>
 
 ### AudioSkipBack
 
@@ -262,11 +268,10 @@ Displays the current playback time or remaining time.
 
 #### Props
 
-| Prop     | Type           | Description                        |
-| -------- | -------------- | ---------------------------------- |
-| remaining | `boolean?`     | If true, shows remaining time      |
-
-Inherits all props from `HTMLTimeElement`.
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `remaining` | `boolean` | `false` | Display remaining time instead of current time. |
+| `className` | `string` | - | Additional CSS classes. |
 
 ### AudioVolume
 
@@ -276,8 +281,13 @@ Inherits all props from `DropdownMenu` component.
 
 ## Notes
 
-- `AudioProvider` (or the project's audio store) is required for player components to work correctly.
-- All audio components are self-contained and read state directly from the global store.
-- The audio player uses the HTML5 audio element under the hood.
-- Previous button restarts the track if played more than 3 seconds, otherwise goes to the previous track.
-- Live streams disable seeking, rewind, and fast-forward controls.
+<Callout variant="info">
+  <strong>Important Information:</strong>
+  
+  - **Component Architecture:** All audio components are self-contained and read state directly from the global store. The audio player uses the HTML5 audio element under the hood.
+  - **Previous Button Behavior:** The previous button restarts the track if it has been played for more than 3 seconds, otherwise it navigates to the previous track in the queue.
+</Callout>
+
+<Callout variant="warning">
+  <strong>Live Stream Limitations:</strong> Live streams disable seeking, rewind, and fast-forward controls. The seek bar is disabled and shows 100% progress for live streams.
+</Callout>

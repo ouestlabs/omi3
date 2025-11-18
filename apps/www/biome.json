@@ -11,7 +11,9 @@
         "noBarrelFile": "off"
       },
       "suspicious": {
-        "noConsole": "off"
+        "noConsole": "off",
+        "noDuplicateProperties": "off",
+        "noDuplicateCustomProperties": "off"
       },
       "a11y": {
         "useSemanticElements": "off"

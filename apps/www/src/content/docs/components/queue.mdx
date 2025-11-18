@@ -140,12 +140,12 @@ A dialog component that displays the current queue and allows track selection, s
 
 #### Props
 
-| Prop              | Type                      | Default                    | Description                        |
-| ----------------- | ------------------------- | -------------------------- | ---------------------------------- |
-| onTrackSelect     | `(index: number) => void` | `undefined`                | Callback when a track is selected  |
-| searchPlaceholder | `string`                  | `"Search for a track..."`  | Placeholder text for search input  |
-| emptyLabel        | `string`                  | `"No tracks found"`        | Label shown when no tracks found   |
-| emptyDescription  | `string`                  | `"Try searching for a different track"` | Description when no tracks found   |
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `onTrackSelect` | `(index: number) => void` | - | Callback function to handle track selection. Receives the index of the selected track. |
+| `searchPlaceholder` | `string` | `"Search for a track..."` | Placeholder text for the search input. |
+| `emptyLabel` | `string` | `"No tracks found"` | Label to display when the queue is empty. |
+| `emptyDescription` | `string` | `"Try searching for a different track"` | Description to display when the queue is empty. |
 
 #### Features
 
@@ -154,6 +154,11 @@ A dialog component that displays the current queue and allows track selection, s
 - **Drag and drop**: Reorder tracks when not searching
 - **Remove tracks**: Remove individual tracks from queue
 - **Clear queue**: Button to clear all tracks
+
+<Callout variant="info">
+  <strong>Search and Drag-and-Drop:</strong> Search functionality filters tracks by title or artist. Track reordering is automatically disabled when search is active to prevent confusion.
+  The queue dialog automatically closes when a track is selected.
+</Callout>
 
 #### Example
 
@@ -174,12 +179,10 @@ A button component with optional tooltip support, used internally by queue compo
 
 #### Props
 
-| Prop        | Type      | Default | Description                    |
-| ----------- | --------- | ------- | ------------------------------ |
-| tooltip     | `boolean` | `false` | Whether to show a tooltip      |
-| tooltipLabel | `string`  | `undefined` | Tooltip text                   |
-
-Inherits all props from `Button` component.
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `tooltip` | `boolean` | `false` | Whether to show a tooltip. |
+| `tooltipLabel` | `string` | - | Tooltip text to display. |
 
 #### Example
 
@@ -234,6 +237,10 @@ Inherits all props from `Toggle` component (except `onPressedChange`).
 
 The shuffle state persists until manually disabled.
 
+<Callout variant="info">
+  <strong>State Persistence:</strong> The shuffle and repeat mode states are persisted to localStorage and will be restored when the app reloads.
+</Callout>
+
 #### Example
 
 ```tsx
@@ -258,6 +265,11 @@ Inherits all props from `AudioQueueButton` component.
 - **First**: New tracks are added at the beginning of the queue
 - **Last**: New tracks are added at the end of the queue (default)
 - **After Current**: New tracks are added after the currently playing track
+
+<Callout variant="info">
+  <strong>Insert Mode Behavior:</strong> The insert mode determines where new tracks are added to the queue when using <code>addToQueue</code>.
+  This setting persists across sessions via localStorage.
+</Callout>
 
 #### Example
 
@@ -288,8 +300,7 @@ Queue components are designed to work seamlessly with the `AudioPlayer` componen
 
 ## Notes
 
-- `AudioProvider` (or the project's audio store) is required for queue components to work correctly.
-- Search functionality filters tracks by title or artist.
-- Track reordering is disabled when search is active.
-- The queue dialog automatically closes when a track is selected.
-- All components read from and update the global audio store state.
+<Callout variant="info">
+  <strong>AudioProvider Requirement:</strong> <code>AudioProvider</code> (or the project's audio store) is required for queue components to work correctly.
+  All components read from and update the global audio store state.
+</Callout>

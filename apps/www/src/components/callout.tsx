@@ -2,13 +2,11 @@ import type * as React from "react";
 import { cn } from "@/registry/default/lib/utils";
 
 interface CalloutProps extends React.ComponentProps<"div"> {
-  label: string;
   variant?: "default" | "info" | "warning" | "error" | "success";
 }
 
 function Callout({
   variant = "default",
-  label,
   className,
   children,
   ...props
@@ -24,17 +22,14 @@ function Callout({
       <div
         className={cn(
           "h-full w-1 rounded-full bg-muted-foreground",
-          variant === "info" && "bg-blue-500",
+          variant === "info" && "bg-blue-500!",
           variant === "warning" && "bg-amber-500",
           variant === "error" && "bg-destructive",
           variant === "success" && "bg-green-500"
         )}
         role="presentation"
       />
-      <div className="text-pretty">
-        <strong className="text-muted-foreground text-xs">{label}:</strong>{" "}
-        {children}
-      </div>
+      <div className="text-pretty">{children}</div>
     </div>
   );
 }
