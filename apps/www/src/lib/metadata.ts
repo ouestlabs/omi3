@@ -54,7 +54,6 @@ function createMetadata(override: Partial<Metadata> = {}): Metadata {
     ...override,
     openGraph: {
       url: `${appConfig.url}`,
-      images: appConfig.ogImage,
       siteName: appConfig.name,
       ...override.openGraph,
     },

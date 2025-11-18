@@ -65,7 +65,9 @@ export default async function Page(props: {
   const doc = page.data;
   const rawContent = await page.data.getText("raw");
   const MDX = doc.body;
-  const neighbours = findNeighbour(source.pageTree, page.url);
+  const neighbours = findNeighbour(source.pageTree, page.url, {
+    separateRoot: false,
+  });
 
   const links = doc.links;
 
