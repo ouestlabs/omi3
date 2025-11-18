@@ -5,7 +5,7 @@ import { source } from "@/lib/source";
 
 export function ComponentsList() {
   const components = source.pageTree.children.find(
-    (page) => page.name === "Components" || page.url?.includes("/components")
+    (page) => page.name === "Components"
   );
 
   if (components?.type !== "folder") {
@@ -13,7 +13,7 @@ export function ComponentsList() {
   }
 
   const list = components.children.filter(
-    (component) => component.type === "page" && component.url !== "/docs/components"
+    (component) => component.type === "page"
   );
 
   return (
