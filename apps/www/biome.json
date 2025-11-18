@@ -1,0 +1,24 @@
+{
+  "root": false,
+  "extends": "//",
+  "linter": {
+    "rules": {
+      "style": {
+        "useNamingConvention": "off",
+        "noMagicNumbers": "off"
+      },
+      "performance": {
+        "noBarrelFile": "off"
+      },
+      "suspicious": {
+        "noConsole": "off",
+        "noDuplicateProperties": "off",
+        "noDuplicateCustomProperties": "off"
+      },
+      "a11y": {
+        "useSemanticElements": "off",
+        "noNoninteractiveElementInteractions": "off"
+      }
+    }
+  }
+}

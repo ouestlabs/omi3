@@ -1,0 +1,102 @@
+---
+title: Get Started
+description: A quick guide to adding your first component.
+---
+
+This guide provides the essentials for adding **audio/ui** components to your React application.
+
+## Prerequisites
+
+Our components are built with [Tailwind CSS v4](https://tailwindcss.com). Before you begin, make sure you have a React project set up with Tailwind CSS.
+
+## Adding Components
+
+You can add components **automatically with the shadcn CLI** or **manually by copying the files**.
+
+#### With the CLI
+
+Each component page provides a command to add it to your project automatically. The CLI will create the necessary files and install any dependencies for you.
+
+For example, to add the audio player:
+
+```bash
+npx shadcn@latest add @audio/player
+```
+
+#### Manually
+
+1. **Find a component** on the [Components](/docs) or [Particles](/particles) pages.
+2. **Copy the code** from the **Code** tab.
+3. **Create a new file** in your project (e.g., `components/ui/audio/player.tsx`) and paste the code.
+4. **Install any dependencies** listed on the component's page.
+5. **Import and use** the component in your app.
+
+### Step 3: Setup AudioProvider
+
+Provide the audio context at the root. You can copy the provider source directly or use the usage snippet below.
+
+<CodeTabs>
+
+<TabsList>
+  <TabsTrigger value="usage">Usage</TabsTrigger>
+  <TabsTrigger value="copy">Code</TabsTrigger>
+</TabsList>
+
+<TabsContent value="usage">
+
+```tsx
+// app/layout.tsx or _app.tsx
+import { AudioProvider } from "@/components/ui/audio/provider"
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>
+        <AudioProvider tracks={initialTracks}>
+          {children}
+        </AudioProvider>
+      </body>
+    </html>
+  )
+}
+```
+
+</TabsContent>
+
+<TabsContent value="copy">
+
+<ComponentSource name="provider" title="components/ui/audio/provider.tsx" />
+
+</TabsContent>
+
+</CodeTabs>
+
+### Step 4: Use the component
+
+```tsx
+import { AudioPlayer, AudioPlayerControlBar, AudioPlayerPlay } from "@/components/ui/audio/player"
+
+export function MyAudioPlayer() {
+  return (
+    <AudioPlayer>
+      <AudioPlayerControlBar>
+        <AudioPlayerPlay />
+      </AudioPlayerControlBar>
+    </AudioPlayer>
+  )
+}
+```
+
+## Styling
+
+Components are styled with a design token system defined by CSS variables and implemented with Tailwind CSS. The variables follow the same approach as shadcn/ui and are fully customizable.
+
+For detailed information about styling, color tokens, and customization options, see the [shadcn/ui theming documentation](https://ui.shadcn.com/docs/theming).
+
+## Working with LLMs
+
+We structure the documentation to make the components **AI-friendly**, so language models can understand, reason about, and modify them. To support this, we include:
+
+ - A [llms.txt](/llms.txt) file that provides a map of the documentation and component structure for your AI agent.
+ - A [llms-full.txt](/llms-full.txt) file containing an expanded view of the docs and component sources for deeper analysis.
+ - A **Copy Markdown** button on every page, so you can easily share content or feed it to your AI workflows.

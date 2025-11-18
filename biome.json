@@ -1,65 +1,19 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-  "vcs": {
-    "enabled": true,
-    "clientKind": "git",
-    "useIgnoreFile": true
-  },
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
   "files": {
-    "ignoreUnknown": true,
-    "ignore": [
-      "**/node_modules",
-      "**/.next",
-      "**/dist",
-      "**/coverage",
-      "**/.turbo"
+    "ignoreUnknown": false,
+    "includes": [
+      "**",
+      "!**/.next",
+      "!**/__index__.tsx",
+      "!**/dist",
+      "!**/.turbo",
+      "!**/dev-dist",
+      "!**/.zed",
+      "!**/.vscode",
+      "!**/routeTree.gen.ts",
+      "!**/.source"
     ]
   },
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "recommended": true,
-      "complexity": {
-        "noUselessThisAlias": "error",
-        "noUselessTypeConstraint": "error"
-      },
-      "correctness": {
-        "noUnusedVariables": "error",
-        "useArrayLiterals": "off",
-        "noUnusedImports": "off"
-      },
-      "style": {
-        "noNamespace": "error",
-        "useAsConstAssertion": "error",
-        "useBlockStatements": "error",
-        "noNonNullAssertion": "error"
-      },
-      "a11y": {
-        "noSvgWithoutTitle": "off"
-      },
-      "suspicious": {
-        "noExplicitAny": "off",
-        "noExtraNonNullAssertion": "error",
-        "noMisleadingInstantiator": "error",
-        "noUnsafeDeclarationMerging": "error",
-        "useNamespaceKeyword": "error"
-      }
-    }
-  },
-  "formatter": {
-    "enabled": true,
-    "indentStyle": "tab",
-    "indentWidth": 2,
-    "lineWidth": 100
-  },
-  "organizeImports": {
-    "enabled": true
-  },
-  "javascript": {
-    "formatter": {
-      "quoteStyle": "double",
-      "trailingCommas": "es5",
-      "semicolons": "always"
-    }
-  }
+  "extends": ["ultracite/core", "ultracite/react", "ultracite/next"]
 }
