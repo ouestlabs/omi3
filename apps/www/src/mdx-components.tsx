@@ -388,7 +388,10 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
       <Alert className={cn("my-6", className)} {...props} />
     ),
     Button,
-    Callout: ({ className, ...props }: React.ComponentProps<typeof Callout>) => (
+    Callout: ({
+      className,
+      ...props
+    }: React.ComponentProps<typeof Callout>) => (
       <Callout className={cn("my-6", className)} {...props} />
     ),
     Accordion,

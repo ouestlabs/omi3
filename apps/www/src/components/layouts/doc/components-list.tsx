@@ -5,15 +5,15 @@ import { source } from "@/lib/source";
 
 export function ComponentsList() {
   const components = source.pageTree.children.find(
-    (page) => page.$id === "components"
+    (page) => page.name === "Components" || page.url?.includes("/components")
   );
 
   if (components?.type !== "folder") {
-    return;
+    return null;
   }
 
   const list = components.children.filter(
-    (component) => component.type === "page"
+    (component) => component.type === "page" && component.url !== "/docs/components"
   );
 
   return (

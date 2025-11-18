@@ -114,10 +114,7 @@ const AudioControlBar = ({
  */
 export type AudioControlGroupProps = React.ComponentProps<"div">;
 
-const AudioControlGroup = ({
-  className,
-  ...props
-}: AudioControlGroupProps) => (
+const AudioControlGroup = ({ className, ...props }: AudioControlGroupProps) => (
   <div
     className={cn("flex w-full items-center gap-1.5", className)}
     data-slot="audio-control-group"

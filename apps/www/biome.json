@@ -16,7 +16,8 @@
         "noDuplicateCustomProperties": "off"
       },
       "a11y": {
-        "useSemanticElements": "off"
+        "useSemanticElements": "off",
+        "noNoninteractiveElementInteractions": "off"
       }
     }
   }

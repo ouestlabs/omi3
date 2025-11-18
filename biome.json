@@ -5,6 +5,7 @@
     "includes": [
       "**",
       "!**/.next",
+      "!**/__index__.tsx",
       "!**/dist",
       "!**/.turbo",
       "!**/dev-dist",

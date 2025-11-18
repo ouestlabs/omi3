@@ -1,7 +1,8 @@
 "use client";
 
 import { ChevronDownIcon, CopyCheckIcon, CopyIcon } from "lucide-react";
-
+import type React from "react";
+import { useMemo } from "react";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import { Button } from "@/registry/default/ui/button";
 import { ButtonGroup } from "@/registry/default/ui/button-group";
@@ -12,12 +13,29 @@ import {
   DropdownMenuTrigger,
 } from "@/registry/default/ui/dropdown-menu";
 
-function getPromptUrl(baseURL: string, url: string) {
-  return `${baseURL}?q=${encodeURIComponent(
-    `I’m looking at this audio/ui documentation: ${url}.
-Help me understand how to use it. Be ready to explain concepts, give examples, or help debug based on it.
-  `
-  )}`;
+/**
+ * Generate a unified prompt for LLM interactions that provides deep context
+ * about the documentation page. This prompt works well across all LLM platforms.
+ */
+function generateLLMPrompt(url: string, markdownUrl?: string): string {
+  const fullMarkdownUrl =
+    typeof window !== "undefined" && markdownUrl
+      ? new URL(markdownUrl, window.location.origin).toString()
+      : markdownUrl || url;
+
+  return `I'm working with the audio/ui documentation. Here's the context:
+
+- Page URL: ${url}
+- Markdown source: ${fullMarkdownUrl}
+
+Please help me understand this documentation deeply. I may need you to:
+- Explain concepts and APIs
+- Provide usage examples
+- Help debug issues
+- Answer questions about implementation details
+- Suggest best practices
+
+Be ready to engage with the full context of this documentation page.`;
 }
 
 const menuItems = {
@@ -35,9 +53,9 @@ const menuItems = {
       View as Markdown
     </a>
   ),
-  v0: (url: string) => (
+  v0: (url: string, markdownUrl?: string) => (
     <a
-      href={getPromptUrl("https://v0.dev", url)}
+      href={`https://v0.dev?q=${encodeURIComponent(generateLLMPrompt(url, markdownUrl))}`}
       rel="noopener noreferrer"
       target="_blank"
     >
@@ -53,9 +71,9 @@ const menuItems = {
       <span className="-translate-x-0.5">Open in v0</span>
     </a>
   ),
-  chatgpt: (url: string) => (
+  chatgpt: (url: string, markdownUrl?: string) => (
     <a
-      href={getPromptUrl("https://chatgpt.com", url)}
+      href={`https://chatgpt.com?q=${encodeURIComponent(generateLLMPrompt(url, markdownUrl))}`}
       rel="noopener noreferrer"
       target="_blank"
     >
@@ -69,9 +87,9 @@ const menuItems = {
       Open in ChatGPT
     </a>
   ),
-  claude: (url: string) => (
+  claude: (url: string, markdownUrl?: string) => (
     <a
-      href={getPromptUrl("https://claude.ai/new", url)}
+      href={`https://claude.ai/new?q=${encodeURIComponent(generateLLMPrompt(url, markdownUrl))}`}
       rel="noopener noreferrer"
       target="_blank"
     >
@@ -86,8 +104,64 @@ const menuItems = {
     </a>
   ),
 };
-export function DocsCopyPage({ page, url }: { page: string; url: string }) {
+
+export function DocsCopyPage({
+  page,
+  url,
+  markdownUrl,
+  githubUrl,
+}: {
+  page: string;
+  url: string;
+  markdownUrl?: string;
+  githubUrl?: string;
+}) {
   const { copyToClipboard, isCopied } = useCopyToClipboard();
+
+  const menuItemsWithExtras = useMemo(() => {
+    const items: Array<{
+      key: string;
+      value: () => React.ReactElement;
+    }> = [];
+
+    items.push(
+      { key: "markdown", value: () => menuItems.markdown(url) },
+      {
+        key: "v0",
+        value: () => menuItems.v0(url, markdownUrl),
+      },
+      {
+        key: "chatgpt",
+        value: () => menuItems.chatgpt(url, markdownUrl),
+      },
+      {
+        key: "claude",
+        value: () => menuItems.claude(url, markdownUrl),
+      }
+    );
+
+    if (githubUrl) {
+      items.push({
+        key: "github",
+        value: () => (
+          <a href={githubUrl} rel="noopener noreferrer" target="_blank">
+            <svg
+              className="size-4"
+              fill="currentColor"
+              role="img"
+              viewBox="0 0 24 24"
+            >
+              <title>GitHub</title>
+              <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+            </svg>
+            Open in GitHub
+          </a>
+        ),
+      });
+    }
+
+    return items;
+  }, [url, markdownUrl, githubUrl]);
 
   return (
     <ButtonGroup className="relative">
@@ -102,9 +176,9 @@ export function DocsCopyPage({ page, url }: { page: string; url: string }) {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="ml-1 shadow-none">
-          {Object.entries(menuItems).map(([key, value]) => (
-            <DropdownMenuItem asChild key={key}>
-              {value(url)}
+          {menuItemsWithExtras.map((item) => (
+            <DropdownMenuItem asChild key={item.key}>
+              {item.value()}
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>

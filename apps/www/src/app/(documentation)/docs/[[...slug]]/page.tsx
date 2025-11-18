@@ -7,7 +7,12 @@ import { DocsTableOfContents } from "@/components/layouts/doc/toc";
 import { SiteFooter } from "@/components/layouts/global/site-footer";
 import { absoluteUrl } from "@/lib/config";
 import { createMetadata } from "@/lib/metadata";
-import { getPageImage, source } from "@/lib/source";
+import {
+  getGitHubUrl,
+  getMarkdownUrl,
+  getPageImage,
+  source,
+} from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
 import { Button } from "@/registry/default/ui/button";
 
@@ -80,6 +85,8 @@ export default async function Page(props: {
                   </h1>
                   <div className="docs-nav fixed inset-x-0 bottom-0 isolate z-50 flex items-center gap-2 border-border/50 border-t bg-background/80 px-6 py-4 backdrop-blur-sm lg:static lg:z-0 lg:border-t-0 lg:bg-transparent lg:px-0 lg:pt-1.5 lg:backdrop-blur-none">
                     <DocsCopyPage
+                      githubUrl={getGitHubUrl(page)}
+                      markdownUrl={getMarkdownUrl(page)}
                       page={rawContent}
                       url={absoluteUrl(page.url)}
                     />
