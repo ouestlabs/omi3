@@ -21,8 +21,7 @@ export default function NotFound() {
       <PageHeader>
         <PageHeaderHeading>Page Not Found</PageHeaderHeading>
         <PageHeaderDescription>
-          The page you&apos;re looking for doesn&apos;t exist or may have been
-          moved.
+          The page you&apos;re looking for doesn't exist or may have been moved.
         </PageHeaderDescription>
         <div className="mt-4">
           <Button asChild className="group">

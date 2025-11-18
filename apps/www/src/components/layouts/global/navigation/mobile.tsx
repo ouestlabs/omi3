@@ -1,22 +1,25 @@
 "use client";
 
-import { MenuIcon } from "lucide-react";
 import Link, { type LinkProps } from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { PAGES_NEW } from "@/lib/docs";
 import type { source } from "@/lib/source";
 import { cn } from "@/registry/default/lib/utils";
-import { Badge } from "@/registry/default/ui/badge";
 import { Button } from "@/registry/default/ui/button";
 import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/registry/default/ui/sheet";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/registry/default/ui/popover";
 
+const TOP_LEVEL_SECTIONS = [
+  { name: "Get Started", href: "/docs" },
+  {
+    name: "Components",
+    href: "/docs/components",
+  },
+];
 export function MobileNav({
   tree,
   items,
@@ -29,24 +32,50 @@ export function MobileNav({
   const [open, setOpen] = React.useState(false);
 
   return (
-    <Sheet onOpenChange={setOpen} open={open}>
-      <SheetTrigger asChild>
+    <Popover onOpenChange={setOpen} open={open}>
+      <PopoverTrigger asChild>
         <Button
-          className={cn("relative", className)}
-          size="icon"
+          className={cn(
+            "extend-touch-target h-8 touch-manipulation items-center justify-start gap-2.5 p-0! hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 active:bg-transparent dark:hover:bg-transparent",
+            className
+          )}
           variant="ghost"
         >
-          <MenuIcon className="size-5" />
-          <span className="sr-only">Toggle Menu</span>
+          <div className="relative flex h-8 w-4 items-center justify-center">
+            <div className="relative size-4">
+              <span
+                className={cn(
+                  "absolute left-0 block h-0.5 w-4 bg-foreground transition-all duration-100",
+                  open ? "-rotate-45 top-[0.4rem]" : "top-1"
+                )}
+              />
+              <span
+                className={cn(
+                  "absolute left-0 block h-0.5 w-4 bg-foreground transition-all duration-100",
+                  open ? "top-[0.4rem] rotate-45" : "top-2.5"
+                )}
+              />
+            </div>
+            <span className="sr-only">Toggle Menu</span>
+          </div>
+          <span className="flex h-8 items-center font-medium text-lg leading-none">
+            Menu
+          </span>
         </Button>
-      </SheetTrigger>
-      <SheetContent side="left">
-        <SheetHeader>
-          <SheetTitle className="text-sm">Menu</SheetTitle>
-        </SheetHeader>
-        <div className="flex flex-col gap-12 overflow-auto p-6 pt-8">
-          <div className="flex flex-col gap-3">
-            <div className="flex flex-col gap-1">
+      </PopoverTrigger>
+      <PopoverContent
+        align="start"
+        alignOffset={-16}
+        className="no-scrollbar h-(--radix-popper-available-height) w-(--radix-popper-available-width) overflow-y-auto rounded-none border-none bg-background/90 p-0 shadow-none backdrop-blur duration-100"
+        side="bottom"
+        sideOffset={16}
+      >
+        <div className="flex flex-col gap-12 overflow-auto px-6 py-6">
+          <div className="flex flex-col gap-4">
+            <div className="font-medium text-muted-foreground text-sm">
+              Menu
+            </div>
+            <div className="flex flex-col gap-3">
               <MobileLink href="/" onOpenChange={setOpen}>
                 Home
               </MobileLink>
@@ -61,24 +90,39 @@ export function MobileNav({
               ))}
             </div>
           </div>
+          <div className="flex flex-col gap-4">
+            <div className="font-medium text-muted-foreground text-sm">
+              Sections
+            </div>
+            <div className="flex flex-col gap-3">
+              {TOP_LEVEL_SECTIONS.map(({ name, href }) => (
+                <MobileLink href={href} key={name} onOpenChange={setOpen}>
+                  {name}
+                </MobileLink>
+              ))}
+            </div>
+          </div>
           <div className="flex flex-col gap-8">
             {tree?.children?.map((group, index) => {
               if (group.type === "folder") {
                 return (
-                  <div className="flex flex-col gap-3" key={String(index)}>
-                    <div className="font-medium text-sm">{group.name}</div>
-                    <div className="flex flex-col gap-0.5">
+                  <div className="flex flex-col gap-4" key={String(index)}>
+                    <div className="font-medium text-muted-foreground text-sm">
+                      {group.name}
+                    </div>
+                    <div className="flex flex-col gap-3">
                       {group.children.map((item) => {
                         if (item.type === "page") {
                           return (
                             <MobileLink
+                              className="flex items-center gap-2"
                               href={item.url}
-                              key={`${item.url}-${String(index)}`}
+                              key={`${item.url}-${index}`}
                               onOpenChange={setOpen}
                             >
-                              {item.name}
+                              {item.name}{" "}
                               {PAGES_NEW.includes(item.url) && (
-                                <Badge>New</Badge>
+                                <span className="flex size-2 rounded-full bg-primary" />
                               )}
                             </MobileLink>
                           );
@@ -93,8 +137,8 @@ export function MobileNav({
             })}
           </div>
         </div>
-      </SheetContent>
-    </Sheet>
+      </PopoverContent>
+    </Popover>
   );
 }
 
@@ -112,10 +156,7 @@ function MobileLink({
   const router = useRouter();
   return (
     <Link
-      className={cn(
-        "flex items-center gap-2 py-1.5 text-muted-foreground",
-        className
-      )}
+      className={cn("font-medium text-2xl", className)}
       href={href}
       onClick={() => {
         router.push(href.toString());

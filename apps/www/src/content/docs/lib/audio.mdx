@@ -37,6 +37,7 @@ await $audio.play()
 | `init()` | Initialize on the client. Safe to call multiple times. |
 | `cleanup()` | Reset and release the audio element (pause, clear src). |
 
+
 #### Playback
 
 | Method | Description |
@@ -110,23 +111,8 @@ if (isLive(track)) {
 
 Common audio track object with optional fields:
 
-```tsx
-import type { Track } from "@/lib/audio"
+<AutoTypeTable path="src/registry/default/lib/audio.ts" name="Track"  />
 
-type Track = {
-  id?: string | number
-  url: string
-  title?: string
-  artist?: string
-  artwork?: string
-  images?: string[]
-  duration?: number
-  album?: string
-  genre?: string
-  live?: boolean
-  [key: string]: unknown
-}
-```
 
 ## Examples
 

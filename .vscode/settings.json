@@ -32,8 +32,21 @@
     "source.fixAll.biome": "explicit",
     "source.organizeImports.biome": "explicit"
   },
+  "files.associations": {
+  "*.css": "tailwindcss"
+},
+"editor.quickSuggestions": {
+  "strings": "on"
+},
   "tailwindCSS.classFunctions": [
     "cva",
     "cn"
-  ]
+  ],
+  "chat.mcp.serverSampling": {
+    "omi3/.vscode/mcp.json: shadcn": {
+      "allowedModels": [
+        "copilot/auto"
+      ]
+    }
+  }
 }

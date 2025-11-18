@@ -15,7 +15,7 @@ function MainNav({
   const pathname = usePathname();
 
   return (
-    <nav className={cn("items-center gap-2", className)} {...props}>
+    <nav className={cn("items-center", className)} {...props}>
       {items.map((item) => (
         <Button
           asChild

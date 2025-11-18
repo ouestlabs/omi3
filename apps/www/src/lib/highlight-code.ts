@@ -1,7 +1,6 @@
 import { transformerNotationWordHighlight } from "@shikijs/transformers";
 import type { ShikiTransformer } from "shiki";
 import { codeToHtml } from "shiki";
-
 export const transformers = [
   {
     code(node) {
@@ -50,7 +49,7 @@ export const transformers = [
     },
   },
   transformerNotationWordHighlight(),
-] as ShikiTransformer[];
+] satisfies ShikiTransformer[];
 
 export async function highlightCode(
   code: string,

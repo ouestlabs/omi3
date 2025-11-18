@@ -63,7 +63,10 @@ function AudioPlayer({
 }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("w-full rounded-(--radius) border p-1.5", className)}
+      className={cn(
+        "w-full rounded-(--radius) border bg-card p-1.5",
+        className
+      )}
       data-slot="audio-player"
       {...props}
     >
@@ -174,7 +177,6 @@ const AudioSeekBar = ({
     useAudioStore();
   const isLiveStream = currentTrack ? isLive(currentTrack) : false;
 
-  // Calculer le progress
   const progress = React.useMemo(() => {
     if (isLiveStream) {
       return 100;
@@ -185,7 +187,6 @@ const AudioSeekBar = ({
     return (currentTime / duration) * 100;
   }, [isLiveStream, currentTime, duration]);
 
-  // Calculer le bufferedProgress
   const bufferedProgress = React.useMemo(() => {
     if (isLiveStream) {
       return 100;
@@ -262,7 +263,7 @@ const AudioSeekBar = ({
 const AudioVolume = ({
   className,
   size = "icon",
-  variant = "ghost",
+  variant = "outline",
   ...props
 }: Omit<
   React.ComponentProps<typeof Slider>,

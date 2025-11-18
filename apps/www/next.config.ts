@@ -1,15 +1,23 @@
+import createBundleAnalyzer from "@next/bundle-analyzer";
 import { createMDX } from "fumadocs-mdx/next";
 import type { NextConfig } from "next";
 
-const withMDX = createMDX();
-
+const withAnalyzer = createBundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+});
 const nextConfig: NextConfig = {
-  devIndicators: false,
-  pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
   reactCompiler: true,
+  devIndicators: false,
+  reactStrictMode: true,
+  logging: {
+    fetches: {
+      fullUrl: true,
+    },
+  },
   experimental: {
     turbopackFileSystemCacheForDev: true,
   },
+  serverExternalPackages: ["ts-morph", "shiki"],
   images: {
     remotePatterns: [
       {
@@ -21,9 +29,9 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
-        source: "/",
-        destination: "/docs",
-        permanent: false,
+        source: "/docs/:path*.mdx",
+        destination: "/docs/:path*.md",
+        permanent: true,
       },
     ];
   },
@@ -31,10 +39,12 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/docs/:path*.md",
-        destination: "/api/raw/docs/:path*",
+        destination: "/docs/raw/:path*",
       },
     ];
   },
 };
 
-export default withMDX(nextConfig);
+const withMDX = createMDX();
+
+export default withAnalyzer(withMDX(nextConfig));

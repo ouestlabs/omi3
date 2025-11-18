@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { useAudioStore } from "@/registry/default/lib/audio-store";
 import { AudioTrackList } from "@/registry/default/ui/audio/track";
 
-export default function AudioTrackSortableListDemo() {
+export default function AudioTrackSortableListGridDemo() {
   const queue = useAudioStore((state) => state.queue);
 
   return (

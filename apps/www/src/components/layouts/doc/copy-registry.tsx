@@ -1,8 +1,8 @@
 "use client";
 import { CheckIcon } from "lucide-react";
 import type * as React from "react";
-import { Icons } from "@/assets";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
+import { Icons } from "@/lib/icons";
 import { cn } from "@/registry/default/lib/utils";
 import { Button } from "@/registry/default/ui/button";
 import {
@@ -37,7 +37,7 @@ export function CopyRegistry({
           {isCopied ? (
             <CheckIcon className="size-3.5" />
           ) : (
-            <Icons.Mcp className="size-3.5" />
+            <Icons.mcp className="size-3.5" />
           )}
         </Button>
       </TooltipTrigger>

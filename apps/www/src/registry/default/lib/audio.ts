@@ -1,3 +1,6 @@
+/**
+ * AudioLib: A comprehensive audio playback library for web applications.
+ */
 export type Track = {
   id?: string | number;
   url: string;
@@ -21,7 +24,7 @@ class AudioLib {
   private retryAttempts = 0;
   private readonly maxRetries = 3;
   private readonly eventTarget = new EventTarget();
-
+  /** Initialize the audio element and event listeners */
   init(): void {
     if (this.isInitialized || !this.isClient()) {
       return;

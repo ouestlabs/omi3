@@ -10,6 +10,12 @@ import {
 import { useRouter } from "next/navigation";
 import type { ComponentProps } from "react";
 import React from "react";
+import { useConfig } from "@/hooks/use-config";
+import { useIsMac } from "@/hooks/use-is-mac";
+import { useMutationObserver } from "@/hooks/use-mutation-observer";
+import type { source } from "@/lib/source";
+import { cn } from "@/registry/default/lib/utils";
+import { Button } from "@/registry/default/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -17,13 +23,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
-import { useConfig } from "@/hooks/use-config";
-import { useIsMac } from "@/hooks/use-is-mac";
-import { useMutationObserver } from "@/hooks/use-mutation-observer";
-import type { source } from "@/lib/source";
-import { cn } from "@/registry/default/lib/utils";
-import { Button } from "@/registry/default/ui/button";
+} from "@/registry/default/ui/command";
 import {
   Dialog,
   DialogContent,

@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 import type { ComponentProps } from "react";
 import React from "react";
-import { Command, CommandInput, CommandList } from "@/components/ui/command";
 import type { Track } from "@/registry/default/lib/audio";
 import {
   type InsertMode,
@@ -20,6 +19,11 @@ import {
 import { cn } from "@/registry/default/lib/utils";
 import { AudioTrackList } from "@/registry/default/ui/audio/track";
 import { Button } from "@/registry/default/ui/button";
+import {
+  Command,
+  CommandInput,
+  CommandList,
+} from "@/registry/default/ui/command";
 import {
   Dialog,
   DialogContent,

@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { PAGES_NEW } from "@/lib/docs";
+import type { source } from "@/lib/source";
 import {
   Sidebar,
   SidebarContent,
@@ -11,10 +13,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar";
-import { PAGES_NEW } from "@/lib/docs";
-import type { source } from "@/lib/source";
-import { Badge } from "@/registry/default/ui/badge";
+} from "@/registry/default/ui/sidebar";
 
 function DocsSidebar({
   tree,
@@ -29,7 +28,6 @@ function DocsSidebar({
       {...props}
     >
       <SidebarContent className="no-scrollbar px-4 py-2">
-        <div className="h-(--top-spacing) shrink-0" />
         {tree.children.map((item) => (
           <SidebarGroup className="gap-1" key={item.$id}>
             <SidebarGroupLabel className="h-7 px-0 text-sidebar-accent-foreground">
@@ -44,7 +42,7 @@ function DocsSidebar({
                         <SidebarMenuItem key={i.url}>
                           <SidebarMenuButton
                             asChild
-                            className="from-secondary to-secondary/64 ps-3.5 text-sidebar-foreground/64 hover:bg-transparent active:bg-transparent data-[active=true]:bg-linear-to-tr"
+                            className="after:-inset-y-1 relative h-[30px] 3xl:fixed:w-full w-fit 3xl:fixed:max-w-48 overflow-visible border border-transparent font-medium text-[0.8rem] after:absolute after:inset-x-0 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent"
                             isActive={i.url === pathname}
                           >
                             <Link
@@ -52,7 +50,12 @@ function DocsSidebar({
                               href={i.url}
                             >
                               {i.name}
-                              {PAGES_NEW.includes(i.url) && <Badge>New</Badge>}
+                              {PAGES_NEW.includes(i.url) && (
+                                <span
+                                  className="flex size-2 rounded-full bg-primary"
+                                  title="New"
+                                />
+                              )}
                             </Link>
                           </SidebarMenuButton>
                         </SidebarMenuItem>

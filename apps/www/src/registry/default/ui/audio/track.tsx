@@ -196,7 +196,7 @@ function AudioTrack({
     <Item
       className={cn(
         "w-full cursor-pointer transition-all hover:bg-secondary/50",
-        isCurrent && "bg-secondary",
+        isCurrent && "bg-secondary/80 backdrop-blur-sm",
         className
       )}
       onClick={(e) => {
@@ -212,17 +212,17 @@ function AudioTrack({
       </ItemMedia>
       <ItemContent className="min-w-0 flex-1 gap-0 overflow-hidden">
         <div className="flex items-center gap-1.5">
-          <ItemTitle className="truncate font-medium text-sm leading-snug">
+          <ItemTitle className="truncate font-medium text-sm">
             {track.title}
           </ItemTitle>
           {isLiveTrack && (
-            <Badge className="bg-red-500/10 px-1 py-0.5 font-medium text-[10px] text-red-600 uppercase leading-none dark:bg-red-500/20 dark:text-red-400">
+            <Badge className="bg-destructive/10 px-1 py-0.5 font-medium text-[10px] text-destructive uppercase leading-none">
               <RadioIcon className="size-2.5" />
               Live
             </Badge>
           )}
         </div>
-        <ItemDescription>{track.artist}</ItemDescription>
+        <ItemDescription className="text-xs">{track.artist}</ItemDescription>
       </ItemContent>
       {!isLiveTrack && trackDuration !== undefined && (
         <ItemContent className="flex-none text-center">
@@ -265,7 +265,7 @@ const audioTrackListVariants = cva("w-full", {
   variants: {
     variant: {
       default: "space-y-2",
-      grid: "grid grid-cols-1 gap-2 sm:grid-cols-2",
+      grid: "grid grid-cols-1 gap-2 xl:grid-cols-2",
     },
   },
   defaultVariants: {
@@ -402,7 +402,7 @@ function AudioTrackList({
   const content = sortable ? (
     <SortableList
       className={
-        variant === "grid" ? "grid grid-cols-1 gap-2 sm:grid-cols-2" : "gap-1"
+        variant === "grid" ? "grid grid-cols-1 gap-2 xl:grid-cols-2" : "gap-1"
       }
       items={tracks
         .filter((t) => t.id !== undefined)

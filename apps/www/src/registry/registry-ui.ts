@@ -19,18 +19,6 @@ export const ui: Registry["items"] = [
     ],
   },
   {
-    name: "empty",
-    type: "registry:ui",
-    dependencies: ["class-variance-authority", "clsx", "tailwind-merge"],
-    registryDependencies: [],
-    files: [
-      {
-        path: "ui/empty.tsx",
-        type: "registry:ui",
-      },
-    ],
-  },
-  {
     name: "sortable-list",
     type: "registry:ui",
     dependencies: [

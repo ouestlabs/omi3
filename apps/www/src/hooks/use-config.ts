@@ -30,7 +30,7 @@ const useConfigStore = create<ConfigStore>()(
   )
 );
 
-export function useConfig(): [Config, (config: Config) => void] {
+function useConfig(): [Config, (config: Config) => void] {
   const config = useConfigStore(
     useShallow((state) => ({
       packageManager: state.packageManager,
@@ -41,3 +41,5 @@ export function useConfig(): [Config, (config: Config) => void] {
 
   return [config, setConfig];
 }
+
+export { useConfig };

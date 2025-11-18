@@ -36,7 +36,7 @@ export default function Page() {
         </PageHeaderDescription>
         <CategoryNavigation categories={particleCategories} />
       </PageHeader>
-      <div className="grid flex-1 items-stretch gap-9 pb-12 lg:grid-cols-2 lg:gap-6 xl:gap-9">
+      <div className="grid flex-1 items-stretch gap-3 pb-12 lg:grid-cols-2">
         {particles.map((particle) => {
           const ParticleComponent = particle.component;
           return (

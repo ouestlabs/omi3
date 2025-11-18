@@ -34,24 +34,6 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
-  "empty": {
-    name: "empty",
-    description: "",
-    type: "registry:ui",
-    registryDependencies: [],
-    files: [{
-      path: "src/registry/default/ui/empty.tsx",
-      type: "registry:ui",
-      target: ""
-    }],
-    component: React.lazy(async () => {
-      const mod = await import("@/registry/default/ui/empty.tsx")
-      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || item.name
-      return { default: mod.default || mod[exportName] }
-    }),
-    categories: undefined,
-    meta: undefined,
-  },
   "sortable-list": {
     name: "sortable-list",
     description: "",
@@ -338,6 +320,56 @@ export const Index: Record<string, any> = {
       return { default: mod.default || mod[exportName] }
     }),
     categories: ["track","sortable","grid"],
+    meta: undefined,
+  },
+  "theme-stone": {
+    name: "theme-stone",
+    description: "",
+    type: "registry:theme",
+    registryDependencies: undefined,
+    files: [undefined],
+    component: null,
+    categories: undefined,
+    meta: undefined,
+  },
+  "theme-zinc": {
+    name: "theme-zinc",
+    description: "",
+    type: "registry:theme",
+    registryDependencies: undefined,
+    files: [undefined],
+    component: null,
+    categories: undefined,
+    meta: undefined,
+  },
+  "theme-neutral": {
+    name: "theme-neutral",
+    description: "",
+    type: "registry:theme",
+    registryDependencies: undefined,
+    files: [undefined],
+    component: null,
+    categories: undefined,
+    meta: undefined,
+  },
+  "theme-gray": {
+    name: "theme-gray",
+    description: "",
+    type: "registry:theme",
+    registryDependencies: undefined,
+    files: [undefined],
+    component: null,
+    categories: undefined,
+    meta: undefined,
+  },
+  "theme-slate": {
+    name: "theme-slate",
+    description: "",
+    type: "registry:theme",
+    registryDependencies: undefined,
+    files: [undefined],
+    component: null,
+    categories: undefined,
     meta: undefined,
   },
   "particle-player": {

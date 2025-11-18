@@ -94,7 +94,7 @@ export default async function CategoryPage({ params }: PageProps) {
           currentCategory={categorySlug}
         />
       </PageHeader>
-      <div className="grid flex-1 items-stretch gap-9 pb-12 lg:grid-cols-2 lg:gap-6 xl:gap-9">
+      <div className="grid flex-1 items-stretch gap-3 pb-12 lg:grid-cols-2">
         {categoryParticles.map((particle) => {
           const ParticleComponent = particle.component;
           return (

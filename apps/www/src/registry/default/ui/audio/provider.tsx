@@ -460,7 +460,6 @@ const demoTracks: Track[] = [
     artist: "Flavio Concini",
     album: "Pixabay Music",
     url: "https://cdn.pixabay.com/audio/2024/10/21/audio_78251ef8e3.mp3",
-    artwork: `https://avatar.vercel.sh/${decodeURIComponent("Beautiful Loop")}`,
     genre: "Upbeat",
   },
   {
@@ -469,7 +468,6 @@ const demoTracks: Track[] = [
     artist: "Aliabbas Abasov",
     album: "Pixabay Music",
     url: "https://cdn.pixabay.com/audio/2024/02/28/audio_60f7a54400.mp3",
-    artwork: `https://avatar.vercel.sh/${decodeURIComponent("Type")}`,
     genre: "Hip Hop",
   },
   {

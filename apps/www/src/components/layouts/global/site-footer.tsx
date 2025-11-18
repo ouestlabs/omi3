@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export function SiteFooter() {
   return (
-    <footer className="flex flex-col gap-0.5">
+    <footer className="flex flex-col gap-0.5 group-has-[.docs-nav]/body:pb-20 group-has-[.docs-nav]/body:sm:pb-0">
       <p>
         <Link className="font-heading text-lg" href="/">
           audio/<span className="text-muted-foreground/64">ui</span>
@@ -12,16 +12,16 @@ export function SiteFooter() {
         Built by{" "}
         <a
           className="font-semibold hover:underline"
-          href="https://github.com/lucien-loua"
+          href="https://github.com/ouestlabs"
           rel="noopener noreferrer"
           target="_blank"
         >
-          lU
+          Ouest Labs
         </a>
         , the source code is available on{" "}
         <a
           className="font-semibold hover:underline"
-          href="https://github.com/lucien-loua/audio-ui"
+          href="https://github.com/ouestlabs/audio-ui"
           rel="noopener noreferrer"
           target="_blank"
         >

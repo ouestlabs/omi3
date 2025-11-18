@@ -6,9 +6,9 @@ function PageHeader({
   ...props
 }: React.ComponentProps<"section">) {
   return (
-    <section className={className} {...props}>
+    <section className={cn("border-grid", className)} {...props}>
       <div className="container-wrapper">
-        <div className="container flex flex-col items-center gap-2 px-0 py-8 text-center md:py-12 lg:py-16 xl:gap-4">
+        <div className="container flex flex-col items-center gap-2 py-8 text-center md:py-16 lg:py-20 xl:gap-4">
           {children}
         </div>
       </div>
@@ -22,7 +22,10 @@ function PageHeaderHeading({
 }: React.ComponentProps<"h1">) {
   return (
     <h1
-      className={cn("font-heading text-4xl lg:text-5xl", className)}
+      className={cn(
+        "max-w-2xl text-balance font-semibold text-4xl text-primary leading-tighter tracking-tight lg:font-semibold lg:leading-[1.1] xl:text-5xl xl:tracking-tighter",
+        className
+      )}
       {...props}
     />
   );
@@ -34,10 +37,24 @@ function PageHeaderDescription({
 }: React.ComponentProps<"p">) {
   return (
     <p
-      className={cn("text-muted-foreground lg:text-lg", className)}
+      className={cn(
+        "max-w-3xl text-balance text-base text-foreground sm:text-lg",
+        className
+      )}
       {...props}
     />
   );
 }
 
-export { PageHeader, PageHeaderDescription, PageHeaderHeading };
+function PageActions({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      className={cn(
+        "flex w-full items-center justify-center gap-2 pt-2 **:data-[slot=button]:shadow-none",
+        className
+      )}
+      {...props}
+    />
+  );
+}
+export { PageHeader, PageHeaderDescription, PageHeaderHeading, PageActions };

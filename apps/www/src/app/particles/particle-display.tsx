@@ -2,9 +2,9 @@ import { InfoIcon } from "lucide-react";
 import React from "react";
 import type { registryItemSchema } from "shadcn/schema";
 import type { z } from "zod";
-import { Icons } from "@/assets";
 import { CodeBlockCommand } from "@/components/code-block/command";
 import { CopyRegistry } from "@/components/layouts/doc/copy-registry";
+import { OpenInV0Button } from "@/components/open-in-v0-button";
 import { ComponentSource } from "@/components/preview/source";
 import { highlightCode } from "@/lib/highlight-code";
 import { getRegistryItem } from "@/lib/registry";
@@ -41,11 +41,11 @@ export async function ParticleDisplay({
   return (
     <div
       className={cn(
-        "after:-inset-[5px] after:-z-1 relative flex min-w-0 flex-col rounded-xl border bg-muted/50 bg-clip-padding before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-xl)-1px)] before:shadow-[0_1px_2px_1px_--theme(--color-black/4%)] after:pointer-events-none after:absolute after:rounded-[calc(var(--radius-xl)+4px)] after:border after:border-border/50 after:bg-clip-padding dark:after:bg-background/72",
+        "relative flex min-w-0 flex-col rounded-xl border bg-muted/50",
         className
       )}
     >
-      <div className="-m-px flex min-w-0 flex-1 flex-col flex-wrap items-center justify-center overflow-x-auto rounded-t-xl rounded-b-lg border bg-background p-6 before:pointer-events-none before:absolute before:inset-0 before:rounded-[calc(var(--radius-xl)-1px)] lg:px-8 lg:py-12 dark:before:shadow-[0_-1px_--theme(--color-white/8%)]">
+      <div className="-m-px flex min-w-0 flex-1 flex-col flex-wrap items-center justify-center overflow-x-auto rounded-xl border bg-background p-5">
         <div data-slot="particle-wrapper">{children}</div>
       </div>
       <div className="flex items-center gap-3 rounded-b-xl p-2">
@@ -92,17 +92,7 @@ export async function ParticleDisplay({
                 <div className="flex h-full flex-1 flex-col overflow-hidden">
                   <div className="flex items-center justify-between gap-2">
                     <h2 className="mt-6 mb-4 font-heading text-xl">Code</h2>
-                    <Button asChild variant="outline">
-                      <a
-                        href={`https://v0.dev/chat/api/open?url=${encodeURIComponent(`${baseUrl}/r/${name}.json`)}`}
-                        rel="noopener noreferrer"
-                        target="_blank"
-                        title="Open in v0"
-                      >
-                        Open in
-                        <Icons.V0 className="size-5" />
-                      </a>
-                    </Button>
+                    <OpenInV0Button name={name} />
                   </div>
                   <ComponentSource
                     className="*:data-rehype-pretty-code-figure:no-scrollbar h-full overflow-hidden *:data-rehype-pretty-code-figure:mt-0 *:data-rehype-pretty-code-figure:max-h-full *:data-rehype-pretty-code-figure:overflow-y-auto"

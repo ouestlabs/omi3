@@ -1,6 +1,6 @@
-import { CopyButton } from "@/components/ui/copy-button";
-import { getIconForLanguageExtension } from "@/lib/get-icon";
+import { CopyButton } from "@/components/copy-button";
 import { highlightCode } from "@/lib/highlight-code";
+import { getIconForLanguageExtension } from "@/lib/icons";
 
 async function CodeBlock({
   code,
@@ -20,7 +20,7 @@ async function CodeBlock({
   });
 
   return (
-    <figure data-rehype-pretty-code-figure="">
+    <figure data-rehype-pretty-code-figure>
       {title && (
         <figcaption
           className="flex items-center gap-2 text-code-foreground [&_svg]:size-5 [&_svg]:text-code-foreground sm:[&_svg]:size-4"

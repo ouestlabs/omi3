@@ -31,7 +31,7 @@ function CodeBlockCommand({
   const [config, setConfig] = useConfig();
   const { isCopied, copyToClipboard } = useCopyToClipboard();
 
-  const packageManager = config?.packageManager || "pnpm";
+  const packageManager = config?.packageManager || "bun";
   const tabs = React.useMemo(
     () => ({
       pnpm: __pnpm__,
@@ -59,7 +59,7 @@ function CodeBlockCommand({
         onValueChange={(value) => {
           setConfig({
             ...config,
-            packageManager: value as "pnpm" | "npm" | "yarn" | "bun",
+            packageManager: value as typeof packageManager,
           });
         }}
         value={packageManager}
