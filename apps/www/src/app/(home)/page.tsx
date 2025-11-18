@@ -2,9 +2,6 @@ import { DemoGrid } from "@/app/(home)/elements/demo-grid";
 import { Hero } from "@/app/(home)/elements/hero";
 import { ThemeCustomizer } from "@/components/theme/customizer";
 
-export const revalidate = false;
-export const dynamic = "force-static";
-
 export default function IndexPage() {
   return (
     <div className="flex flex-1 flex-col">

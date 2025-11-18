@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { ImageResponse } from "next/og";
-import { loadGoogleFont } from "@/lib/font";
+import { baseUrl } from "@/lib/config";
+import { loadGoogleFont } from "@/lib/fonts";
 import { source } from "@/lib/source";
 
 export const revalidate = false;
@@ -8,15 +9,10 @@ export const size = {
   width: 1200,
   height: 630,
 };
-const WAVEFORM_HEIGHT_MULTIPLIER = 0.2;
-const WAVEFORM_HEIGHT = 100;
-const WAVEFORM_HEIGHT_OFFSET = 500;
-const WAVEFORM_COLOR = "#e4e4e4";
-const BACKGROUND_COLOR = "#0c0c0c";
 
 export async function GET(
   _req: Request,
-  { params }: { params: Promise<{ slug: string[] }> }
+  { params }: RouteContext<"/og/docs/[[...slug]]">
 ) {
   const { slug } = await params;
   const page = source.getPage(slug);
@@ -37,41 +33,15 @@ export async function GET(
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: BACKGROUND_COLOR,
         position: "relative",
         overflow: "hidden",
+        backgroundImage: `url(${baseUrl.origin}/bg.png)`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
       }}
     >
       <div
         style={{
-          position: "absolute",
-          width: "100%",
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          opacity: 0.07,
-        }}
-      >
-        {Array.from({ length: 120 }).map((_, i) => (
-          <div
-            key={i.toString()}
-            style={{
-              width: "5px",
-              height: `${Math.sin(i * WAVEFORM_HEIGHT_MULTIPLIER) * WAVEFORM_HEIGHT + WAVEFORM_HEIGHT_OFFSET}px`,
-              background: WAVEFORM_COLOR,
-              margin: "0 8px",
-              borderRadius: "2px",
-            }}
-          />
-        ))}
-      </div>
-      <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
@@ -122,6 +92,6 @@ export async function GET(
 
 export function generateStaticParams() {
   return source.generateParams().map((params) => ({
-    slug: params.slug ?? [],
+    slug: params.slug ?? undefined,
   }));
 }

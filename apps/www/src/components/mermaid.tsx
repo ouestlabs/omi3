@@ -16,7 +16,6 @@ export function Mermaid({ chart }: { chart: string }) {
   return <MermaidContent chart={chart} />;
 }
 
-// Create the promise once at module level
 let mermaidPromise: Promise<typeof import("mermaid")> | null = null;
 
 function getMermaidPromise() {

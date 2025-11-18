@@ -6,56 +6,46 @@ import { DocsCopyPage } from "@/components/layouts/doc/copy-page";
 import { DocsTableOfContents } from "@/components/layouts/doc/toc";
 import { SiteFooter } from "@/components/layouts/global/site-footer";
 import { absoluteUrl } from "@/lib/config";
-import { source } from "@/lib/source";
+import { createMetadata } from "@/lib/metadata";
+import { getPageImage, source } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
 import { Button } from "@/registry/default/ui/button";
-export const revalidate = false;
-export const dynamic = "force-static";
-export const dynamicParams = false;
 
 export function generateStaticParams() {
   return source.generateParams();
 }
 
-export async function generateMetadata(props: {
-  params: Promise<{ slug?: string[] }>;
-}) {
-  const params = await props.params;
-  const page = source.getPage(params.slug);
-
+export async function generateMetadata({
+  params,
+}: PageProps<"/docs/[[...slug]]">) {
+  const { slug = [] } = await params;
+  const page = source.getPage(slug);
   if (!page) {
-    notFound();
+    return createMetadata({
+      title: "Not Found",
+    });
   }
 
   const doc = page.data;
 
-  if (!(doc.title && doc.description)) {
-    notFound();
-  }
+  const description =
+    doc.description ?? "A collection of composable Audio UI components";
 
-  const slug = params.slug ?? [];
-  const ogImageUrl =
-    slug.length > 0 ? `/og/docs/${slug.join("/")}` : "/opengraph-image";
+  const image = {
+    url: getPageImage(page).url,
+  };
 
-  return {
-    title: `${doc.title} - audio/ui`,
-    description: doc.description,
+  return createMetadata({
+    title: doc.title,
+    description,
     openGraph: {
-      title: `${doc.title} - audio/ui`,
-      description: doc.description,
-      images: [
-        {
-          url: ogImageUrl,
-        },
-      ],
+      url: page.url,
+      images: [image],
     },
     twitter: {
-      card: "summary_large_image",
-      title: `${doc.title} - audio/ui`,
-      description: doc.description,
-      images: [ogImageUrl],
+      images: [image],
     },
-  };
+  });
 }
 
 export default async function Page(props: {

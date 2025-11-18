@@ -8,7 +8,7 @@ export function GET() {
   const map = new Map<string, string[]>();
 
   for (const page of source.getPages()) {
-    const dir = page.slugs[0] ?? "Introduction";
+    const dir = page.slugs[0] ?? "introduction";
     const list = map.get(dir) ?? [];
     list.push(`- [${page.data.title}](${page.url}): ${page.data.description}`);
     map.set(dir, list);

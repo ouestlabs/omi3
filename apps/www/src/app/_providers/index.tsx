@@ -23,17 +23,15 @@ export function Providers({ children }: { children: React.ReactNode }) {
         disableTransitionOnChange
         enableSystem
       >
-        <ThemeProvider>
-          <LayoutProvider>
-            <NuqsAdapter>
-              <ActiveThemeProvider>
-                <AudioProvider tracks={demoTracks}>{children}</AudioProvider>
-                <TailwindIndicator />
-                <Toaster position="top-center" />
-              </ActiveThemeProvider>
-            </NuqsAdapter>
-          </LayoutProvider>
-        </ThemeProvider>
+        <LayoutProvider>
+          <NuqsAdapter>
+            <ActiveThemeProvider>
+              <AudioProvider tracks={demoTracks}>{children}</AudioProvider>
+              <TailwindIndicator />
+              <Toaster position="top-center" />
+            </ActiveThemeProvider>
+          </NuqsAdapter>
+        </LayoutProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );

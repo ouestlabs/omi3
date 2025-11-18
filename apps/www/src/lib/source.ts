@@ -1,8 +1,9 @@
 import { docs } from "@source/server";
 import { type InferPageType, loader } from "fumadocs-core/source";
+
 export const source = loader({
   baseUrl: "/docs",
-  source:  docs.toFumadocsSource(),
+  source: docs.toFumadocsSource(),
 });
 
 export async function getLLMText(page: InferPageType<typeof source>) {
@@ -11,4 +12,13 @@ export async function getLLMText(page: InferPageType<typeof source>) {
   return `# ${page.data.title}
 
 ${processed}`;
+}
+
+export function getPageImage(page: InferPageType<typeof source>) {
+  const segments = [...page.slugs, "image.png"];
+
+  return {
+    segments,
+    url: `/og/docs/${segments.join("/")}`,
+  };
 }

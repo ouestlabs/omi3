@@ -1,9 +1,9 @@
-import type { Metadata } from "next";
 import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
 } from "@/components/layouts/global";
+import { createMetadata } from "@/lib/metadata";
 import { getUniqueParticleCategories } from "@/lib/particle-categories";
 import { cn } from "@/registry/default/lib/utils";
 import { particles } from "@/registry/default/particles";
@@ -11,20 +11,16 @@ import { particles } from "@/registry/default/particles";
 import { CategoryNavigation } from "./category-navigation";
 import { ParticleDisplay } from "./particle-display";
 
-export const revalidate = false;
-export const dynamic = "force-static";
-export const dynamicParams = false;
-
 const particleCategories = getUniqueParticleCategories(particles);
 
 const title = "Particles";
 const description =
   "Particles are more than just components. They are the building blocks of your design system. Click on a category or browse them all.";
 
-export const metadata: Metadata = {
-  title: "Particle components built with React and Tailwind CSS - audio/ui",
+export const metadata = createMetadata({
+  title,
   description,
-};
+});
 
 export default function Page() {
   return (

@@ -12,7 +12,17 @@ import { Button } from "@/registry/default/ui/button";
 export const Hero = memo(function _Hero() {
   return (
     <section className="flex flex-col items-center justify-center gap-4 py-16 text-center">
-      <PixelBlast color="var(--primary)" variant="square" />
+      <PixelBlast
+        enableRipples
+        pixelSize={5}
+        pixelSizeJitter={0.5}
+        rippleIntensityScale={1.5}
+        rippleSpeed={0.5}
+        speed={0.6}
+        transparent
+        variant="square"
+      />
+
       <div className="flex flex-col gap-6">
         <PageHeader className="relative">
           <PageHeaderHeading className="max-w-4xl! text-7xl!">
@@ -20,9 +30,7 @@ export const Hero = memo(function _Hero() {
               <span className="font-bold leading-[0.95] tracking-[-0.03em]">
                 Audio
               </span>
-              <span className="font-normal font-waldenburg tracking-[-0.02em] opacity-90">
-                UI
-              </span>
+              <span className="tracking-[-0.02em] opacity-90">UI</span>
             </span>
           </PageHeaderHeading>
           <PageHeaderDescription>

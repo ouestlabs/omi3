@@ -5,22 +5,13 @@ import {
   PageHeaderDescription,
   PageHeaderHeading,
 } from "@/components/layouts/global";
+import { createMetadata } from "@/lib/metadata";
 import { getUniqueParticleCategories } from "@/lib/particle-categories";
 import { cn } from "@/registry/default/lib/utils";
 import { particles } from "@/registry/default/particles";
 
 import { CategoryNavigation } from "../category-navigation";
 import { ParticleDisplay } from "../particle-display";
-
-export const revalidate = false;
-export const dynamic = "force-static";
-export const dynamicParams = false;
-
-type PageProps = {
-  params: Promise<{
-    category: string;
-  }>;
-};
 
 const particleCategories = getUniqueParticleCategories(particles);
 
@@ -48,7 +39,7 @@ export function generateStaticParams() {
 
 export async function generateMetadata({
   params,
-}: PageProps): Promise<Metadata> {
+}: PageProps<"/particles/[category]">): Promise<Metadata> {
   const { category: categorySlug } = await params;
   const { categoryObj, categoryParticles } = getCategoryDetails(categorySlug);
 
@@ -56,17 +47,19 @@ export async function generateMetadata({
     notFound();
   }
 
-  return {
+  return createMetadata({
     title: `${
       categoryObj.name.charAt(0).toUpperCase() + categoryObj.name.slice(1)
-    } particle components built with React and Tailwind CSS - audio/ui`,
+    } particle components`,
     description: `Showing ${categoryParticles.length} particle component${
       categoryParticles.length !== 1 ? "s" : ""
     } in the ${categoryObj.name} category`,
-  };
+  });
 }
 
-export default async function CategoryPage({ params }: PageProps) {
+export default async function CategoryPage({
+  params,
+}: PageProps<"/particles/[category]">) {
   const { category: categorySlug } = await params;
   const { categoryObj, categoryParticles } = getCategoryDetails(categorySlug);
 

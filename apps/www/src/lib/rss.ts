@@ -1,6 +1,6 @@
 import { Feed } from "feed";
+import { appConfig } from "@/lib/config";
 import { source } from "@/lib/source";
-import { appConfig } from "./config";
 
 export function getRSS() {
   const feed = new Feed({
@@ -8,7 +8,7 @@ export function getRSS() {
     id: `${appConfig.url}/docs`,
     link: `${appConfig.url}/docs`,
     language: "en",
-    image: appConfig.ogImage ?? `${appConfig.url}/opengraph-image`,
+    image: appConfig.ogImage ?? `${appConfig.url}/opengraph-image.png`,
     favicon: `${appConfig.url}/icon`,
     copyright: `All rights reserved ${new Date().getFullYear()}, ${appConfig.name}`,
     generator: appConfig.name,
@@ -29,6 +29,7 @@ export function getRSS() {
       author: [
         {
           name: appConfig.name,
+          link: appConfig.links.twitter,
         },
       ],
     });
