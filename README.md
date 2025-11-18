@@ -1,6 +1,6 @@
-# `audio/ui`
+![audio/ui](/apps/www/src/app/opengraph-image.png)
 
-**audio/ui** is a collection of accessible and composable components for building audio interfaces in your React apps. Built on top of [shadcn/ui](https://ui.shadcn.com/) and styled with [Tailwind CSS](https://tailwindcss.com/), it's designed for you to copy, paste, and own.
+**`audio/ui`** is a collection of accessible and composable components for building audio interfaces in your React apps. Built on top of [shadcn/ui](https://ui.shadcn.com/) and styled with [Tailwind CSS](https://tailwindcss.com/), it's designed for you to copy, paste, and own.
 
 We think shadcn/ui is the best foundation for modern web applications. We've taken its powerful, accessible components and given them a design system that's ready to go, right out of the box.
 
