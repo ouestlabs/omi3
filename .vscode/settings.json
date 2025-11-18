@@ -43,7 +43,7 @@
     "cn"
   ],
   "chat.mcp.serverSampling": {
-    "omi3/.vscode/mcp.json: shadcn": {
+    "audio-ui/.vscode/mcp.json: shadcn": {
       "allowedModels": [
         "copilot/auto"
       ]
