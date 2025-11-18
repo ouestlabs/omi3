@@ -1,5 +1,5 @@
 {
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.defaultFormatter": "biomejs.biome",
   "[javascript]": {
     "editor.defaultFormatter": "biomejs.biome"
   },
@@ -41,15 +41,5 @@
   "tailwindCSS.classFunctions": [
     "cva",
     "cn"
-  ],
-  "chat.mcp.serverSampling": {
-    "audio-ui/.vscode/mcp.json: shadcn": {
-      "allowedModels": [
-        "copilot/auto"
-      ]
-    }
-  },
-  "[mdx]": {
-    "editor.defaultFormatter": "unifiedjs.vscode-mdx"
-  }
+  ]
 }
