@@ -428,8 +428,8 @@ export const Index: Record<string, any> = {
     categories: undefined,
     meta: undefined,
   },
-  "audio": {
-    name: "audio",
+  "audio-lib": {
+    name: "audio-lib",
     description: "Audio Lib",
     type: "registry:lib",
     registryDependencies: [],
@@ -446,8 +446,8 @@ export const Index: Record<string, any> = {
     categories: ["lib","audio"],
     meta: undefined,
   },
-  "store": {
-    name: "store",
+  "audio-store": {
+    name: "audio-store",
     description: "Audio store",
     type: "registry:lib",
     registryDependencies: ["@audio/audio"],

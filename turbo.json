@@ -17,10 +17,6 @@
     "lint:fix": {
       "dependsOn": ["^lint:fix"]
     },
-    "//#check": {},
-    "//#fix": {
-      "cache": false
-    },
     "clean": {
       "cache": false
     }

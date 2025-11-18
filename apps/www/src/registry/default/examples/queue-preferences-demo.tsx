@@ -1,6 +1,6 @@
 import {
-  AudioControlBar,
   AudioPlayer,
+  AudioPlayerControlBar,
 } from "@/registry/default/ui/audio/player";
 import {
   AudioQueue,
@@ -10,10 +10,10 @@ import {
 export default function AudioQueuePreferencesDemo() {
   return (
     <AudioPlayer className="w-max">
-      <AudioControlBar>
+      <AudioPlayerControlBar>
         <AudioQueuePreferences />
         <AudioQueue />
-      </AudioControlBar>
+      </AudioPlayerControlBar>
     </AudioPlayer>
   );
 }

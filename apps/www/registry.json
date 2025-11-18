@@ -759,7 +759,7 @@
       ]
     },
     {
-      "name": "audio",
+      "name": "audio-lib",
       "description": "Audio Lib",
       "type": "registry:lib",
       "dependencies": [],
@@ -776,7 +776,7 @@
       ]
     },
     {
-      "name": "store",
+      "name": "audio-store",
       "description": "Audio store",
       "type": "registry:lib",
       "dependencies": [

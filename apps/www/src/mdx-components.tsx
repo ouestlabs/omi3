@@ -1,5 +1,3 @@
-import { createGenerator } from "fumadocs-typescript";
-import { AutoTypeTable } from "fumadocs-typescript/ui";
 import { InfoIcon } from "lucide-react";
 import type { MDXComponents } from "mdx/types";
 import Image from "next/image";
@@ -34,8 +32,6 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/registry/default/ui/tabs";
-
-const generator = createGenerator();
 
 export function getMDXComponents(components?: MDXComponents): MDXComponents {
   return {
@@ -411,9 +407,6 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
         className={cn("font-medium underline underline-offset-4", className)}
         {...props}
       />
-    ),
-    AutoTypeTable: (props) => (
-      <AutoTypeTable {...props} generator={generator} />
     ),
     Mermaid,
     ...components,

@@ -32,16 +32,16 @@ import {
   TooltipTrigger,
 } from "@/registry/default/ui/tooltip";
 
-interface AudioButtonProps extends React.ComponentProps<typeof Button> {
+interface AudioPlayerButtonProps extends React.ComponentProps<typeof Button> {
   tooltip?: boolean;
   tooltipLabel?: string;
 }
 
-function AudioButton({
+function AudioPlayerButton({
   tooltip = false,
   tooltipLabel,
   ...props
-}: AudioButtonProps) {
+}: AudioPlayerButtonProps) {
   const button = <Button {...props} />;
 
   if (tooltip && tooltipLabel) {
@@ -68,6 +68,7 @@ function AudioPlayer({
         className
       )}
       data-slot="audio-player"
+      role="presentation"
       {...props}
     >
       {children}
@@ -91,16 +92,16 @@ const audioControlBarVariants = cva(
 );
 
 /**
- * Props for the AudioControlBar component.
+ * Props for the AudioPlayerControlBar component.
  */
-export type AudioControlBarProps = React.ComponentProps<"div"> &
+export type AudioPlayerControlBarProps = React.ComponentProps<"div"> &
   VariantProps<typeof audioControlBarVariants>;
 
-const AudioControlBar = ({
+const AudioPlayerControlBar = ({
   className,
   variant,
   ...props
-}: AudioControlBarProps) => (
+}: AudioPlayerControlBarProps) => (
   <div
     className={cn(audioControlBarVariants({ variant }), className)}
     data-slot="audio-control-bar"
@@ -110,11 +111,14 @@ const AudioControlBar = ({
 );
 
 /**
- * Props for the AudioControlGroup component.
+ * Props for the AudioPlayerControlGroup component.
  */
-export type AudioControlGroupProps = React.ComponentProps<"div">;
+export type AudioPlayerControlGroupProps = React.ComponentProps<"div">;
 
-const AudioControlGroup = ({ className, ...props }: AudioControlGroupProps) => (
+const AudioPlayerControlGroup = ({
+  className,
+  ...props
+}: AudioPlayerControlGroupProps) => (
   <div
     className={cn("flex w-full items-center gap-1.5", className)}
     data-slot="audio-control-group"
@@ -123,17 +127,17 @@ const AudioControlGroup = ({ className, ...props }: AudioControlGroupProps) => (
 );
 
 /**
- * Props for the AudioTimeDisplay component.
+ * Props for the AudioPlayerTimeDisplay component.
  */
-export type AudioTimeDisplayProps = React.ComponentProps<"time"> & {
+export type AudioPlayerTimeDisplayProps = React.ComponentProps<"time"> & {
   remaining?: boolean;
 };
 
-const AudioTimeDisplay = ({
+const AudioPlayerTimeDisplay = ({
   className,
   remaining,
   ...props
-}: AudioTimeDisplayProps) => {
+}: AudioPlayerTimeDisplayProps) => {
   const { currentTime, duration, currentTrack } = useAudioStore();
   const isLiveStream = currentTrack ? isLive(currentTrack) : false;
 
@@ -180,7 +184,7 @@ const AudioTimeDisplay = ({
   );
 };
 
-const AudioSeekBar = ({
+const AudioPlayerSeekBar = ({
   className,
   ...props
 }: Omit<
@@ -274,7 +278,7 @@ const AudioSeekBar = ({
   );
 };
 
-const AudioVolume = ({
+const AudioPlayerVolume = ({
   className,
   size = "icon",
   variant = "outline",
@@ -310,7 +314,7 @@ const AudioVolume = ({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <AudioButton
+        <AudioPlayerButton
           className={cn("hidden md:flex", className)}
           data-slot="audio-volume-button"
           size={size}
@@ -321,7 +325,7 @@ const AudioVolume = ({
           variant={variant}
         >
           <Icon className={cn(isMuted && "opacity-40", "text-primary")} />
-        </AudioButton>
+        </AudioPlayerButton>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         className={cn("flex w-48 flex-col gap-1.5 p-1.5", className)}
@@ -369,14 +373,14 @@ const AudioVolume = ({
   );
 };
 
-const AudioPlay = React.memo(
+const AudioPlayerPlay = React.memo(
   ({
     className,
     onClick,
     size = "icon",
     variant = "ghost",
     ...props
-  }: React.ComponentProps<typeof AudioButton>) => {
+  }: React.ComponentProps<typeof AudioPlayerButton>) => {
     const isPlaying = useAudioStore((state) => state.isPlaying);
     const isLoading = useAudioStore((state) => state.isLoading);
     const isBuffering = useAudioStore((state) => state.isBuffering);
@@ -410,7 +414,7 @@ const AudioPlay = React.memo(
     );
 
     return (
-      <AudioButton
+      <AudioPlayerButton
         aria-label={isPlaying ? "Pause" : "Play"}
         className={cn(className)}
         data-slot="audio-play-button"
@@ -425,19 +429,19 @@ const AudioPlay = React.memo(
         {showSpinner && <Loader2Icon className="animate-spin" />}
         {!showSpinner && isPlaying && <PauseIcon fill="currentColor" />}
         {!(showSpinner || isPlaying) && <PlayIcon fill="currentColor" />}
-      </AudioButton>
+      </AudioPlayerButton>
     );
   }
 );
 
-const AudioRewind = React.memo(
+const AudioPlayerRewind = React.memo(
   ({
     className,
     onClick,
     size = "icon",
     variant = "ghost",
     ...props
-  }: React.ComponentProps<typeof AudioButton>) => {
+  }: React.ComponentProps<typeof AudioPlayerButton>) => {
     const currentTime = useAudioStore((state) => state.currentTime);
     const seek = useAudioStore((state) => state.seek);
     const currentTrack = useAudioStore((state) => state.currentTrack);
@@ -457,7 +461,7 @@ const AudioRewind = React.memo(
     );
 
     return (
-      <AudioButton
+      <AudioPlayerButton
         className={cn(className)}
         data-slot="audio-rewind-button"
         disabled={disableSeekBackward}
@@ -476,19 +480,19 @@ const AudioRewind = React.memo(
         {...props}
       >
         <RewindIcon fill="currentColor" />
-      </AudioButton>
+      </AudioPlayerButton>
     );
   }
 );
 
-const AudioFastForward = React.memo(
+const AudioPlayerFastForward = React.memo(
   ({
     className,
     onClick,
     size = "icon",
     variant = "ghost",
     ...props
-  }: React.ComponentProps<typeof AudioButton>) => {
+  }: React.ComponentProps<typeof AudioPlayerButton>) => {
     const currentTime = useAudioStore((state) => state.currentTime);
     const seek = useAudioStore((state) => state.seek);
     const duration = useAudioStore((state) => state.duration);
@@ -511,7 +515,7 @@ const AudioFastForward = React.memo(
     }, [currentTrack, currentTime, duration, isLiveStream]);
 
     return (
-      <AudioButton
+      <AudioPlayerButton
         className={cn(className)}
         data-slot="audio-fast-forward-button"
         disabled={disableSeekForward}
@@ -530,19 +534,19 @@ const AudioFastForward = React.memo(
         {...props}
       >
         <FastForwardIcon fill="currentColor" />
-      </AudioButton>
+      </AudioPlayerButton>
     );
   }
 );
 
-const AudioSkipForward = React.memo(
+const AudioPlayerSkipForward = React.memo(
   ({
     className,
     onClick,
     size = "icon",
     variant = "ghost",
     ...props
-  }: React.ComponentProps<typeof AudioButton>) => {
+  }: React.ComponentProps<typeof AudioPlayerButton>) => {
     const repeatMode = useAudioStore((state) => state.repeatMode);
     const queueLength = useAudioStore((state) => state.queue.length);
     const currentQueueIndex = useAudioStore((state) => state.currentQueueIndex);
@@ -558,7 +562,7 @@ const AudioSkipForward = React.memo(
     );
 
     return (
-      <AudioButton
+      <AudioPlayerButton
         aria-label="Next"
         className={cn(className)}
         data-slot="audio-skip-forward-button"
@@ -571,19 +575,19 @@ const AudioSkipForward = React.memo(
         {...props}
       >
         <SkipForwardIcon fill="currentColor" />
-      </AudioButton>
+      </AudioPlayerButton>
     );
   }
 );
 
-const AudioSkipBack = React.memo(
+const AudioPlayerSkipBack = React.memo(
   ({
     className,
     onClick,
     size = "icon",
     variant = "ghost",
     ...props
-  }: React.ComponentProps<typeof AudioButton>) => {
+  }: React.ComponentProps<typeof AudioPlayerButton>) => {
     const repeatMode = useAudioStore((state) => state.repeatMode);
     const currentQueueIndex = useAudioStore((state) => state.currentQueueIndex);
     const currentTrack = useAudioStore((state) => state.currentTrack);
@@ -596,7 +600,7 @@ const AudioSkipBack = React.memo(
     );
 
     return (
-      <AudioButton
+      <AudioPlayerButton
         className={cn(className)}
         data-slot="audio-skip-back-button"
         disabled={disablePrevious}
@@ -608,22 +612,22 @@ const AudioSkipBack = React.memo(
         {...props}
       >
         <SkipBackIcon fill="currentColor" />
-      </AudioButton>
+      </AudioPlayerButton>
     );
   }
 );
 
 export {
-  AudioButton,
-  AudioControlBar,
-  AudioControlGroup,
-  AudioFastForward,
-  AudioPlay,
-  AudioRewind,
-  AudioSeekBar,
-  AudioSkipBack,
-  AudioSkipForward,
-  AudioTimeDisplay,
-  AudioVolume,
+  AudioPlayerButton,
+  AudioPlayerControlBar,
+  AudioPlayerControlGroup,
+  AudioPlayerFastForward,
+  AudioPlayerPlay,
+  AudioPlayerRewind,
+  AudioPlayerSeekBar,
+  AudioPlayerSkipBack,
+  AudioPlayerSkipForward,
+  AudioPlayerTimeDisplay,
+  AudioPlayerVolume,
   AudioPlayer,
 };

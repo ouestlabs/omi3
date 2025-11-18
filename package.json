@@ -13,8 +13,6 @@
     "build": "turbo build",
     "lint": "turbo lint",
     "lint:fix": "turbo lint:fix",
-    "check": "ultracite check",
-    "fix": "ultracite fix",
     "clean": "turbo clean && rm -rf node_modules bun.lock"
   },
   "packageManager": "bun@1.3.2",

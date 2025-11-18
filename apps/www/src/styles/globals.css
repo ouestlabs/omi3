@@ -3,8 +3,7 @@
 @import "./themes.css";
 @import "./rehype.css";
 @import "./utilities.css";
-@import "fumadocs-ui/css/shadcn.css";
-@import "fumadocs-ui/css/preset.css";
+
 @custom-variant dark (&:is(.dark *));
 @custom-variant fixed (&:is(.layout-fixed *));
 

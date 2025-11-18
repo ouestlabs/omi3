@@ -10,7 +10,7 @@
   "files": [
     {
       "path": "src/registry/default/examples/player-demo.tsx",
-      "content": "import {\n  AudioControlBar,\n  AudioPlay,\n  AudioPlayer,\n  AudioSeekBar,\n  AudioTimeDisplay,\n  AudioVolume,\n} from \"@/registry/default/ui/audio/player\";\n\nexport default function AudioDemoPlayer() {\n  return (\n    <AudioPlayer>\n      <AudioControlBar>\n        <AudioPlay />\n        <AudioSeekBar />\n        <AudioTimeDisplay />\n        <AudioVolume />\n      </AudioControlBar>\n    </AudioPlayer>\n  );\n}\n",
+      "content": "import {\n  AudioPlayer,\n  AudioPlayerControlBar,\n  AudioPlayerPlay,\n  AudioPlayerSeekBar,\n  AudioPlayerTimeDisplay,\n  AudioPlayerVolume,\n} from \"@/registry/default/ui/audio/player\";\n\nexport default function AudioDemoPlayer() {\n  return (\n    <AudioPlayer>\n      <AudioPlayerControlBar>\n        <AudioPlayerPlay />\n        <AudioPlayerSeekBar />\n        <AudioPlayerTimeDisplay />\n        <AudioPlayerVolume />\n      </AudioPlayerControlBar>\n    </AudioPlayer>\n  );\n}\n",
       "type": "registry:example"
     }
   ],

@@ -51,6 +51,10 @@ npx shadcn@latest add @audio/slider
 
 <ComponentSource name="player" title="components/ui/audio/player.tsx" />
 
+<Step>Copy the audio lib file.</Step>
+
+<ComponentSource name="audio-lib" title="lib/audio.ts" />
+
 <Step>Copy the required store file.</Step>
 
 <ComponentSource name="audio-store" title="lib/audio-store.ts" />
@@ -95,34 +99,34 @@ Import the components you need:
 ```tsx showLineNumbers
 import {
   AudioPlayer,
-  AudioControlBar,
-  AudioControlGroup,
-  AudioPlay,
-  AudioSkipBack,
-  AudioSkipForward,
-  AudioRewind,
-  AudioFastForward,
-  AudioSeekBar,
-  AudioTimeDisplay,
-  AudioVolume,
+  AudioPlayerControlBar,
+  AudioPlayerControlGroup,
+  AudioPlayerPlay,
+  AudioPlayerSkipBack,
+  AudioPlayerSkipForward,
+  AudioPlayerRewind,
+  AudioPlayerFastForward,
+  AudioPlayerSeekBar,
+  AudioPlayerTimeDisplay,
+  AudioPlayerVolume,
 } from "@/components/ui/audio/player"
 ```
 
 ```tsx
 <AudioPlayer>
-  <AudioControlBar>
-    <AudioControlGroup>
-      <AudioRewind />
-      <AudioSkipBack />
-      <AudioPlay />
-      <AudioSkipForward />
-      <AudioFastForward />
-      <AudioTimeDisplay />
-      <AudioSeekBar />
-      <AudioTimeDisplay remaining />
-      <AudioVolume />
-    </AudioControlGroup>
-  </AudioControlBar>
+  <AudioPlayerControlBar>
+    <AudioPlayerControlGroup>
+      <AudioPlayerRewind />
+      <AudioPlayerSkipBack />
+      <AudioPlayerPlay />
+      <AudioPlayerSkipForward />
+      <AudioPlayerFastForward />
+      <AudioPlayerTimeDisplay />
+      <AudioPlayerSeekBar />
+      <AudioPlayerTimeDisplay remaining />
+      <AudioPlayerVolume />
+    </AudioPlayerControlGroup>
+  </AudioPlayerControlBar>
 </AudioPlayer>
 ```
 
@@ -134,7 +138,7 @@ A player with stacked variant, showing time displays above and below the seek ba
 
 ### Player with Queue
 
-A full-featured player with queue management, shuffle, and repeat controls. Uses `AudioControlGroup` for flexible layout management.
+A full-featured player with queue management, shuffle, and repeat controls. Uses `AudioPlayerControlGroup` for flexible layout management.
 
 <ComponentPreview name="player-queue-demo" />
 
@@ -158,7 +162,7 @@ Inherits all props from `HTMLDivElement`.
 </AudioPlayer>
 ```
 
-### AudioControlBar
+### AudioPlayerControlBar
 
 A container component that holds audio player controls. Use it to wrap your control components.
 
@@ -172,26 +176,26 @@ A container component that holds audio player controls. Use it to wrap your cont
 #### Example
 
 ```tsx
-<AudioControlBar>
-  <AudioPlay />
-  <AudioSeekBar />
-  <AudioTimeDisplay />
-</AudioControlBar>
+<AudioPlayerControlBar>
+  <AudioPlayerPlay />
+  <AudioPlayerSeekBar />
+  <AudioPlayerTimeDisplay />
+</AudioPlayerControlBar>
 ```
 
 #### Stacked Layout
 
 ```tsx
-<AudioControlBar variant="stacked">
-  <AudioControlGroup>
-    <AudioTimeDisplay />
-    <AudioSeekBar />
-    <AudioTimeDisplay remaining />
-  </AudioControlGroup>
-</AudioControlBar>
+<AudioPlayerControlBar variant="stacked">
+  <AudioPlayerControlGroup>
+    <AudioPlayerTimeDisplay />
+    <AudioPlayerSeekBar />
+    <AudioPlayerTimeDisplay remaining />
+  </AudioPlayerControlGroup>
+</AudioPlayerControlBar>
 ```
 
-### AudioControlGroup
+### AudioPlayerControlGroup
 
 A flexible wrapper component for grouping audio controls and managing flex layouts. Useful for creating custom layouts with `flex-col`, `justify-between`, etc.
 
@@ -204,65 +208,65 @@ A flexible wrapper component for grouping audio controls and managing flex layou
 #### Example
 
 ```tsx showLineNumbers
-<AudioControlBar variant="stacked">
-  <AudioControlGroup>
-    <AudioTimeDisplay />
-    <AudioSeekBar />
-    <AudioTimeDisplay remaining />
-  </AudioControlGroup>
-  <AudioControlGroup className="justify-between">
-    <AudioControlGroup>
-      <AudioSkipBack />
-      <AudioPlay />
-      <AudioSkipForward />
-    </AudioControlGroup>
-      <AudioVolume />
-  </AudioControlGroup>
-</AudioControlBar>
+<AudioPlayerControlBar variant="stacked">
+  <AudioPlayerControlGroup>
+    <AudioPlayerTimeDisplay />
+    <AudioPlayerSeekBar />
+    <AudioPlayerTimeDisplay remaining />
+  </AudioPlayerControlGroup>
+  <AudioPlayerControlGroup className="justify-between">
+    <AudioPlayerControlGroup>
+      <AudioPlayerSkipBack />
+      <AudioPlayerPlay />
+      <AudioPlayerSkipForward />
+    </AudioPlayerControlGroup>
+      <AudioPlayerVolume />
+  </AudioPlayerControlGroup>
+</AudioPlayerControlBar>
 ```
 
-### AudioPlay
+### AudioPlayerPlay
 
 A button that toggles play/pause state. Shows a loading spinner when buffering or loading, and automatically handles keyboard shortcuts (Space bar to play/pause).
 
-Inherits all props from `AudioButton` (which extends shadcn/ui's `Button` component).
+Inherits all props from `AudioPlayerButton` (which extends shadcn/ui's `Button` component).
 
 <Callout variant="info">
-  <strong>Keyboard Shortcuts:</strong> The <code>AudioPlay</code> component automatically handles the Space bar keyboard shortcut for play/pause.
+  <strong>Keyboard Shortcuts:</strong> The <code>AudioPlayerPlay</code> component automatically handles the Space bar keyboard shortcut for play/pause.
   This works when the focus is on the document body.
 </Callout>
 
-### AudioSkipBack
+### AudioPlayerSkipBack
 
 A button that navigates to the previous track.
 
-Inherits all props from `AudioButton` (which extends shadcn/ui's `Button` component).
+Inherits all props from `AudioPlayerButton` (which extends shadcn/ui's `Button` component).
 
-### AudioSkipForward
+### AudioPlayerSkipForward
 
 A button that navigates to the next track.
 
-Inherits all props from `AudioButton` (which extends shadcn/ui's `Button` component).
+Inherits all props from `AudioPlayerButton` (which extends shadcn/ui's `Button` component).
 
-### AudioRewind
+### AudioPlayerRewind
 
 A button that seeks backward by 10 seconds.
 
-Inherits all props from `AudioButton` (which extends shadcn/ui's `Button` component).
+Inherits all props from `AudioPlayerButton` (which extends shadcn/ui's `Button` component).
 
-### AudioFastForward
+### AudioPlayerFastForward
 
 A button that seeks forward by 10 seconds.
 
-Inherits all props from `AudioButton` (which extends shadcn/ui's `Button` component).
+Inherits all props from `AudioPlayerButton` (which extends shadcn/ui's `Button` component).
 
-### AudioSeekBar
+### AudioPlayerSeekBar
 
 A slider component that shows playback progress and allows seeking. Automatically syncs with the current track's playback position.
 
 Inherits all props from `Slider` component (except `value`, `onValueChange`, `min`, `max`, `bufferValue`).
 
-### AudioTimeDisplay
+### AudioPlayerTimeDisplay
 
 Displays the current playback time or remaining time.
 
@@ -273,7 +277,7 @@ Displays the current playback time or remaining time.
 | `remaining` | `boolean` | `false` | Display remaining time instead of current time. |
 | `className` | `string` | - | Additional CSS classes. |
 
-### AudioVolume
+### AudioPlayerVolume
 
 A dropdown menu button with a slider to control volume. Click to open the volume control menu.
 

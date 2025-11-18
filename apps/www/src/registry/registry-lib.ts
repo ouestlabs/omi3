@@ -7,7 +7,7 @@ export const lib: Registry["items"] = [
     registryDependencies: ["@audio/store", "@audio/audio"],
   },
   {
-    name: "audio",
+    name: "audio-lib",
     description: "Audio Lib",
     type: "registry:lib",
     dependencies: [],
@@ -16,7 +16,7 @@ export const lib: Registry["items"] = [
     categories: ["lib", "audio"],
   },
   {
-    name: "store",
+    name: "audio-store",
     description: "Audio store",
     type: "registry:lib",
     dependencies: ["zustand"],

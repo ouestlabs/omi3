@@ -78,9 +78,9 @@ The `AudioQueue` component opens a dialog showing the current queue with search 
 
 ```tsx
 <AudioPlayer>
-  <AudioControlBar>
+  <AudioPlayerControlBar>
     <AudioQueue />
-  </AudioControlBar>
+  </AudioPlayerControlBar>
 </AudioPlayer>
 ```
 
@@ -92,11 +92,11 @@ Use this when you want quick access to shuffle and repeat controls. The toggle b
 
 ```tsx
 <AudioPlayer>
-  <AudioControlBar>
+  <AudioPlayerControlBar>
     <AudioQueueShuffle />
     <AudioQueueRepeatMode />
     <AudioQueue />
-  </AudioControlBar>
+  </AudioPlayerControlBar>
 </AudioPlayer>
 ```
 
@@ -108,10 +108,10 @@ Use this when you want a compact interface with all queue settings in a dropdown
 
 ```tsx
 <AudioPlayer>
-  <AudioControlBar>
+  <AudioPlayerControlBar>
     <AudioQueuePreferences />
     <AudioQueue />
-  </AudioControlBar>
+  </AudioPlayerControlBar>
 </AudioPlayer>
 ```
 
@@ -123,12 +123,12 @@ Use this when you want both quick access buttons and a preferences menu. Provide
 
 ```tsx
 <AudioPlayer tracks={tracks}>
-  <AudioControlBar>
+  <AudioPlayerControlBar>
     <AudioQueueShuffle />
     <AudioQueueRepeatMode />
     <AudioQueuePreferences />
     <AudioQueue />
-  </AudioControlBar>
+  </AudioPlayerControlBar>
 </AudioPlayer>
 ```
 
@@ -283,18 +283,18 @@ Queue components are designed to work seamlessly with the `AudioPlayer` componen
 
 ```tsx
 <AudioPlayer>
-  <AudioControlBar>
-    <AudioControlGroup>
-      <AudioPlay />
-      <AudioSeekBar />
-      <AudioTimeDisplay />
-    </AudioControlGroup>
-    <AudioControlGroup>
+  <AudioPlayerControlBar>
+    <AudioPlayerControlGroup>
+      <AudioPlayerPlay />
+      <AudioPlayerSeekBar />
+      <AudioPlayerTimeDisplay />
+    </AudioPlayerControlGroup>
+    <AudioPlayerControlGroup>
       <AudioQueueShuffle />
       <AudioQueueRepeatMode />
       <AudioQueue />
-    </AudioControlGroup>
-  </AudioControlBar>
+    </AudioPlayerControlGroup>
+  </AudioPlayerControlBar>
 </AudioPlayer>
 ```
 

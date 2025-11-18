@@ -1,15 +1,15 @@
 "use client";
 
 import {
-  AudioControlBar,
-  AudioControlGroup,
-  AudioPlay,
   AudioPlayer,
-  AudioSeekBar,
-  AudioSkipBack,
-  AudioSkipForward,
-  AudioTimeDisplay,
-  AudioVolume,
+  AudioPlayerControlBar,
+  AudioPlayerControlGroup,
+  AudioPlayerPlay,
+  AudioPlayerSeekBar,
+  AudioPlayerSkipBack,
+  AudioPlayerSkipForward,
+  AudioPlayerTimeDisplay,
+  AudioPlayerVolume,
 } from "@/registry/default/ui/audio/player";
 import {
   AudioQueueRepeatMode,
@@ -21,23 +21,23 @@ export default function ParticlePlayerWidget() {
   return (
     <AudioPlayer className="flex flex-col gap-1.5">
       <AudioTrackList className="h-36 w-full rounded-sm border bg-muted/50 p-1" />
-      <AudioControlBar variant="stacked">
-        <AudioControlGroup>
-          <AudioTimeDisplay />
-          <AudioSeekBar />
-          <AudioTimeDisplay remaining />
-        </AudioControlGroup>
-        <AudioControlGroup>
-          <AudioControlGroup>
-            <AudioSkipBack />
-            <AudioPlay />
-            <AudioSkipForward />
-          </AudioControlGroup>
+      <AudioPlayerControlBar variant="stacked">
+        <AudioPlayerControlGroup>
+          <AudioPlayerTimeDisplay />
+          <AudioPlayerSeekBar />
+          <AudioPlayerTimeDisplay remaining />
+        </AudioPlayerControlGroup>
+        <AudioPlayerControlGroup>
+          <AudioPlayerControlGroup>
+            <AudioPlayerSkipBack />
+            <AudioPlayerPlay />
+            <AudioPlayerSkipForward />
+          </AudioPlayerControlGroup>
           <AudioQueueShuffle />
           <AudioQueueRepeatMode />
-          <AudioVolume />
-        </AudioControlGroup>
-      </AudioControlBar>
+          <AudioPlayerVolume />
+        </AudioPlayerControlGroup>
+      </AudioPlayerControlBar>
     </AudioPlayer>
   );
 }

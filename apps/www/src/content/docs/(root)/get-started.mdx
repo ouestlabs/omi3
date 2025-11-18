@@ -74,14 +74,14 @@ export default function RootLayout({ children }) {
 ### Step 4: Use the component
 
 ```tsx
-import { AudioPlayer, AudioControlBar, AudioPlay } from "@/components/ui/audio/player"
+import { AudioPlayer, AudioPlayerControlBar, AudioPlayerPlay } from "@/components/ui/audio/player"
 
 export function MyAudioPlayer() {
   return (
     <AudioPlayer>
-      <AudioControlBar>
-        <AudioPlay />
-      </AudioControlBar>
+      <AudioPlayerControlBar>
+        <AudioPlayerPlay />
+      </AudioPlayerControlBar>
     </AudioPlayer>
   )
 }

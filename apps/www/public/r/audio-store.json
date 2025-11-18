@@ -1,6 +1,6 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
-  "name": "store",
+  "name": "audio-store",
   "type": "registry:lib",
   "description": "Audio store",
   "dependencies": [

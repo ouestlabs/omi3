@@ -1,13 +1,13 @@
 import {
-  AudioControlBar,
-  AudioControlGroup,
-  AudioPlay,
   AudioPlayer,
-  AudioSeekBar,
-  AudioSkipBack,
-  AudioSkipForward,
-  AudioTimeDisplay,
-  AudioVolume,
+  AudioPlayerControlBar,
+  AudioPlayerControlGroup,
+  AudioPlayerPlay,
+  AudioPlayerSeekBar,
+  AudioPlayerSkipBack,
+  AudioPlayerSkipForward,
+  AudioPlayerTimeDisplay,
+  AudioPlayerVolume,
 } from "@/registry/default/ui/audio/player";
 import {
   AudioQueue,
@@ -17,25 +17,25 @@ import {
 export default function AudioQueueSimpleDemo() {
   return (
     <AudioPlayer>
-      <AudioControlBar variant="stacked">
-        <AudioControlGroup>
-          <AudioTimeDisplay />
-          <AudioSeekBar />
-          <AudioTimeDisplay remaining />
-        </AudioControlGroup>
-        <AudioControlGroup className="justify-between">
-          <AudioControlGroup>
-            <AudioSkipBack />
-            <AudioPlay />
-            <AudioSkipForward />
-          </AudioControlGroup>
-          <AudioControlGroup>
-            <AudioVolume />
+      <AudioPlayerControlBar variant="stacked">
+        <AudioPlayerControlGroup>
+          <AudioPlayerTimeDisplay />
+          <AudioPlayerSeekBar />
+          <AudioPlayerTimeDisplay remaining />
+        </AudioPlayerControlGroup>
+        <AudioPlayerControlGroup className="justify-between">
+          <AudioPlayerControlGroup>
+            <AudioPlayerSkipBack />
+            <AudioPlayerPlay />
+            <AudioPlayerSkipForward />
+          </AudioPlayerControlGroup>
+          <AudioPlayerControlGroup>
+            <AudioPlayerVolume />
             <AudioQueuePreferences />
             <AudioQueue />
-          </AudioControlGroup>
-        </AudioControlGroup>
-      </AudioControlBar>
+          </AudioPlayerControlGroup>
+        </AudioPlayerControlGroup>
+      </AudioPlayerControlBar>
     </AudioPlayer>
   );
 }

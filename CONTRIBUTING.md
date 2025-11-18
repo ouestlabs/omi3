@@ -9,7 +9,7 @@ Thank you for your interest in contributing to `audio/ui`! This guide will help 
 1. **UI Components** - Core reusable components (`Button`, `Input`, `Slider`, etc.)
 2. **Examples** - Demonstrations of how to use UI components
 3. **Particles** - Pre-assembled audio player patterns and composite components
-4. **Library** - Utility functions and stores (`audio-store`, `audio`, etc.)
+4. **Library** - Utility functions and stores (`audio-store`, `audio-lib`, etc.)
 
 ## Project Structure
 
@@ -37,18 +37,18 @@ Examples are component demonstrations that showcase how to use our UI components
    // registry/default/examples/audio-player-custom-demo.tsx
    import {
      AudioPlayer,
-     AudioControlBar,
-     AudioPlayButton,
-     AudioSeekBar,
-   } from "@/registry/default/ui/player"
+     AudioPlayerControlBar,
+     AudioPlayerPlay,
+     AudioPlayerSeekBar,
+   } from "@/registry/default/ui/audio/player"
 
    export default function AudioPlayerCustomDemo() {
      return (
        <AudioPlayer>
-         <AudioControlBar>
-           <AudioPlayButton />
-           <AudioSeekBar />
-         </AudioControlBar>
+         <AudioPlayerControlBar>
+           <AudioPlayerPlay />
+           <AudioPlayerSeekBar />
+         </AudioPlayerControlBar>
        </AudioPlayer>
      )
    }
@@ -101,16 +101,16 @@ Particles are pre-assembled components that combine multiple UI components into 
    // registry/default/particles/particle-custom-player.tsx
    import {
      AudioPlayer,
-     AudioControlBar,
-     AudioPlayButton,
-   } from "@/registry/default/ui/player"
+     AudioPlayerControlBar,
+     AudioPlayerPlay,
+   } from "@/registry/default/ui/audio/player"
 
    export default function ParticleCustomPlayer() {
      return (
        <AudioPlayer>
-         <AudioControlBar>
-           <AudioPlayButton />
-         </AudioControlBar>
+         <AudioPlayerControlBar>
+           <AudioPlayerPlay />
+         </AudioPlayerControlBar>
        </AudioPlayer>
      )
    }
@@ -156,7 +156,7 @@ export const particles: Registry["items"] = [
     name: "particle-custom-player",
     description: "Custom audio player",
     type: "registry:block",
-    registryDependencies: ["@audio/player", "@audio/store", "@audio/audio"],
+    registryDependencies: ["@audio/player", "@audio/audio-store", "@audio/audio-lib"],
     files: [
       { path: "particles/particle-custom-player.tsx", type: "registry:block" },
     ],
@@ -228,7 +228,7 @@ UI components are core reusable components built on shadcn/ui.
 2. Write your component following shadcn/ui patterns:
    ```tsx
    // registry/default/ui/custom-component.tsx
-   import { cn } from "audio-ui/lib/utils"
+   import { cn } from "@/registry/default/lib/utils"
    import type * as React from "react"
 
    export function CustomComponent({ className, ...props }: React.ComponentProps<"div">) {
@@ -264,12 +264,15 @@ When adding dependencies, use the correct format:
 
 - **Official shadcn/ui components**: Use simple names (e.g., `"button"`, `"dialog"`)
 - **Custom components from this registry**: Use namespace format (e.g., `"@audio/player"`, `"@audio/slider"`)
+- **Library utilities**: Use namespace format with the registry name (e.g., `"@audio/audio-store"`, `"@audio/audio-lib"`)
 
 Example:
 ```tsx
 registryDependencies: [
   "@audio/player",      // Custom component
   "@audio/slider",      // Custom component
+  "@audio/audio-store", // Library store
+  "@audio/audio-lib",   // Library utilities
   "button",             // Official shadcn/ui
   "dialog",             // Official shadcn/ui
 ]
@@ -314,7 +317,7 @@ bun run build:registry
 
 - Check existing examples in `registry/default/examples/` for patterns
 - Look at similar components for reference
-- Review the [documentation](/docs) for component usage
+- Review the [documentation](/apps/www/src/content/docs) for component usage
 - Check the [GitHub repository](https://github.com/ouestlabs/audio-ui) for issues and discussions
 
 Thank you for contributing to `audio/ui`! 🎉
