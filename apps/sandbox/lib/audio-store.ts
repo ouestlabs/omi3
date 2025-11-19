@@ -46,7 +46,7 @@ type AudioStore = {
   addTracksToEndOfQueue: (tracksToAdd: Track[]) => void;
 
   // Control Actions
-  setVolume: (volume: number) => void;
+  setVolume: (params: { volume: number }) => void;
   toggleMute: () => void;
   changeRepeatMode: () => void;
   setInsertMode: (mode: InsertMode) => void;
@@ -55,7 +55,7 @@ type AudioStore = {
   setRepeatMode: (mode: RepeatMode) => void;
 
   // State Actions
-  setCurrentTrack: (track: Track | null) => void;
+  setCurrentTrack: (track: Track | null) => Promise<void>;
   setError: (message: string | null) => void;
 };
 
@@ -67,70 +67,149 @@ function canUseDOM() {
   );
 }
 
-const calculateNextIndex = (
-  queue: Track[],
-  currentQueueIndex: number,
-  shuffleEnabled: boolean,
-  repeatMode: RepeatMode
-): number => {
-  if (queue.length === 0) {
-    return -1;
-  }
-
-  if (shuffleEnabled) {
-    if (queue.length === 1) {
-      return repeatMode === "none" ? -1 : 0;
-    }
-    let randomIndex: number;
-    do {
-      randomIndex = Math.floor(Math.random() * queue.length);
-    } while (randomIndex === currentQueueIndex);
-    return randomIndex;
-  }
-
-  let nextIndex = currentQueueIndex + 1;
-  if (nextIndex >= queue.length) {
-    if (repeatMode === "all") {
-      nextIndex = 0;
-    } else {
-      return -1;
-    }
-  }
-
-  return nextIndex >= 0 && nextIndex < queue.length ? nextIndex : -1;
+type QueueNavigationParams = {
+  queue: Track[];
+  currentQueueIndex: number;
+  shuffleEnabled: boolean;
+  repeatMode: RepeatMode;
 };
 
-const calculatePreviousIndex = (
-  queue: Track[],
-  currentQueueIndex: number,
-  shuffleEnabled: boolean,
-  repeatMode: RepeatMode
-): number => {
+type GetRandomShuffleIndexParams = {
+  queueLength: number;
+  currentIndex: number;
+};
+
+/**
+ * Calculates a random index for shuffle mode
+ */
+const getRandomShuffleIndex = (params: GetRandomShuffleIndexParams): number => {
+  const { queueLength, currentIndex } = params;
+  if (queueLength === 1) {
+    return 0;
+  }
+  let randomIndex: number;
+  do {
+    randomIndex = Math.floor(Math.random() * queueLength);
+  } while (randomIndex === currentIndex);
+  return randomIndex;
+};
+
+type CalculateQueueIndexParams = QueueNavigationParams & {
+  direction: 1 | -1;
+};
+
+/**
+ * Calculates the next or previous index in the queue based on direction
+ */
+const calculateQueueIndex = (params: CalculateQueueIndexParams): number => {
+  const { queue, currentQueueIndex, shuffleEnabled, repeatMode, direction } =
+    params;
+
   if (queue.length === 0) {
     return -1;
   }
 
   if (shuffleEnabled) {
-    if (queue.length === 1) {
-      return repeatMode === "none" ? -1 : 0;
-    }
-    let randomIndex: number;
-    do {
-      randomIndex = Math.floor(Math.random() * queue.length);
-    } while (randomIndex === currentQueueIndex);
-    return randomIndex;
+    const singleTrackIndex = repeatMode === "none" ? -1 : 0;
+    return queue.length === 1
+      ? singleTrackIndex
+      : getRandomShuffleIndex({
+          queueLength: queue.length,
+          currentIndex: currentQueueIndex,
+        });
   }
 
-  let prevIndex = currentQueueIndex - 1;
-  if (prevIndex < 0) {
-    if (repeatMode === "all") {
-      prevIndex = queue.length - 1;
-    } else {
-      return -1;
-    }
+  const newIndex = currentQueueIndex + direction;
+  const isAtEnd = newIndex >= queue.length;
+  const isAtStart = newIndex < 0;
+
+  if (isAtEnd) {
+    return repeatMode === "all" ? 0 : -1;
   }
 
-  return prevIndex >= 0 && prevIndex < queue.length ? prevIndex : -1;
+  if (isAtStart) {
+    return repeatMode === "all" ? queue.length - 1 : -1;
+  }
+
+  return newIndex;
+};
+
+/**
+ * Calculates the index of the next track
+ */
+const calculateNextIndex = (params: QueueNavigationParams): number =>
+  calculateQueueIndex({
+    ...params,
+    direction: 1,
+  });
+
+/**
+ * Calculates the index of the previous track
+ */
+const calculatePreviousIndex = (params: QueueNavigationParams): number =>
+  calculateQueueIndex({
+    ...params,
+    direction: -1,
+  });
+
+/**
+ * Default state after successful track loading
+ */
+const getSuccessState = (params: { isPlaying?: boolean } = {}) => ({
+  isLoading: false,
+  isError: false,
+  errorMessage: null,
+  isBuffering: false,
+  isPlaying: params.isPlaying ?? false,
+});
+
+/**
+ * Default state after loading error
+ */
+const getErrorState = (params: { errorMessage: string }) => ({
+  isLoading: false,
+  isPlaying: false,
+  isError: true,
+  errorMessage: params.errorMessage,
+  isBuffering: false,
+});
+
+type LoadAndPlayTrackParams = {
+  track: Track;
+  queueIndex: number;
+  set: (partial: Partial<AudioStore>) => void;
+  errorMessage: string;
+};
+
+/**
+ * Loads and plays a track with error handling
+ */
+const loadAndPlayTrack = async (
+  params: LoadAndPlayTrackParams
+): Promise<void> => {
+  const { track, queueIndex, set, errorMessage } = params;
+  const isLiveStream = isLive(track);
+
+  set({
+    currentTrack: track,
+    currentQueueIndex: queueIndex,
+    isLoading: true,
+    isBuffering: true,
+  });
+
+  try {
+    await $audio.load({
+      url: track.url,
+      startTime: 0,
+      isLiveStream,
+    });
+    await $audio.play();
+    set(getSuccessState({ isPlaying: true }));
+  } catch (error) {
+    console.error(errorMessage, error);
+    set(getErrorState({ errorMessage }));
+    throw error;
+  }
 };
 
 const useAudioStore = create<AudioStore>()(
@@ -181,52 +260,35 @@ const useAudioStore = create<AudioStore>()(
 
       async next() {
         const state = get();
-        const nextIndex = calculateNextIndex(
-          state.queue,
-          state.currentQueueIndex,
-          state.shuffleEnabled,
-          state.repeatMode
-        );
+        const nextIndex = calculateNextIndex({
+          queue: state.queue,
+          currentQueueIndex: state.currentQueueIndex,
+          shuffleEnabled: state.shuffleEnabled,
+          repeatMode: state.repeatMode,
+        });
 
-        if (nextIndex === -1 || !state.queue[nextIndex]) {
+        const nextTrack = state.queue[nextIndex];
+        if (nextIndex === -1 || !nextTrack) {
           $audio.pause();
           set({ isLoading: false, isPlaying: false, isBuffering: false });
           return;
         }
 
-        const nextSong = state.queue[nextIndex];
-        const isLiveStream = isLive(nextSong);
-
-        set({ isLoading: true, isBuffering: true });
-        try {
-          set({
-            currentTrack: nextSong,
-            currentQueueIndex: nextIndex,
-          });
-          await $audio.load(nextSong.url, 0, isLiveStream);
-          await $audio.play();
-          set({
-            isLoading: false,
-            isError: false,
-            errorMessage: null,
-            isBuffering: false,
-          });
-        } catch {
-          set({
-            isLoading: false,
-            isPlaying: false,
-            isError: true,
-            errorMessage: "Error loading/playing next track",
-            isBuffering: false,
-          });
-        }
+        await loadAndPlayTrack({
+          track: nextTrack,
+          queueIndex: nextIndex,
+          set,
+          errorMessage: "Error loading/playing next track",
+        });
       },
 
       async previous() {
         const state = get();
         const currentTime = $audio.getCurrentTime();
+        const RESTART_THRESHOLD = 3;
 
-        if (currentTime > 3 && !state.shuffleEnabled) {
+        // If track has more than 3 seconds and shuffle is not enabled, restart the track
+        if (currentTime > RESTART_THRESHOLD && !state.shuffleEnabled) {
           set({ isLoading: true });
           try {
             $audio.setCurrentTime(0);
@@ -235,17 +297,19 @@ const useAudioStore = create<AudioStore>()(
           } catch (error) {
             console.error("Error restarting current track:", error);
             set({ isLoading: false });
+            return;
           }
         }
 
-        const prevIndex = calculatePreviousIndex(
-          state.queue,
-          state.currentQueueIndex,
-          state.shuffleEnabled,
-          state.repeatMode
-        );
+        const prevIndex = calculatePreviousIndex({
+          queue: state.queue,
+          currentQueueIndex: state.currentQueueIndex,
+          shuffleEnabled: state.shuffleEnabled,
+          repeatMode: state.repeatMode,
+        });
 
-        if (prevIndex === -1 || !state.queue[prevIndex]) {
+        const prevTrack = state.queue[prevIndex];
+        if (prevIndex === -1 || !prevTrack) {
           if (prevIndex !== -1) {
             console.error(
               "Inconsistency: previous index is valid but track not found"
@@ -256,33 +320,12 @@ const useAudioStore = create<AudioStore>()(
           return;
         }
 
-        const prevSong = state.queue[prevIndex];
-        const isLiveStream = isLive(prevSong);
-
-        set({ isLoading: true, isBuffering: true });
-        try {
-          set({
-            currentTrack: prevSong,
-            currentQueueIndex: prevIndex,
-          });
-          await $audio.load(prevSong.url, 0, isLiveStream);
-          await $audio.play();
-          set({
-            isLoading: false,
-            isError: false,
-            errorMessage: null,
-            isBuffering: false,
-          });
-        } catch (error) {
-          console.error("Store Previous track error (load/play):", error);
-          set({
-            isLoading: false,
-            isPlaying: false,
-            isError: true,
-            errorMessage: "Error loading/playing previous track",
-            isBuffering: false,
-          });
-        }
+        await loadAndPlayTrack({
+          track: prevTrack,
+          queueIndex: prevIndex,
+          set,
+          errorMessage: "Error loading/playing previous track",
+        });
       },
 
       seek(time: number) {
@@ -291,8 +334,8 @@ const useAudioStore = create<AudioStore>()(
       },
 
       async setQueueAndPlay(songs: Track[], startIndex: number) {
-        const targetSong = songs[startIndex];
-        if (!targetSong) {
+        const targetTrack = songs[startIndex];
+        if (!targetTrack) {
           console.error("[Playback] Invalid startIndex for setQueueAndPlay");
           get().clearQueue();
           $audio.pause();
@@ -307,35 +350,13 @@ const useAudioStore = create<AudioStore>()(
 
         get().setQueue(songs, startIndex);
 
-        const isLiveStream = isLive(targetSong);
-        set({ isLoading: true, isBuffering: true });
-        try {
-          set({
-            currentTrack: targetSong,
-            currentQueueIndex: startIndex,
-          });
-          await $audio.load(targetSong.url, 0, isLiveStream);
-          await $audio.play();
-          set({
-            isLoading: false,
-            isPlaying: true,
-            isError: false,
-            errorMessage: null,
-            isBuffering: false,
-          });
-        } catch (error) {
-          console.error(
-            "[Playback] Error in setQueueAndPlay (load/play):",
-            error
-          );
-          set({
-            isLoading: false,
-            isPlaying: false,
-            isError: true,
-            errorMessage: `Error playing ${targetSong.title}`,
-            isBuffering: false,
-          });
-        }
+        const errorMessage = `Error playing ${targetTrack.title || "track"}`;
+        await loadAndPlayTrack({
+          track: targetTrack,
+          queueIndex: startIndex,
+          set,
+          errorMessage,
+        });
       },
 
       handleTrackEnd() {
@@ -437,8 +458,9 @@ const useAudioStore = create<AudioStore>()(
       },
 
       // Control Actions
-      setVolume(volume) {
-        $audio.setVolume(volume);
+      setVolume(params: { volume: number }) {
+        const { volume } = params;
+        $audio.setVolume({ volume });
         set({ volume, isMuted: volume === 0 });
       },
 
@@ -493,59 +515,51 @@ const useAudioStore = create<AudioStore>()(
       },
 
       // State Actions
-      setCurrentTrack: (track: Track | null) => {
-        const performSetCurrentTrack = async () => {
-          const state = get();
+      async setCurrentTrack(track: Track | null) {
+        const state = get();
 
-          if (!track) {
-            $audio.cleanup();
-            set({
-              currentTrack: null,
-              currentQueueIndex: -1,
-              isPlaying: false,
-              currentTime: 0,
-              duration: 0,
-              queue: [],
-              isLoading: false,
-              isError: false,
-              errorMessage: null,
-            });
-            return;
-          }
+        if (!track) {
+          $audio.cleanup();
+          set({
+            currentTrack: null,
+            currentQueueIndex: -1,
+            isPlaying: false,
+            currentTime: 0,
+            duration: 0,
+            queue: [],
+            isLoading: false,
+            isError: false,
+            errorMessage: null,
+          });
+          return;
+        }
 
-          if (state.currentTrack?.id === track.id) {
-            return;
-          }
+        // Avoid reloading the same track
+        if (state.currentTrack?.id === track.id) {
+          return;
+        }
 
-          const isLiveStream = isLive(track);
+        const errorMessage = `Error: ${track.title || "Unknown track"}`;
 
-          try {
-            set({
-              currentTrack: track,
-              queue: [track],
-              currentQueueIndex: 0,
-              isLoading: true,
-              isPlaying: false,
-              currentTime: 0,
-              duration: 0,
-              isError: false,
-              errorMessage: null,
-            });
+        // Update queue with a single track
+        set({
+          currentTrack: track,
+          queue: [track],
+          currentQueueIndex: 0,
+          isLoading: true,
+          isPlaying: false,
+          currentTime: 0,
+          duration: 0,
+          isError: false,
+          errorMessage: null,
+        });
 
-            await $audio.load(track.url, 0, isLiveStream);
-            await $audio.play();
-          } catch (error) {
-            console.error("Error setting single current track:", error);
-            set({
-              isLoading: false,
-              isPlaying: false,
-              isError: true,
-              errorMessage: `Error: ${error instanceof Error ? error.message : "Unknown"}`,
-            });
-          }
-        };
-
-        performSetCurrentTrack();
+        await loadAndPlayTrack({
+          track,
+          queueIndex: 0,
+          set,
+          errorMessage,
+        });
       },
       setError: (message) => {
         set({
