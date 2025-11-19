@@ -156,7 +156,7 @@ export const particles: Registry["items"] = [
     name: "particle-custom-player",
     description: "Custom audio player",
     type: "registry:block",
-    registryDependencies: ["@audio/player", "@audio/audio-store", "@audio/audio-lib"],
+    registryDependencies: ["@audio/player", "@audio/store", "@audio/lib"],
     files: [
       { path: "particles/particle-custom-player.tsx", type: "registry:block" },
     ],
@@ -264,15 +264,15 @@ When adding dependencies, use the correct format:
 
 - **Official shadcn/ui components**: Use simple names (e.g., `"button"`, `"dialog"`)
 - **Custom components from this registry**: Use namespace format (e.g., `"@audio/player"`, `"@audio/slider"`)
-- **Library utilities**: Use namespace format with the registry name (e.g., `"@audio/audio-store"`, `"@audio/audio-lib"`)
+- **Library utilities**: Use namespace format with the registry name (e.g., `"@audio/store"`, `"@audio/lib"`)
 
 Example:
 ```tsx
 registryDependencies: [
   "@audio/player",      // Custom component
   "@audio/slider",      // Custom component
-  "@audio/audio-store", // Library store
-  "@audio/audio-lib",   // Library utilities
+  "@audio/store", // Library store
+  "@audio/lib",   // Library utilities
   "button",             // Official shadcn/ui
   "dialog",             // Official shadcn/ui
 ]

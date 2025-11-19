@@ -11,7 +11,8 @@
     {
       "path": "src/registry/default/examples/track-demo.tsx",
       "content": "\"use client\";\n\nimport { AudioTrack } from \"@/registry/default/ui/audio/track\";\n\nexport default function AudioTrackDemo() {\n  return <AudioTrack className=\"w-full\" trackId={\"4\"} />;\n}\n",
-      "type": "registry:example"
+      "type": "registry:example",
+      "target": "components/audio/examples/track-demo.tsx"
     }
   ],
   "categories": [

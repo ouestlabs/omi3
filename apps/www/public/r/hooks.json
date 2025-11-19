@@ -2,5 +2,6 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "hooks",
   "type": "registry:hook",
-  "registryDependencies": []
+  "registryDependencies": [],
+  "files": []
 }

@@ -5,7 +5,8 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { rimraf } from "rimraf";
 import type { RegistryItem } from "shadcn/schema";
-import { registry } from "../src/registry";
+import { fixImport, getFileTarget } from "@/lib/registry";
+import { registry } from "@/registry";
 
 async function buildRegistryIndex() {
   let index = `
@@ -76,17 +77,47 @@ export const Index: Record<string, any> = {`;
 async function buildRegistryJsonFile() {
   const fixedRegistry = {
     ...registry,
-    items: registry.items.map((item: RegistryItem) => {
-      const files = item.files?.map((file: (typeof item.files)[number]) => ({
-        ...file,
-        path: `src/registry/default/${file.path}`,
-      }));
+    items: await Promise.all(
+      registry.items.map(async (item: RegistryItem) => {
+        const files = await Promise.all(
+          (item.files || []).map(async (file) => {
+            const filePath = `src/registry/default/${file.path}`;
+            const resolvedPath = path.isAbsolute(filePath)
+              ? filePath
+              : path.join(process.cwd(), filePath);
 
-      return {
-        ...item,
-        files,
-      };
-    }),
+            let content: string | undefined;
+            try {
+              const rawContent = await fs.readFile(resolvedPath, "utf-8");
+              content = fixImport(rawContent);
+            } catch (error) {
+              console.warn(
+                `Warning: Could not read file ${resolvedPath}:`,
+                error
+              );
+            }
+
+            const target = getFileTarget({
+              path: file.path,
+              type: file.type,
+              target: file.target,
+            });
+
+            return {
+              ...file,
+              path: filePath,
+              target,
+              ...(content !== undefined && { content }),
+            };
+          })
+        );
+
+        return {
+          ...item,
+          files,
+        };
+      })
+    ),
   };
 
   rimraf.sync(path.join(process.cwd(), "registry.json"));

@@ -3,6 +3,8 @@
   "name": "ui",
   "type": "registry:ui",
   "registryDependencies": [
-    "@audio/player"
-  ]
+    "@audio/slider",
+    "@audio/sortable-list"
+  ],
+  "files": []
 }

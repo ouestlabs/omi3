@@ -12,6 +12,9 @@ export function getRSS() {
     favicon: `${appConfig.url}/icon`,
     copyright: `All rights reserved ${new Date().getFullYear()}, ${appConfig.name}`,
     generator: appConfig.name,
+    feedLinks: {
+      rss: `${appConfig.url}/rss.xml`,
+    },
   });
 
   for (const page of source.getPages()) {

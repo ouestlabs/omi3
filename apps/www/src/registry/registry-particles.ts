@@ -9,7 +9,7 @@ export const particles: Registry["items"] = [
       "@audio/player",
       "@audio/queue",
       "@audio/store",
-      "@audio/audio",
+      "@audio/lib",
     ],
     files: [{ path: "particles/particle-player.tsx", type: "registry:block" }],
     categories: ["player", "queue"],
@@ -19,10 +19,12 @@ export const particles: Registry["items"] = [
     description: "Audio player widget",
     type: "registry:block",
     registryDependencies: [
+      "@audio/provider",
       "@audio/player",
+      "@audio/queue",
       "@audio/track",
       "@audio/store",
-      "@audio/audio",
+      "@audio/lib",
     ],
     files: [
       { path: "particles/particle-player-widget.tsx", type: "registry:block" },
