@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { PAGES_NEW } from "@/lib/docs";
 import type { source } from "@/lib/source";
+import { useIsMobile } from "@/registry/default/hooks/use-mobile";
 import { cn } from "@/registry/default/lib/utils";
 import { Button } from "@/registry/default/ui/button";
 import {
@@ -30,9 +31,16 @@ export function MobileNav({
   className?: string;
 }) {
   const [open, setOpen] = React.useState(false);
+  const isMobile = useIsMobile();
+
+  React.useEffect(() => {
+    if (!isMobile && open) {
+      setOpen(false);
+    }
+  }, [isMobile, open]);
 
   return (
-    <Popover onOpenChange={setOpen} open={open}>
+    <Popover onOpenChange={setOpen} open={open && isMobile}>
       <PopoverTrigger asChild>
         <Button
           className={cn(
@@ -125,6 +133,38 @@ export function MobileNav({
                                 <span className="flex size-2 rounded-full bg-primary" />
                               )}
                             </MobileLink>
+                          );
+                        }
+                        if (item.type === "folder") {
+                          return (
+                            <div
+                              className="flex flex-col gap-2 pl-4"
+                              key={item.$id}
+                            >
+                              <div className="font-medium text-muted-foreground text-xs">
+                                {item.name}
+                              </div>
+                              <div className="flex flex-col gap-2">
+                                {item.children.map((child) => {
+                                  if (child.type === "page") {
+                                    return (
+                                      <MobileLink
+                                        className="flex items-center gap-2 text-xl"
+                                        href={child.url}
+                                        key={child.url}
+                                        onOpenChange={setOpen}
+                                      >
+                                        {child.name}{" "}
+                                        {PAGES_NEW.includes(child.url) && (
+                                          <span className="flex size-2 rounded-full bg-primary" />
+                                        )}
+                                      </MobileLink>
+                                    );
+                                  }
+                                  return null;
+                                })}
+                              </div>
+                            </div>
                           );
                         }
                         return null;

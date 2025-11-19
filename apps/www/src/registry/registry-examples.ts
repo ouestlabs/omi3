@@ -140,4 +140,30 @@ export const examples: Registry["items"] = [
     ],
     categories: ["track", "sortable", "grid"],
   },
+  {
+    name: "slider-demo",
+    description: "Slider component examples",
+    type: "registry:example",
+    registryDependencies: ["@audio/slider"],
+    files: [
+      {
+        path: "examples/slider-demo.tsx",
+        type: "registry:example",
+      },
+    ],
+    categories: ["slider", "ui"],
+  },
+  {
+    name: "sortable-list-demo",
+    description: "Sortable list component examples",
+    type: "registry:example",
+    registryDependencies: ["@audio/sortable-list"],
+    files: [
+      {
+        path: "examples/sortable-list-demo.tsx",
+        type: "registry:example",
+      },
+    ],
+    categories: ["sortable-list", "ui"],
+  },
 ];

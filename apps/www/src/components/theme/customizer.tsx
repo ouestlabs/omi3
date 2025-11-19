@@ -12,6 +12,7 @@ import {
   baseColors,
   baseColorsOKLCH,
 } from "@/registry/base-colors";
+import { useIsMobile } from "@/registry/default/hooks/use-mobile";
 import { cn } from "@/registry/default/lib/utils";
 import { Button } from "@/registry/default/ui/button";
 import {
@@ -116,10 +117,12 @@ export function CopyCodeButton({
 }: React.ComponentProps<typeof Button>) {
   let { activeTheme: activeThemeName = "neutral" } = useThemeConfig();
   activeThemeName = activeThemeName === "default" ? "neutral" : activeThemeName;
+  const isMobile = useIsMobile();
+  const [open, setOpen] = React.useState(false);
 
   return (
     <>
-      <Drawer>
+      <Drawer onOpenChange={setOpen} open={open && isMobile}>
         <DrawerTrigger asChild>
           <Button className={cn("sm:hidden", className)} {...props}>
             Copy Code
@@ -135,7 +138,7 @@ export function CopyCodeButton({
           <CustomizerCode themeName={activeThemeName} />
         </DrawerContent>
       </Drawer>
-      <Dialog>
+      <Dialog onOpenChange={setOpen} open={open && !isMobile}>
         <DialogTrigger asChild>
           <Button
             className={cn("group/button hidden sm:flex", className)}

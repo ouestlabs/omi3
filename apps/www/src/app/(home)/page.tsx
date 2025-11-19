@@ -6,8 +6,8 @@ export default function IndexPage() {
   return (
     <div className="flex flex-1 flex-col">
       <Hero />
-      <div className="container-wrapper scroll-mt-20" id="themes">
-        <div className="container flex items-center justify-between gap-8 px-6 py-4 md:px-8">
+      <div className="container-wrapper" id="themes">
+        <div className="container flex items-center justify-between gap-8 p-5 pt-8 sm:p-8">
           <ThemeCustomizer />
         </div>
       </div>
