@@ -6,6 +6,7 @@ import {
   ExternalLinkIcon,
 } from "lucide-react";
 import Link from "next/link";
+import { Icons } from "@/lib/icons";
 import { Button } from "@/registry/default/ui/button";
 import {
   ButtonGroup,
@@ -38,6 +39,36 @@ function normalizeLinkValue(value: LinkValue): string[] {
     return [];
   }
   return Array.isArray(value) ? value : [value];
+}
+
+function getIconFromUrl(url: string): React.ReactNode {
+  try {
+    const urlObj = new URL(url);
+    const hostname = urlObj.hostname.toLowerCase();
+
+    if (hostname.includes("shadcn.com")) {
+      return <Icons.shadcn className="size-4 shrink-0" />;
+    }
+    if (hostname.includes("radix-ui.com") || hostname.includes("radix")) {
+      return <Icons.radix className="size-4 shrink-0" />;
+    }
+    if (hostname.includes("github.com")) {
+      return <Icons.github className="size-4 shrink-0" />;
+    }
+    if (hostname.includes("docs.dndkit.com") || hostname.includes("dndkit")) {
+      return <Icons.react className="size-4 shrink-0" />;
+    }
+    if (
+      hostname.includes("zustand.docs.pmnd.rs") ||
+      hostname.includes("zustand")
+    ) {
+      return <Icons.react className="size-4 shrink-0" />;
+    }
+
+    return <ExternalLinkIcon className="size-4 shrink-0" />;
+  } catch {
+    return <ExternalLinkIcon className="size-4 shrink-0" />;
+  }
 }
 
 function extractLabelFromUrl(url: string): string {
@@ -80,7 +111,7 @@ function addLinkItems(
       menuItems.push({
         label,
         url,
-        icon: <ExternalLinkIcon className="size-4" />,
+        icon: getIconFromUrl(url),
       });
     }
   }
@@ -165,7 +196,9 @@ export function DocsLinks({ links }: DocLinksProps) {
                 rel="noreferrer"
                 target="_blank"
               >
-                {item.icon}
+                {item.icon && (
+                  <span className="flex shrink-0">{item.icon}</span>
+                )}
                 {item.label}
               </Link>
             </DropdownMenuItem>
