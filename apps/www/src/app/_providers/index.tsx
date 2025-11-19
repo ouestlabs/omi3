@@ -26,7 +26,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
           <NuqsAdapter>
             <ActiveThemeProvider>
               <AudioProvider tracks={demoTracks}>{children}</AudioProvider>
-              <Toaster position="top-center" />
+              <Toaster position="top-center" richColors />
             </ActiveThemeProvider>
           </NuqsAdapter>
         </LayoutProvider>
