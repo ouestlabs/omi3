@@ -148,6 +148,13 @@ export default async function Page(props: {
                 <MDX components={getMDXComponents()} />
               </div>
             </div>
+            {page.data.lastModified && (
+              <p className="text-muted-foreground text-sm">
+                Last updated{" "}
+                {new Date(page.data.lastModified).toLocaleDateString()}
+              </p>
+            )}
+
             <div className="flex items-center gap-2 pt-6">
               {neighbours.previous && (
                 <Button asChild className="shadow-none" variant="outline">
