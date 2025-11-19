@@ -5,6 +5,7 @@ import { source } from "@/lib/source";
 export function getRSS() {
   const feed = new Feed({
     title: appConfig.name,
+    description: appConfig.description,
     id: `${appConfig.url}/docs`,
     link: `${appConfig.url}/docs`,
     language: "en",
