@@ -87,33 +87,37 @@ async function getFileContent(file: { path: string; type?: string }) {
   return code;
 }
 
-function getFileTarget(file: { path: string; type?: string; target?: string }) {
-  let target = file.target;
-
-  if (!target || target === "") {
-    const fileName = file.path.split("/").pop();
-    if (
-      file.type === "registry:block" ||
-      file.type === "registry:component" ||
-      file.type === "registry:example"
-    ) {
-      target = `components/${fileName}`;
-    }
-
-    if (file.type === "registry:ui") {
-      target = `components/ui/${fileName}`;
-    }
-
-    if (file.type === "registry:hook") {
-      target = `hooks/${fileName}`;
-    }
-
-    if (file.type === "registry:lib") {
-      target = `lib/${fileName}`;
-    }
+export function getFileTarget(file: {
+  path: string;
+  type?: string;
+  target?: string;
+}) {
+  if (file.target) {
+    return file.target;
   }
 
-  return target ?? "";
+  const fileName = file.path.split("/").pop() ?? "";
+  const pathParts = file.path.split("/");
+  const isAudioPath = pathParts.includes("audio");
+
+  switch (file.type) {
+    case "registry:component":
+      return `components/audio/${fileName}`;
+    case "registry:block":
+      return `components/audio/particles/${fileName}`;
+    case "registry:example":
+      return `components/audio/examples/${fileName}`;
+    case "registry:ui":
+      return isAudioPath
+        ? `components/audio/${fileName}`
+        : `components/ui/${fileName}`;
+    case "registry:hook":
+      return `hooks/${fileName}`;
+    case "registry:lib":
+      return `lib/${fileName}`;
+    default:
+      return "";
+  }
 }
 
 async function createTempSourceFile(filename: string) {
@@ -145,7 +149,13 @@ function fixFilePaths(
 }
 
 export function fixImport(content: string) {
-  const regex = /@\/(.+?)\/((?:.*?\/)?(?:components|ui|hooks|lib))\/([\w-]+)/g;
+  const fixed = content.replace(
+    /@\/registry\/default\/ui\/audio\/([\w-]+)/g,
+    (_, component) => `@/components/audio/${component}`
+  );
+
+  const regex =
+    /@\/(.+?)\/((?:.*?\/)?(?:components|ui|hooks|lib|examples|particles))\/([\w-]+)/g;
 
   const replacement = (
     match: string,
@@ -154,7 +164,7 @@ export function fixImport(content: string) {
     component: string
   ) => {
     if (type.endsWith("components")) {
-      return `@/components/${component}`;
+      return `@/components/audio/${component}`;
     }
     if (type.endsWith("ui")) {
       return `@/components/ui/${component}`;
@@ -165,11 +175,17 @@ export function fixImport(content: string) {
     if (type.endsWith("lib")) {
       return `@/lib/${component}`;
     }
+    if (type.endsWith("examples")) {
+      return `@/components/audio/examples/${component}`;
+    }
+    if (type.endsWith("particles")) {
+      return `@/components/audio/particles/${component}`;
+    }
 
     return match;
   };
 
-  return content.replace(regex, replacement);
+  return fixed.replace(regex, replacement);
 }
 
 export type FileTree = {

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "component",
+  "type": "registry:component",
+  "registryDependencies": [
+    "@audio/player",
+    "@audio/track",
+    "@audio/queue",
+    "@audio/provider"
+  ],
+  "files": []
+}

@@ -11,7 +11,8 @@
     {
       "path": "src/registry/default/examples/queue-preferences-demo.tsx",
       "content": "import {\n  AudioPlayer,\n  AudioPlayerControlBar,\n} from \"@/registry/default/ui/audio/player\";\nimport {\n  AudioQueue,\n  AudioQueuePreferences,\n} from \"@/registry/default/ui/audio/queue\";\n\nexport default function AudioQueuePreferencesDemo() {\n  return (\n    <AudioPlayer className=\"w-max\">\n      <AudioPlayerControlBar>\n        <AudioQueuePreferences />\n        <AudioQueue />\n      </AudioPlayerControlBar>\n    </AudioPlayer>\n  );\n}\n",
-      "type": "registry:example"
+      "type": "registry:example",
+      "target": "components/audio/examples/queue-preferences-demo.tsx"
     }
   ],
   "categories": [

@@ -3,11 +3,6 @@ import type { Registry } from "shadcn/schema";
 export const lib: Registry["items"] = [
   {
     name: "lib",
-    type: "registry:lib",
-    registryDependencies: ["@audio/store", "@audio/audio"],
-  },
-  {
-    name: "audio-lib",
     description: "Audio Lib",
     type: "registry:lib",
     dependencies: [],
@@ -16,11 +11,11 @@ export const lib: Registry["items"] = [
     categories: ["lib", "audio"],
   },
   {
-    name: "audio-store",
+    name: "store",
     description: "Audio store",
     type: "registry:lib",
     dependencies: ["zustand"],
-    registryDependencies: ["@audio/audio"],
+    registryDependencies: ["@audio/lib"],
     files: [{ path: "lib/audio-store.ts", type: "registry:lib" }],
     categories: ["lib", "audio", "store"],
   },

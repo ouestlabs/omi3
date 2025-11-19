@@ -1,9 +1,9 @@
-import { AudioLines } from "lucide-react";
 import Link from "next/link";
 import { CommandMenu } from "@/components/command-menu";
 import { GithubStars } from "@/components/github-starts";
 import { ThemeSwitcher } from "@/components/theme/switcher";
 import { appConfig } from "@/lib/config";
+import { Icons } from "@/lib/icons";
 import { source } from "@/lib/source";
 import { Button } from "@/registry/default/ui/button";
 import { Separator } from "@/registry/default/ui/separator";
@@ -33,7 +33,7 @@ function SiteHeader() {
                 aria-hidden
                 className="flex shrink-0 select-none items-center justify-center gap-1 text-muted-foreground"
               >
-                <AudioLines className="pointer-events-none size-4 text-foreground sm:size-5" />
+                <Icons.audioUi className="pointer-events-none size-4 text-foreground sm:size-5" />
                 <p className="-mt-[2.3px] sm:-mt-[3px] text-balance font-medium font-serif text-xl leading-snug sm:text-2xl">
                   {appConfig.name}
                 </p>

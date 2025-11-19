@@ -5,7 +5,7 @@ export const examples: Registry["items"] = [
     name: "player-demo",
     description: "Audio player demo",
     type: "registry:example",
-    registryDependencies: ["@audio/player", "@audio/frame"],
+    registryDependencies: ["@audio/player"],
     files: [{ path: "examples/player-demo.tsx", type: "registry:example" }],
     categories: ["player"],
   },
