@@ -4,7 +4,7 @@ const ALLOWED_HOSTS = ["ice2.tuxnet.me"];
 
 export async function GET(
   request: NextRequest,
-  { params }: RouteContext<"/api/radio/[...path]">
+  { params }: RouteContext<"/radio/[...path]">
 ) {
   const { path } = await params;
   const pathString = path.join("/");
@@ -59,7 +59,7 @@ export async function GET(
 
 export async function HEAD(
   request: NextRequest,
-  { params }: RouteContext<"/api/radio/[...path]">
+  { params }: RouteContext<"/radio/[...path]">
 ) {
   return await GET(request, { params });
 }

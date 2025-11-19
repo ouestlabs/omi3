@@ -474,7 +474,7 @@ const demoTracks: Track[] = [
     id: "3",
     title: "Radio Tuxnet",
     artist: "Tuxnet",
-    url: "/api/radio/live.aac?host=ice2.tuxnet.me",
+    url: "/radio/live.aac?host=ice2.tuxnet.me",
     genre: "Hip Hop",
     artwork: "/icon",
   },
