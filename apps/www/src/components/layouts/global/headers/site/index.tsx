@@ -7,9 +7,9 @@ import { Icons } from "@/lib/icons";
 import { source } from "@/lib/source";
 import { Button } from "@/registry/default/ui/button";
 import { Separator } from "@/registry/default/ui/separator";
+import { SiteConfig } from "./config";
 import { MainNav } from "./navigation/main";
 import { MobileNav } from "./navigation/mobile";
-import { SiteConfig } from "./site-config";
 
 function SiteHeader() {
   const pageTree = source.pageTree;

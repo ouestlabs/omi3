@@ -3,7 +3,7 @@ import React from "react";
 import type { registryItemSchema } from "shadcn/schema";
 import type { z } from "zod";
 import { CodeBlockCommand } from "@/components/code-block/command";
-import { CopyRegistry } from "@/components/layouts/doc/copy-registry";
+import { CopyRegistry } from "@/components/copy-registry";
 import { OpenInV0Button } from "@/components/open-in-v0-button";
 import { ComponentSource } from "@/components/preview/source";
 import { highlightCode } from "@/lib/highlight-code";

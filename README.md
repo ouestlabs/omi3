@@ -1,6 +1,6 @@
 # audio/ui
 
-A set of accessible and composable Audio UI React components. Built on top of [shadcn/ui](https://ui.shadcn.com/), it's designed for you to copy, paste, and own.
+A set of accessible and composable Audio UI components. Built on top of [shadcn/ui](https://ui.shadcn.com/), it's designed for you to copy, paste, and own.
 
 ![audio/ui](/apps/www/src/app/opengraph-image.png)
 

@@ -352,7 +352,7 @@ const AudioPlayerVolume = ({
             min={0}
             onValueChange={(value) => {
               if (value?.[0] !== undefined) {
-                setVolume(value[0] / 100);
+                setVolume({ volume: value[0] / 100 });
                 if (value[0] === 0) {
                   toggleMute();
                 } else if (isMuted) {

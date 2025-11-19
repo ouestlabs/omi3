@@ -13,10 +13,6 @@ import {
   DropdownMenuTrigger,
 } from "@/registry/default/ui/dropdown-menu";
 
-/**
- * Generate a unified prompt for LLM interactions that provides deep context
- * about the documentation page. This prompt works well across all LLM platforms.
- */
 function generateLLMPrompt(url: string, markdownUrl?: string): string {
   const fullMarkdownUrl =
     typeof window !== "undefined" && markdownUrl

@@ -1,8 +1,13 @@
 ---
 title: Audio Track
 description: Track display components with list management and track information.
-featured: true
-component: true
+links:
+  doc:
+    - https://ui.shadcn.com/docs/components/avatar
+    - https://ui.shadcn.com/docs/components/badge
+    - https://ui.shadcn.com/docs/components/button
+    - https://ui.shadcn.com/docs/components/item
+    - https://ui.shadcn.com/docs/components/scroll-area
 ---
  
 Track components for displaying and managing audio tracks. These components support two modes:
@@ -221,6 +226,6 @@ Key features:
 <Callout variant="info">
   <strong>Important Information:</strong>
   
-  - **AudioProvider Requirement:** <code>AudioProvider</code> (or the project's audio store) is required for store mode to work correctly. Make sure to wrap your app with the provider at the root level.
+  - **AudioProvider Requirement:** <code>AudioProvider</code> (or the project's audio store) is required for store mode to work correctly. Make sure to wrap your app with the provider at the root level. The provider manages the audio playback state and lifecycle, making it essential for all audio components.
   - **Localization:** If you localize strings (e.g., empty labels), pass <code>emptyLabel</code> and <code>emptyDescription</code> to the list component.
 </Callout>

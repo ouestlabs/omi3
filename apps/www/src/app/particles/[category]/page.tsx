@@ -4,7 +4,7 @@ import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
-} from "@/components/layouts/global";
+} from "@/components/layouts/global/headers/page";
 import { createMetadata } from "@/lib/metadata";
 import { getUniqueParticleCategories } from "@/lib/particle-categories";
 import { cn } from "@/registry/default/lib/utils";

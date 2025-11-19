@@ -13,36 +13,72 @@ Our components are built with [Tailwind CSS v4](https://tailwindcss.com). Before
 
 You can add components **automatically with the shadcn CLI** or **manually by copying the files**.
 
-#### With the CLI
+<CodeTabs>
 
-Each component page provides a command to add it to your project automatically. The CLI will create the necessary files and install any dependencies for you.
+<TabsList>
+  <TabsTrigger value="cli">CLI</TabsTrigger>
+  <TabsTrigger value="manual">Manual</TabsTrigger>
+</TabsList>
 
-For example, to add the audio player:
+<TabsContent value="cli">
 
 ```bash
 npx shadcn@latest add @audio/player
 ```
 
-#### Manually
+</TabsContent>
 
-1. **Find a component** on the [Components](/docs) or [Particles](/particles) pages.
-2. **Copy the code** from the **Code** tab.
-3. **Create a new file** in your project (e.g., `components/ui/audio/player.tsx`) and paste the code.
-4. **Install any dependencies** listed on the component's page.
-5. **Import and use** the component in your app.
+<TabsContent value="manual">
+
+<Steps>
+
+<Step>Install the runtime dependencies:</Step>
+
+```bash
+npm install zustand lucide-react
+```
+
+<Step>Install the required shadcn/ui primitives:</Step>
+
+```bash
+npx shadcn@latest add button dialog dropdown-menu empty input item scroll-area toggle tooltip
+```
+
+<Step>Install the slider components from this registry:</Step>
+
+```bash
+npx shadcn@latest add @audio/slider
+```
+
+<Step>Copy and paste the following code into your project.</Step>
+
+<ComponentSource name="player" title="components/audio/player.tsx" />
+
+<Step>Copy the required provider file.</Step>
+
+<ComponentSource name="provider" title="components/audio/provider.tsx" />
+
+<Step>Copy the audio lib file.</Step>
+
+<ComponentSource name="lib" title="lib/audio.ts" />
+
+<Step>Copy the required store file.</Step>
+
+<ComponentSource name="store" title="lib/audio-store.ts" />
+
+<Step>Update the import paths to match your project setup.</Step>
+
+</Steps>
+
+</TabsContent>
+
+</CodeTabs>
 
 ### Step 3: Setup AudioProvider
 
-Provide the audio context at the root. You can copy the provider source directly or use the usage snippet below.
+The `AudioProvider` is a core component that manages the audio playback state and lifecycle for all audio components. It initializes the audio element, handles playback events, manages error retries, preloads next tracks, and synchronizes audio state with the Zustand store.
 
-<CodeTabs>
-
-<TabsList>
-  <TabsTrigger value="usage">Usage</TabsTrigger>
-  <TabsTrigger value="copy">Code</TabsTrigger>
-</TabsList>
-
-<TabsContent value="usage">
+Wrap your app with `AudioProvider` at the root level:
 
 ```tsx
 // app/layout.tsx or _app.tsx
@@ -60,16 +96,6 @@ export default function RootLayout({ children }) {
   )
 }
 ```
-
-</TabsContent>
-
-<TabsContent value="copy">
-
-<ComponentSource name="provider" title="components/audio/provider.tsx" />
-
-</TabsContent>
-
-</CodeTabs>
 
 ### Step 4: Use the component
 
