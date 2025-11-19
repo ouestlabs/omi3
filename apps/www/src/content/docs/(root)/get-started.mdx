@@ -14,64 +14,45 @@ Our components are built with [Tailwind CSS v4](https://tailwindcss.com). Before
 You can add components **automatically with the shadcn CLI** or **manually by copying the files**.
 
 <CodeTabs>
+  <TabsList>
+    <TabsTrigger value="cli">CLI</TabsTrigger>
+    <TabsTrigger value="manual">Manual</TabsTrigger>
+  </TabsList>
+  <TabsContent value="cli">
+  ```bash
+  npx shadcn@latest add @audio/player
+  ```
+  </TabsContent>
 
-<TabsList>
-  <TabsTrigger value="cli">CLI</TabsTrigger>
-  <TabsTrigger value="manual">Manual</TabsTrigger>
-</TabsList>
+  <TabsContent value="manual">
+    <Steps>
+      <Step>Install the runtime dependencies:</Step>
 
-<TabsContent value="cli">
+        ```bash
+        npm install zustand lucide-react
+        ```
+      <Step>Install the required shadcn/ui primitives:</Step>
 
-```bash
-npx shadcn@latest add @audio/player
-```
+        ```bash
+        npx shadcn@latest add button dialog dropdown-menu empty input item scroll-area toggle tooltip
+        ```
+      <Step>Install the slider components from this registry:</Step>
 
-</TabsContent>
+        ```bash
+        npx shadcn@latest add @audio/slider
+        ```
+      <Step>Copy and paste the following code into your project.</Step>
+        <Source name="player" title="components/audio/player.tsx" />
+      <Step>Copy the required provider file.</Step>
+        <Source name="provider" title="components/audio/provider.tsx" />
+      <Step>Copy the audio lib file.</Step>
+        <Source name="lib" title="lib/audio.ts" />
+      <Step>Copy the required store file.</Step>
+        <Source name="store" title="lib/audio-store.ts" />
+      <Step>Update the import paths to match your project setup.</Step>
+    </Steps>
 
-<TabsContent value="manual">
-
-<Steps>
-
-<Step>Install the runtime dependencies:</Step>
-
-```bash
-npm install zustand lucide-react
-```
-
-<Step>Install the required shadcn/ui primitives:</Step>
-
-```bash
-npx shadcn@latest add button dialog dropdown-menu empty input item scroll-area toggle tooltip
-```
-
-<Step>Install the slider components from this registry:</Step>
-
-```bash
-npx shadcn@latest add @audio/slider
-```
-
-<Step>Copy and paste the following code into your project.</Step>
-
-<ComponentSource name="player" title="components/audio/player.tsx" />
-
-<Step>Copy the required provider file.</Step>
-
-<ComponentSource name="provider" title="components/audio/provider.tsx" />
-
-<Step>Copy the audio lib file.</Step>
-
-<ComponentSource name="lib" title="lib/audio.ts" />
-
-<Step>Copy the required store file.</Step>
-
-<ComponentSource name="store" title="lib/audio-store.ts" />
-
-<Step>Update the import paths to match your project setup.</Step>
-
-</Steps>
-
-</TabsContent>
-
+  </TabsContent>
 </CodeTabs>
 
 ### Step 3: Setup AudioProvider
@@ -82,25 +63,27 @@ Wrap your app with `AudioProvider` at the root level:
 
 ```tsx
 // app/layout.tsx or _app.tsx
-import { AudioProvider } from "@/components/audio/provider"
+import { AudioProvider } from "@/components/audio/provider";
 
 export default function RootLayout({ children }) {
   return (
     <html>
       <body>
-        <AudioProvider tracks={initialTracks}>
-          {children}
-        </AudioProvider>
+        <AudioProvider tracks={initialTracks}>{children}</AudioProvider>
       </body>
     </html>
-  )
+  );
 }
 ```
 
 ### Step 4: Use the component
 
 ```tsx
-import { AudioPlayer, AudioPlayerControlBar, AudioPlayerPlay } from "@/components/audio/player"
+import {
+  AudioPlayer,
+  AudioPlayerControlBar,
+  AudioPlayerPlay,
+} from "@/components/audio/player";
 
 export function MyAudioPlayer() {
   return (
@@ -109,7 +92,7 @@ export function MyAudioPlayer() {
         <AudioPlayerPlay />
       </AudioPlayerControlBar>
     </AudioPlayer>
-  )
+  );
 }
 ```
 
@@ -123,6 +106,6 @@ For detailed information about styling, color tokens, and customization options,
 
 We structure the documentation to make the components **AI-friendly**, so language models can understand, reason about, and modify them. To support this, we include:
 
- - A [llms.txt](/llms.txt) file that provides a map of the documentation and component structure for your AI agent.
- - A [llms-full.txt](/llms-full.txt) file containing an expanded view of the docs and component sources for deeper analysis.
- - A **Copy Markdown** button on every page, so you can easily share content or feed it to your AI workflows.
+- A [llms.txt](/llms.txt) file that provides a map of the documentation and component structure for your AI agent.
+- A [llms-full.txt](/llms-full.txt) file containing an expanded view of the docs and component sources for deeper analysis.
+- A **Copy Markdown** button on every page, so you can easily share content or feed it to your AI workflows.

@@ -4,7 +4,14 @@ import { CopyCheckIcon, CopyIcon, TerminalIcon } from "lucide-react";
 import React from "react";
 import { useConfig } from "@/hooks/use-config";
 import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
+import { cn } from "@/registry/default/lib/utils";
 import { Button } from "@/registry/default/ui/button";
+import {
+  CollapsibleContent,
+  CollapsibleTrigger,
+  Collapsible as UICollapsible,
+} from "@/registry/default/ui/collapsible";
+import { Separator } from "@/registry/default/ui/separator";
 import {
   Tabs,
   TabsContent,
@@ -17,7 +24,44 @@ import {
   TooltipTrigger,
 } from "@/registry/default/ui/tooltip";
 
-function CodeBlockCommand({
+// Collapsible
+function Collapse({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof UICollapsible>) {
+  const [isOpened, setIsOpened] = React.useState(false);
+
+  return (
+    <UICollapsible
+      className={cn("group/collapsible md:-mx-1 relative", className)}
+      onOpenChange={setIsOpened}
+      open={isOpened}
+      {...props}
+    >
+      <div className="absolute top-1.5 right-10 z-10 flex items-center">
+        <CollapsibleTrigger asChild>
+          <Button className="text-muted-foreground" size="sm" variant="ghost">
+            {isOpened ? "Collapse" : "Expand"}
+          </Button>
+        </CollapsibleTrigger>
+        <Separator className="mx-1.5 h-5!" orientation="vertical" />
+      </div>
+      <CollapsibleContent
+        className="relative mt-6 h-full overflow-hidden data-[state=closed]:h-auto! data-[state=closed]:max-h-64! [&>figure]:mt-0 [&>figure]:md:mx-0!"
+        forceMount
+      >
+        {children}
+      </CollapsibleContent>
+      <CollapsibleTrigger className="-bottom-2 absolute inset-x-0 flex h-20 cursor-pointer items-center justify-center rounded-b-lg bg-linear-to-b from-transparent via-50% via-background to-background font-medium text-muted-foreground text-sm transition-colors hover:text-foreground group-data-[state=open]/collapsible:hidden">
+        {isOpened ? "Collapse" : "Expand"}
+      </CollapsibleTrigger>
+    </UICollapsible>
+  );
+}
+
+// Command
+function Command({
   __npm__,
   __yarn__,
   __pnpm__,
@@ -118,4 +162,26 @@ function CodeBlockCommand({
   );
 }
 
-export { CodeBlockCommand };
+// Tabs
+function CodeTabs({ children }: React.ComponentProps<typeof Tabs>) {
+  const [config, setConfig] = useConfig();
+
+  const installationType = React.useMemo(
+    () => config.installationType || "cli",
+    [config]
+  );
+
+  return (
+    <Tabs
+      className="relative mt-6 w-full"
+      onValueChange={(value) =>
+        setConfig({ ...config, installationType: value as "cli" | "manual" })
+      }
+      value={installationType}
+    >
+      {children}
+    </Tabs>
+  );
+}
+
+export { Collapse, Command, CodeTabs };

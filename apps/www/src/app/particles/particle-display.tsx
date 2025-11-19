@@ -2,10 +2,10 @@ import { InfoIcon } from "lucide-react";
 import React from "react";
 import type { registryItemSchema } from "shadcn/schema";
 import type { z } from "zod";
-import { CodeBlockCommand } from "@/components/code-block/command";
 import { CopyRegistry } from "@/components/copy-registry";
+import { Command } from "@/components/md/code";
+import { Source } from "@/components/md/preview";
 import { OpenInV0Button } from "@/components/open-in-v0-button";
-import { ComponentSource } from "@/components/preview/source";
 import { highlightCode } from "@/lib/highlight-code";
 import { getRegistryItem } from "@/lib/registry";
 import { cn } from "@/registry/default/lib/utils";
@@ -81,7 +81,7 @@ export async function ParticleDisplay({
                 <div>
                   <h2 className="mb-4 font-heading text-xl">Installation</h2>
                   <figure data-rehype-pretty-code-figure>
-                    <CodeBlockCommand
+                    <Command
                       __bun__={`bunx --bun shadcn@latest add @audio/${name}`}
                       __npm__={`npx shadcn@latest add @audio/${name}`}
                       __pnpm__={`pnpm dlx shadcn@latest add @audio/${name}`}
@@ -94,7 +94,7 @@ export async function ParticleDisplay({
                     <h2 className="mt-6 mb-4 font-heading text-xl">Code</h2>
                     <OpenInV0Button name={name} />
                   </div>
-                  <ComponentSource
+                  <Source
                     className="*:data-rehype-pretty-code-figure:no-scrollbar h-full overflow-hidden *:data-rehype-pretty-code-figure:mt-0 *:data-rehype-pretty-code-figure:max-h-full *:data-rehype-pretty-code-figure:overflow-y-auto"
                     collapsible={false}
                     name={name}
