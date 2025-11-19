@@ -6,16 +6,6 @@
 import React from "react" 
 
 export const Index: Record<string, any> = {
-  "component": {
-    name: "component",
-    description: "",
-    type: "registry:component",
-    registryDependencies: ["@audio/player","@audio/track","@audio/queue","@audio/provider"],
-    files: [undefined],
-    component: null,
-    categories: undefined,
-    meta: undefined,
-  },
   "player": {
     name: "player",
     description: "",
@@ -56,7 +46,7 @@ export const Index: Record<string, any> = {
     name: "queue",
     description: "",
     type: "registry:component",
-    registryDependencies: ["@audio/store","@audio/track","@audio/provider","@shadcn/empty","@shadcn/button","@shadcn/command","@shadcn/dialog","@shadcn/dropdown-menu","@shadcn/input","@shadcn/item","@shadcn/scroll-area","@shadcn/toggle","@shadcn/tooltip"],
+    registryDependencies: ["@audio/store","@audio/lib","@audio/track","@audio/provider","@shadcn/empty","@shadcn/button","@shadcn/command","@shadcn/dialog","@shadcn/dropdown-menu","@shadcn/input","@shadcn/item","@shadcn/scroll-area","@shadcn/toggle","@shadcn/tooltip"],
     files: [{
       path: "src/registry/default/ui/audio/queue.tsx",
       type: "registry:component",
@@ -74,7 +64,7 @@ export const Index: Record<string, any> = {
     name: "track",
     description: "",
     type: "registry:component",
-    registryDependencies: ["@audio/sortable-list","@audio/provider","@shadcn/badge","@shadcn/empty","@shadcn/avatar","@shadcn/button","@shadcn/item","@shadcn/scroll-area"],
+    registryDependencies: ["@audio/store","@audio/lib","@audio/sortable-list","@audio/provider","@shadcn/badge","@shadcn/empty","@shadcn/avatar","@shadcn/button","@shadcn/item","@shadcn/scroll-area"],
     files: [{
       path: "src/registry/default/ui/audio/track.tsx",
       type: "registry:component",
@@ -92,7 +82,7 @@ export const Index: Record<string, any> = {
     name: "ui",
     description: "",
     type: "registry:ui",
-    registryDependencies: ["@audio/player"],
+    registryDependencies: ["@audio/slider","@audio/sortable-list"],
     files: [undefined],
     component: null,
     categories: undefined,

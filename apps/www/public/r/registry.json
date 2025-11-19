@@ -3,17 +3,6 @@
   "homepage": "https://ui.shadcn.com",
   "items": [
     {
-      "name": "component",
-      "type": "registry:component",
-      "registryDependencies": [
-        "@audio/player",
-        "@audio/track",
-        "@audio/queue",
-        "@audio/provider"
-      ],
-      "files": []
-    },
-    {
       "name": "player",
       "type": "registry:component",
       "dependencies": [
@@ -72,6 +61,7 @@
       ],
       "registryDependencies": [
         "@audio/store",
+        "@audio/lib",
         "@audio/track",
         "@audio/provider",
         "@shadcn/empty",
@@ -101,6 +91,8 @@
         "lucide-react"
       ],
       "registryDependencies": [
+        "@audio/store",
+        "@audio/lib",
         "@audio/sortable-list",
         "@audio/provider",
         "@shadcn/badge",
@@ -123,7 +115,8 @@
       "name": "ui",
       "type": "registry:ui",
       "registryDependencies": [
-        "@audio/player"
+        "@audio/slider",
+        "@audio/sortable-list"
       ],
       "files": []
     },

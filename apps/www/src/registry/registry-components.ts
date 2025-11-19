@@ -45,6 +45,7 @@ export const components: Registry["items"] = [
     dependencies: ["zustand", "lucide-react"],
     registryDependencies: [
       "@audio/store",
+      "@audio/lib",
       "@audio/track",
       "@audio/provider",
       "@shadcn/empty",
@@ -70,6 +71,8 @@ export const components: Registry["items"] = [
     type: "registry:component",
     dependencies: ["lucide-react"],
     registryDependencies: [
+      "@audio/store",
+      "@audio/lib",
       "@audio/sortable-list",
       "@audio/provider",
       "@shadcn/badge",

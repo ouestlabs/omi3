@@ -6,6 +6,8 @@
     "lucide-react"
   ],
   "registryDependencies": [
+    "@audio/store",
+    "@audio/lib",
     "@audio/sortable-list",
     "@audio/provider",
     "@shadcn/badge",

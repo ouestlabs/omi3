@@ -8,6 +8,7 @@
   ],
   "registryDependencies": [
     "@audio/store",
+    "@audio/lib",
     "@audio/track",
     "@audio/provider",
     "@shadcn/empty",

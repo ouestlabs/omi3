@@ -45,10 +45,17 @@ npx shadcn@latest add button dialog dropdown-menu input empty item scroll-area t
 npx shadcn@latest add @audio/track
 ```
 
-<Step>Copy the component and supporting files into your project (see registry sources):</Step>
+<Step>Copy and paste the following code into your project.</Step>
 
-<ComponentSource name="queue" title="components/ui/audio/queue.tsx" />
+<ComponentSource name="queue" title="components/audio/queue.tsx" />
+
+<Step>Copy the required store file.</Step>
+
 <ComponentSource name="store" title="lib/audio-store.ts" />
+
+<Step>Copy the audio lib file.</Step>
+
+<ComponentSource name="lib" title="lib/audio.ts" />
 
 <Step>Update the import paths to match your project setup.</Step>
 
@@ -69,7 +76,7 @@ import {
   AudioQueuePreferences,
   AudioQueueRepeatMode,
   AudioQueueShuffle,
-} from "@/components/ui/audio/queue"
+} from "@/components/audio/queue"
 ```
 
 ### Basic Queue

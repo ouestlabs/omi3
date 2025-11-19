@@ -46,7 +46,7 @@ Provide the audio context at the root. You can copy the provider source directly
 
 ```tsx
 // app/layout.tsx or _app.tsx
-import { AudioProvider } from "@/components/ui/audio/provider"
+import { AudioProvider } from "@/components/audio/provider"
 
 export default function RootLayout({ children }) {
   return (
@@ -65,7 +65,7 @@ export default function RootLayout({ children }) {
 
 <TabsContent value="copy">
 
-<ComponentSource name="provider" title="components/ui/audio/provider.tsx" />
+<ComponentSource name="provider" title="components/audio/provider.tsx" />
 
 </TabsContent>
 
@@ -74,7 +74,7 @@ export default function RootLayout({ children }) {
 ### Step 4: Use the component
 
 ```tsx
-import { AudioPlayer, AudioPlayerControlBar, AudioPlayerPlay } from "@/components/ui/audio/player"
+import { AudioPlayer, AudioPlayerControlBar, AudioPlayerPlay } from "@/components/audio/player"
 
 export function MyAudioPlayer() {
   return (
