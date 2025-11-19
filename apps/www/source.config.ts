@@ -15,8 +15,8 @@ export const docs = defineDocs({
     schema: frontmatterSchema.extend({
       links: z
         .object({
-          doc: z.string().optional(),
-          api: z.string().optional(),
+          doc: z.union([z.string(), z.array(z.string())]).optional(),
+          api: z.union([z.string(), z.array(z.string())]).optional(),
         })
         .optional(),
     }),

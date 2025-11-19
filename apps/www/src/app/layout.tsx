@@ -1,6 +1,6 @@
 import "../styles/globals.css";
 
-import { SiteHeader } from "@/components/layouts/global";
+import { SiteHeader } from "@/components/layouts/global/headers/site";
 import { fontMono, fontSans, fontSerif } from "@/lib/fonts";
 import {
   createMetadata,

@@ -5,7 +5,7 @@ import {
   PageHeader,
   PageHeaderDescription,
   PageHeaderHeading,
-} from "@/components/layouts/global";
+} from "@/components/layouts/global/headers/page";
 
 import { Button } from "@/registry/default/ui/button";
 
