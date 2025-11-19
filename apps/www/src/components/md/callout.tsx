@@ -14,7 +14,7 @@ function Callout({
   return (
     <div
       className={cn(
-        "grid grid-cols-[4px_1fr] items-start gap-3 rounded-lg border bg-card p-3 text-muted-foreground text-sm",
+        "my-6 grid grid-cols-[4px_1fr] items-start gap-3 rounded-lg border bg-card p-3 text-muted-foreground text-sm",
         className
       )}
       {...props}

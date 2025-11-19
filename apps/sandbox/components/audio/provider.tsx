@@ -11,6 +11,68 @@ import {
 
 const MAX_ERROR_RETRIES = 3;
 const ERROR_RETRY_DELAY = 1000;
+const THROTTLE_INTERVAL = 100;
+const MIN_UPDATE_THRESHOLD = 0.5;
+
+/**
+ * Gets error information from a MediaError error code.
+ *
+ * @param errorCode - The MediaError error code
+ * @returns An object containing the error message and whether it's recoverable
+ */
+const getErrorInfo = (
+  errorCode: number
+): { message: string; recoverable: boolean } => {
+  switch (errorCode) {
+    case MediaError.MEDIA_ERR_ABORTED:
+      return { message: "Playback cancelled", recoverable: true };
+    case MediaError.MEDIA_ERR_NETWORK:
+      return { message: "Network error", recoverable: true };
+    case MediaError.MEDIA_ERR_DECODE:
+      return {
+        message: "Audio file decoding error",
+        recoverable: false,
+      };
+    case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
+      return {
+        message: "File/network loading error (Code 4)",
+        recoverable: true,
+      };
+    default:
+      return {
+        message: `Unknown error (${errorCode})`,
+        recoverable: true,
+      };
+  }
+};
+
+/**
+ * Parses an audio error and returns its information.
+ *
+ * @param e - The error event
+ * @param audio - The HTML audio element that triggered the error
+ * @returns An object containing the error message, whether it's recoverable, and the error code
+ */
+const parseAudioError = (
+  e: Event,
+  audio: HTMLAudioElement
+): { message: string; recoverable: boolean; errorCode: number } => {
+  if (audio.error) {
+    const errorCode = audio.error.code;
+    const errorInfo = getErrorInfo(errorCode);
+    return { ...errorInfo, errorCode };
+  }
+
+  if (e instanceof ErrorEvent) {
+    return { message: e.message, recoverable: true, errorCode: 0 };
+  }
+
+  return {
+    message: "Unknown audio error",
+    recoverable: false,
+    errorCode: 0,
+  };
+};
 
 function AudioProvider({
   tracks = [],
@@ -21,8 +83,6 @@ function AudioProvider({
 }) {
   const preloadAudioRef = React.useRef<HTMLAudioElement | null>(null);
   const errorRetryCountRef = React.useRef<number>(0);
-  const throttleInterval = 100;
-  const minUpdateThreshold = 0.5;
 
   const setState = React.useCallback(
     (
@@ -79,7 +139,10 @@ function AudioProvider({
       const wasPlaying = !audio.paused;
       const state = useAudioStore.getState();
       if (state.currentTrack) {
-        await $audio.load(state.currentTrack.url, currentTime);
+        await $audio.load({
+          url: state.currentTrack.url,
+          startTime: currentTime,
+        });
         if (wasPlaying) {
           await $audio.play();
         }
@@ -94,7 +157,7 @@ function AudioProvider({
   const lastUpdateTimeRef = React.useRef<number>(0);
   const throttledTimeUpdate = React.useCallback(() => {
     const now = Date.now();
-    if (now - lastUpdateTimeRef.current < throttleInterval) {
+    if (now - lastUpdateTimeRef.current < THROTTLE_INTERVAL) {
       return;
     }
     lastUpdateTimeRef.current = now;
@@ -107,7 +170,7 @@ function AudioProvider({
     const currentTime = audio.currentTime;
     const state = useAudioStore.getState();
 
-    if (Math.abs(state.currentTime - currentTime) > minUpdateThreshold) {
+    if (Math.abs(state.currentTime - currentTime) > MIN_UPDATE_THRESHOLD) {
       const duration = audio.duration;
       const newProgress = duration > 0 ? (currentTime / duration) * 100 : 0;
       useAudioStore.setState({ currentTime, progress: newProgress });
@@ -137,12 +200,12 @@ function AudioProvider({
     }
 
     const state = useAudioStore.getState();
-    const nextIndex = calculateNextIndex(
-      state.queue,
-      state.currentQueueIndex,
-      state.shuffleEnabled,
-      state.repeatMode
-    );
+    const nextIndex = calculateNextIndex({
+      queue: state.queue,
+      currentQueueIndex: state.currentQueueIndex,
+      shuffleEnabled: state.shuffleEnabled,
+      repeatMode: state.repeatMode,
+    });
 
     if (nextIndex === -1 || nextIndex >= state.queue.length) {
       return;
@@ -183,52 +246,6 @@ function AudioProvider({
       setState({ isPlaying: false, isBuffering: false });
     };
 
-    const getErrorInfo = (
-      errorCode: number
-    ): { message: string; recoverable: boolean } => {
-      switch (errorCode) {
-        case MediaError.MEDIA_ERR_ABORTED:
-          return { message: "Playback cancelled", recoverable: true };
-        case MediaError.MEDIA_ERR_NETWORK:
-          return { message: "Network error", recoverable: true };
-        case MediaError.MEDIA_ERR_DECODE:
-          return {
-            message: "Audio file decoding error",
-            recoverable: false,
-          };
-        case MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED:
-          return {
-            message: "File/network loading error (Code 4)",
-            recoverable: true,
-          };
-        default:
-          return {
-            message: `Unknown error (${errorCode})`,
-            recoverable: true,
-          };
-      }
-    };
-
-    const parseError = (
-      e: Event
-    ): { message: string; recoverable: boolean; errorCode: number } => {
-      if (audio.error) {
-        const errorCode = audio.error.code;
-        const errorInfo = getErrorInfo(errorCode);
-        return { ...errorInfo, errorCode };
-      }
-
-      if (e instanceof ErrorEvent) {
-        return { message: e.message, recoverable: true, errorCode: 0 };
-      }
-
-      return {
-        message: "Unknown audio error",
-        recoverable: false,
-        errorCode: 0,
-      };
-    };
-
     const handleErrorRetry = async (
       audioElement: HTMLAudioElement,
       recoverable: boolean
@@ -241,7 +258,11 @@ function AudioProvider({
     };
 
     const handleError = async (e: Event) => {
-      const { message: initialMessage, recoverable, errorCode } = parseError(e);
+      const {
+        message: initialMessage,
+        recoverable,
+        errorCode,
+      } = parseAudioError(e, audio);
 
       console.error("Audio error details:", {
         event: e,
@@ -288,7 +309,11 @@ function AudioProvider({
       if (state.repeatMode === "one" && state.currentTrack) {
         try {
           const isLiveStream = isLive(state.currentTrack);
-          await $audio.load(state.currentTrack.url, 0, isLiveStream);
+          await $audio.load({
+            url: state.currentTrack.url,
+            startTime: 0,
+            isLiveStream,
+          });
           await $audio.play();
           setState({ currentTime: 0, progress: 0 });
           return;
@@ -300,6 +325,15 @@ function AudioProvider({
       state.handleTrackEnd();
     };
 
+    // Default state for successful loading events
+    const getLoadingSuccessState = (duration = 0) => ({
+      isLoading: false,
+      isBuffering: false,
+      duration,
+      isError: false,
+      errorMessage: null,
+    });
+
     const handleLoadStart = () => {
       setState({
         isLoading: true,
@@ -310,14 +344,7 @@ function AudioProvider({
     };
 
     const handleCanPlay = () => {
-      const duration = audio.duration || 0;
-      setState({
-        isLoading: false,
-        isBuffering: false,
-        duration,
-        isError: false,
-        errorMessage: null,
-      });
+      setState(getLoadingSuccessState(audio.duration || 0));
     };
 
     const handleWaiting = () => {
@@ -326,17 +353,13 @@ function AudioProvider({
 
     const handlePlaying = () => {
       setState({
-        isLoading: false,
-        isBuffering: false,
+        ...getLoadingSuccessState(),
         isPlaying: true,
-        isError: false,
-        errorMessage: null,
       });
     };
 
     const handleDurationChange = () => {
-      const duration = audio.duration || 0;
-      setState({ duration });
+      setState({ duration: audio.duration || 0 });
     };
 
     const handleVolumeChange = () => {
@@ -365,8 +388,12 @@ function AudioProvider({
       try {
         setState({ isLoading: true });
 
-        await $audio.load(track.url, startTime, isLiveStream);
-        $audio.setVolume(volume);
+        await $audio.load({
+          url: track.url,
+          startTime,
+          isLiveStream,
+        });
+        $audio.setVolume({ volume });
         $audio.setMuted(muted);
 
         setState({ isLoading: false, isPlaying: false });

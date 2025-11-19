@@ -37,4 +37,5 @@ async function CodeBlock({
     </figure>
   );
 }
+
 export { CodeBlock };

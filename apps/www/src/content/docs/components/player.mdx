@@ -13,92 +13,75 @@ links:
 
 A fully composable audio player component system. Build custom audio interfaces by combining individual control components.
 
-<ComponentPreview name="player-demo" />
+<Preview name="player-demo" />
 
 ## Installation
 
 <CodeTabs>
+  <TabsList>
+    <TabsTrigger value="cli">CLI</TabsTrigger>
+    <TabsTrigger value="manual">Manual</TabsTrigger>
+  </TabsList>
+  <TabsContent value="cli">
+  ```bash
+  npx shadcn@latest add @audio/player
+  ```
+  </TabsContent>
 
-<TabsList>
-  <TabsTrigger value="cli">CLI</TabsTrigger>
-  <TabsTrigger value="manual">Manual</TabsTrigger>
-</TabsList>
-<TabsContent value="cli">
+  <TabsContent value="manual">
+    <Steps>
+      <Step>Install the runtime dependencies:</Step>
 
-```bash
-npx shadcn@latest add @audio/player
-```
+        ```bash
+        npm install zustand lucide-react
+        ```
+      <Step>Install the required shadcn/ui primitives:</Step>
 
-</TabsContent>
+        ```bash
+        npx shadcn@latest add button dialog dropdown-menu empty input item scroll-area toggle tooltip
+        ```
+      <Step>Install the slider components from this registry:</Step>
 
-<TabsContent value="manual">
+        ```bash
+        npx shadcn@latest add @audio/slider
+        ```
+      <Step>Copy and paste the following code into your project.</Step>
+        <Source name="player" title="components/audio/player.tsx" />
+      <Step>Copy the required provider file.</Step>
+        <Source name="provider" title="components/audio/provider.tsx" />
+      <Step>Copy the audio lib file.</Step>
+        <Source name="lib" title="lib/audio.ts" />
+      <Step>Copy the required store file.</Step>
+        <Source name="store" title="lib/audio-store.ts" />
+      <Step>Update the import paths to match your project setup.</Step>
+    </Steps>
 
-<Steps>
-
-<Step>Install the runtime dependencies:</Step>
-
-```bash
-npm install zustand lucide-react
-```
-
-<Step>Install the required shadcn/ui primitives:</Step>
-
-```bash
-npx shadcn@latest add button dialog dropdown-menu empty input item scroll-area toggle tooltip
-```
-
-<Step>Install the slider components from this registry:</Step>
-
-```bash
-npx shadcn@latest add @audio/slider
-```
-
-<Step>Copy and paste the following code into your project.</Step>
-
-<ComponentSource name="player" title="components/audio/player.tsx" />
-
-<Step>Copy the required provider file.</Step>
-
-<ComponentSource name="provider" title="components/audio/provider.tsx" />
-
-<Step>Copy the audio lib file.</Step>
-
-<ComponentSource name="lib" title="lib/audio.ts" />
-
-<Step>Copy the required store file.</Step>
-
-<ComponentSource name="store" title="lib/audio-store.ts" />
-
-<Step>Update the import paths to match your project setup.</Step>
-
-</Steps>
-
-</TabsContent>
-
+  </TabsContent>
 </CodeTabs>
 
 ## Setup
 
 <Callout variant="info">
-  <strong>AudioProvider Required:</strong> Wrap your app with <code>AudioProvider</code> at the root level. This provides the audio context to all components. The provider manages audio playback state, handles events, manages error retries, and preloads tracks.
+  <strong>AudioProvider Required:</strong> Wrap your app with{" "}
+  <code>AudioProvider</code> at the root level. This provides the audio context
+  to all components. The provider manages audio playback state, handles events,
+  manages error retries, and preloads tracks.
 </Callout>
 
 First, wrap your app with `AudioProvider` at the root level:
 
 ```tsx showLineNumbers
 // app/layout.tsx or _app.tsx
-import { AudioProvider } from "@/components/audio/provider"
+import { AudioProvider } from "@/components/audio/provider";
 
 export default function RootLayout({ children }) {
   return (
     <html>
       <body>
-        <AudioProvider tracks={initialTracks}>
-          {children}
-        </AudioProvider>
+        <AudioProvider tracks={initialTracks}>{children}</AudioProvider>
       </body>
     </html>
-  )
+  );
 }
 ```
 
@@ -119,7 +102,7 @@ import {
   AudioPlayerSeekBar,
   AudioPlayerTimeDisplay,
   AudioPlayerVolume,
-} from "@/components/audio/player"
+} from "@/components/audio/player";
 ```
 
 ```tsx
@@ -144,13 +127,13 @@ import {
 
 A player with stacked variant, showing time displays above and below the seek bar.
 
-<ComponentPreview name="player-stacked-demo" />
+<Preview name="player-stacked-demo" />
 
 ### Player with Queue
 
 A full-featured player with queue management, shuffle, and repeat controls. Uses `AudioPlayerControlGroup` for flexible layout management.
 
-<ComponentPreview name="player-queue-demo" />
+<Preview name="player-queue-demo" />
 
 For more queue management options, see the [Audio Queue documentation](/docs/components/queue).
 
@@ -167,9 +150,7 @@ Inherits all props from `HTMLDivElement`.
 #### Example
 
 ```tsx
-<AudioPlayer>
-  {/* Your audio controls */}
-</AudioPlayer>
+<AudioPlayer>{/* Your audio controls */}</AudioPlayer>
 ```
 
 ### AudioPlayerControlBar
@@ -178,10 +159,10 @@ A container component that holds audio player controls. Use it to wrap your cont
 
 #### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `variant` | `"compact" \| "stacked"` | `"compact"` | Layout variant for the control bar. |
-| `className` | `string` | - | Additional CSS classes. |
+| Prop        | Type                     | Default     | Description                         |
+| ----------- | ------------------------ | ----------- | ----------------------------------- |
+| `variant`   | `"compact" \| "stacked"` | `"compact"` | Layout variant for the control bar. |
+| `className` | `string`                 | -           | Additional CSS classes.             |
 
 #### Example
 
@@ -211,9 +192,9 @@ A flexible wrapper component for grouping audio controls and managing flex layou
 
 #### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `className` | `string` | - | Additional CSS classes. |
+| Prop        | Type     | Default | Description             |
+| ----------- | -------- | ------- | ----------------------- |
+| `className` | `string` | -       | Additional CSS classes. |
 
 #### Example
 
@@ -230,7 +211,7 @@ A flexible wrapper component for grouping audio controls and managing flex layou
       <AudioPlayerPlay />
       <AudioPlayerSkipForward />
     </AudioPlayerControlGroup>
-      <AudioPlayerVolume />
+    <AudioPlayerVolume />
   </AudioPlayerControlGroup>
 </AudioPlayerControlBar>
 ```
@@ -242,8 +223,9 @@ A button that toggles play/pause state. Shows a loading spinner when buffering o
 Inherits all props from `AudioPlayerButton` (which extends shadcn/ui's `Button` component).
 
 <Callout variant="info">
-  <strong>Keyboard Shortcuts:</strong> The <code>AudioPlayerPlay</code> component automatically handles the Space bar keyboard shortcut for play/pause.
-  This works when the focus is on the document body.
+  <strong>Keyboard Shortcuts:</strong> The <code>AudioPlayerPlay</code>{" "}
+  component automatically handles the Space bar keyboard shortcut for
+  play/pause. This works when the focus is on the document body.
 </Callout>
 
 ### AudioPlayerSkipBack
@@ -282,10 +264,10 @@ Displays the current playback time or remaining time.
 
 #### Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
+| Prop        | Type      | Default | Description                                     |
+| ----------- | --------- | ------- | ----------------------------------------------- |
 | `remaining` | `boolean` | `false` | Display remaining time instead of current time. |
-| `className` | `string` | - | Additional CSS classes. |
+| `className` | `string`  | -       | Additional CSS classes.                         |
 
 ### AudioPlayerVolume
 
@@ -297,12 +279,22 @@ Inherits all props from `DropdownMenu` component.
 
 <Callout variant="info">
   <strong>Important Information:</strong>
-  
-  - **Component Architecture:** All audio components are self-contained and read state directly from the global store. The audio player uses the HTML5 audio element under the hood.
-  - **AudioProvider Role:** The `AudioProvider` component manages the audio element lifecycle, handles playback events, manages error retries (up to 3 retries with 1 second delay), preloads next tracks, and synchronizes audio state with the Zustand store. It's required for all audio components to function correctly.
-  - **Previous Button Behavior:** The previous button restarts the track if it has been played for more than 3 seconds, otherwise it navigates to the previous track in the queue.
+
+  - **Component Architecture:** All audio components are self-contained and read
+    state directly from the global store. The audio player uses the HTML5 audio
+    element under the hood.
+  - **AudioProvider Role:** The `AudioProvider` component manages the audio
+    element lifecycle, handles playback events, manages error retries (up to 3
+    retries with 1 second delay), preloads next tracks, and synchronizes audio
+    state with the Zustand store. It's required for all audio components to
+    function correctly.
+  - **Previous Button Behavior:** The previous button restarts the track if it has
+    been played for more than 3 seconds, otherwise it navigates to the previous
+    track in the queue.
 </Callout>
 
 <Callout variant="warning">
-  <strong>Live Stream Limitations:</strong> Live streams disable seeking, rewind, and fast-forward controls. The seek bar is disabled and shows 100% progress for live streams.
+  <strong>Live Stream Limitations:</strong> Live streams disable seeking,
+  rewind, and fast-forward controls. The seek bar is disabled and shows 100%
+  progress for live streams.
 </Callout>

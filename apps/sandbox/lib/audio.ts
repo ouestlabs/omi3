@@ -12,6 +12,23 @@ export type Track = {
   [key: string]: unknown;
 };
 
+type LoadParams = {
+  url: string;
+  startTime?: number;
+  isLiveStream?: boolean;
+};
+
+type SetVolumeParams = {
+  volume: number;
+  fadeTime?: number;
+};
+
+type FadeVolumeParams = {
+  audio: HTMLAudioElement;
+  targetVolume: number;
+  duration: number;
+};
+
 class AudioLib {
   private audio: HTMLAudioElement | null = null;
   private isInitialized = false;
@@ -21,6 +38,10 @@ class AudioLib {
   private retryAttempts = 0;
   private readonly maxRetries = 3;
   private readonly eventTarget = new EventTarget();
+  private readonly LOAD_TIMEOUT_LIVE = 60_000;
+  private readonly LOAD_TIMEOUT_NORMAL = 30_000;
+  private readonly FADE_UPDATE_INTERVAL = 16;
+
   /** Initialize the audio element and event listeners */
   init(): void {
     if (this.isInitialized || !this.isClient()) {
@@ -149,11 +170,32 @@ class AudioLib {
     return this.audio;
   }
 
-  async load(url: string, startTime = 0, isLiveStream = false): Promise<void> {
+  /**
+   * Executes a function only if on client side
+   */
+  private ifClient<T>(fn: () => T): T | undefined {
     if (!this.isClient()) {
       return;
     }
+    return fn();
+  }
 
+  async load(params: LoadParams): Promise<void> {
+    const { url, startTime = 0, isLiveStream = false } = params;
+    const result = this.ifClient(() =>
+      this._load({ url, startTime, isLiveStream })
+    );
+    if (result) {
+      await result;
+    }
+  }
+
+  private async _load(params: {
+    url: string;
+    startTime: number;
+    isLiveStream: boolean;
+  }): Promise<void> {
+    const { url, startTime, isLiveStream } = params;
     const audio = this.ensureAudio();
     if (!audio) {
       return;
@@ -174,7 +216,9 @@ class AudioLib {
       audio.src = url;
       audio.preload = "auto";
 
-      const loadTimeout = isLiveStream ? 60_000 : 30_000;
+      const loadTimeout = isLiveStream
+        ? this.LOAD_TIMEOUT_LIVE
+        : this.LOAD_TIMEOUT_NORMAL;
 
       await new Promise<void>((resolve, reject) => {
         let timeoutId: NodeJS.Timeout | null = null;
@@ -212,7 +256,7 @@ class AudioLib {
           isResolved = true;
           cleanup();
 
-          // Ne pas définir currentTime pour les streams live
+          // Don't set currentTime for live streams
           if (startTime > 0 && !isLiveStream) {
             audio.currentTime = startTime;
           }
@@ -248,9 +292,13 @@ class AudioLib {
   }
 
   async play(): Promise<void> {
-    if (!this.isClient()) {
-      return;
+    const result = this.ifClient(() => this._play());
+    if (result) {
+      await result;
     }
+  }
+
+  private async _play(): Promise<void> {
     if (!this.audio) {
       throw new Error("Audio module not initialized");
     }
@@ -308,42 +356,40 @@ class AudioLib {
   }
 
   pause(): void {
-    if (!this.isClient()) {
-      return;
-    }
-    const audio = this.ensureAudio();
-
-    audio.pause();
+    this.ifClient(() => {
+      const audio = this.ensureAudio();
+      audio.pause();
+    });
   }
 
-  setVolume(volume: number, fadeTime = 0): void {
-    if (!this.isClient()) {
-      return;
-    }
+  setVolume(params: SetVolumeParams): void {
+    const { volume, fadeTime = 0 } = params;
+    this.ifClient(() => {
+      const audio = this.ensureAudio();
 
-    const audio = this.ensureAudio();
-
-    if (this.fadeTimeout) {
-      clearTimeout(this.fadeTimeout);
-      this.fadeTimeout = null;
-    }
-
-    if (fadeTime <= 0) {
-      audio.volume = Math.max(0, Math.min(1, volume));
-      if (volume > 0) {
-        this.lastVolume = volume;
+      if (this.fadeTimeout) {
+        clearTimeout(this.fadeTimeout);
+        this.fadeTimeout = null;
       }
-      return;
-    }
 
-    this.fadeVolume(audio, volume, fadeTime);
+      if (fadeTime <= 0) {
+        audio.volume = Math.max(0, Math.min(1, volume));
+        if (volume > 0) {
+          this.lastVolume = volume;
+        }
+        return;
+      }
+
+      this.fadeVolume({
+        audio,
+        targetVolume: volume,
+        duration: fadeTime,
+      });
+    });
   }
 
-  private fadeVolume(
-    audio: HTMLAudioElement,
-    targetVolume: number,
-    duration: number
-  ): void {
+  private fadeVolume(params: FadeVolumeParams): void {
+    const { audio, targetVolume, duration } = params;
     if (!this.isClient()) {
       return;
     }
@@ -360,7 +406,7 @@ class AudioLib {
       audio.volume = currentVolume;
 
       if (progress < 1) {
-        this.fadeTimeout = setTimeout(updateVolume, 16);
+        this.fadeTimeout = setTimeout(updateVolume, this.FADE_UPDATE_INTERVAL);
       } else {
         if (endVolume > 0) {
           this.lastVolume = endVolume;
@@ -373,68 +419,74 @@ class AudioLib {
   }
 
   getVolume(): number {
-    if (!this.isClient()) {
-      return 0;
-    }
-
-    const audio = this.ensureAudio();
-    return audio.volume;
+    return (
+      this.ifClient(() => {
+        const audio = this.ensureAudio();
+        return audio.volume;
+      }) ?? 0
+    );
   }
 
   setMuted(muted: boolean): void {
-    if (!this.isClient()) {
-      return;
-    }
-    const audio = this.ensureAudio();
-    if (audio.muted === muted) {
-      return;
-    }
-
-    if (muted) {
-      if (audio.volume > 0) {
-        this.lastVolume = audio.volume;
+    this.ifClient(() => {
+      const audio = this.ensureAudio();
+      if (audio.muted === muted) {
+        return;
       }
-      this.fadeVolume(audio, 0, 200);
-      audio.muted = true;
-    } else {
-      audio.muted = false;
-      this.fadeVolume(audio, this.lastVolume, 200);
-    }
+
+      if (muted) {
+        if (audio.volume > 0) {
+          this.lastVolume = audio.volume;
+        }
+        this.fadeVolume({ audio, targetVolume: 0, duration: 200 });
+        audio.muted = true;
+      } else {
+        audio.muted = false;
+        this.fadeVolume({
+          audio,
+          targetVolume: this.lastVolume,
+          duration: 200,
+        });
+      }
+    });
   }
 
   getDuration(): number {
-    if (!this.isClient()) {
-      return 0;
-    }
-    const audio = this.ensureAudio();
-    return audio.duration;
+    return (
+      this.ifClient(() => {
+        const audio = this.ensureAudio();
+        return audio.duration;
+      }) ?? 0
+    );
   }
 
   getCurrentTime(): number {
-    if (!this.isClient()) {
-      return 0;
-    }
-    const audio = this.ensureAudio();
-    return audio.currentTime;
+    return (
+      this.ifClient(() => {
+        const audio = this.ensureAudio();
+        return audio.currentTime;
+      }) ?? 0
+    );
   }
 
   setCurrentTime(time: number): void {
-    if (!this.isClient()) {
-      return;
-    }
-    const audio = this.ensureAudio();
-    const duration = audio.duration;
+    this.ifClient(() => {
+      const audio = this.ensureAudio();
+      const duration = audio.duration;
 
-    if (!Number.isNaN(duration) && time >= 0 && time <= duration) {
-      if (audio.readyState >= audio.HAVE_METADATA) {
-        audio.currentTime = time;
+      if (Number.isNaN(duration)) {
+        return;
       }
-    } else if (!Number.isNaN(duration)) {
-      const validTime = Math.max(0, Math.min(time, duration));
+
+      const isValidTime = time >= 0 && time <= duration;
+      const validTime = isValidTime
+        ? time
+        : Math.max(0, Math.min(time, duration));
+
       if (audio.readyState >= audio.HAVE_METADATA) {
         audio.currentTime = validTime;
       }
-    }
+    });
   }
 
   addEventListener(
@@ -454,19 +506,21 @@ class AudioLib {
   }
 
   getSource(): string {
-    if (!this.isClient()) {
-      return "";
-    }
-    const audio = this.ensureAudio();
-    return audio.src;
+    return (
+      this.ifClient(() => {
+        const audio = this.ensureAudio();
+        return audio.src;
+      }) ?? ""
+    );
   }
 
   isPaused(): boolean {
-    if (!this.isClient()) {
-      return true;
-    }
-    const audio = this.ensureAudio();
-    return audio.paused;
+    return (
+      this.ifClient(() => {
+        const audio = this.ensureAudio();
+        return audio.paused;
+      }) ?? true
+    );
   }
 
   getBufferedRanges(): TimeRanges | null {

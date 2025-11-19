@@ -5,50 +5,42 @@ links:
   doc: https://docs.dndkit.com/presets/sortable
 ---
 
-<ComponentPreview name="sortable-list-demo" description="A sortable list component with drag-and-drop support." />
+<Preview
+  name="sortable-list-demo"
+  description="A sortable list component with drag-and-drop support."
+/>
 
 ## Installation
 
 <CodeTabs>
+  <TabsList>
+    <TabsTrigger value="cli">CLI</TabsTrigger>
+    <TabsTrigger value="manual">Manual</TabsTrigger>
+  </TabsList>
+  <TabsContent value="cli">
+  ```bash
+  npx shadcn@latest add @audio/sortable-list
+  ```
+  </TabsContent>
 
-<TabsList>
-  <TabsTrigger value="cli">CLI</TabsTrigger>
-  <TabsTrigger value="manual">Manual</TabsTrigger>
-</TabsList>
-<TabsContent value="cli">
+  <TabsContent value="manual">
+    <Steps>
+      <Step>Install the following dependencies:</Step>
 
-```bash
-npx shadcn@latest add @audio/sortable-list
-```
+        ```bash
+        npm install @dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities lucide-react
+        ```
+      <Step>Install the required shadcn/ui primitives:</Step>
 
-</TabsContent>
+        ```bash
+        npx shadcn@latest add button
+        ```
+      <Step>Copy and paste the following code into your project.</Step>
+        <Source name="sortable-list" title="components/ui/sortable-list.tsx" />
+      <Step>Update the import paths to match your project setup.</Step>
+    </Steps>
 
-<TabsContent value="manual">
-
-<Steps>
-
-<Step>Install the following dependencies:</Step>
-
-```bash
-npm install @dnd-kit/core @dnd-kit/sortable @dnd-kit/utilities lucide-react
-```
-
-<Step>Install the required shadcn/ui primitives:</Step>
-
-```bash
-npx shadcn@latest add button
-```
-
-<Step>Copy and paste the following code into your project.</Step>
-
-<ComponentSource name="sortable-list" title="components/ui/sortable-list.tsx" />
-
-<Step>Update the import paths to match your project setup.</Step>
-
-</Steps>
-
-</TabsContent>
-
+  </TabsContent>
 </CodeTabs>
 
 ## Usage
@@ -58,25 +50,25 @@ import {
   SortableList,
   SortableItem,
   SortableDragHandle,
-} from "@/components/ui/sortable-list"
+} from "@/components/ui/sortable-list";
 ```
 
 ```tsx showLineNumbers
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
 import {
   Item,
   ItemActions,
   ItemContent,
   ItemDescription,
   ItemTitle,
-} from "@/components/ui/item"
+} from "@/components/ui/item";
 import {
   SortableList,
   SortableItem,
   SortableDragHandle,
-} from "@/components/ui/sortable-list"
+} from "@/components/ui/sortable-list";
 
 const initialItems = [
   {
@@ -94,10 +86,10 @@ const initialItems = [
     title: "Item 3",
     description: "Description for item 3",
   },
-]
+];
 
 export function SortableListDemo() {
-  const [items, setItems] = useState(initialItems)
+  const [items, setItems] = useState(initialItems);
 
   return (
     <SortableList
@@ -118,7 +110,7 @@ export function SortableListDemo() {
         </SortableItem>
       )}
     />
-  )
+  );
 }
 ```
 
@@ -130,12 +122,12 @@ The main container component for sortable items. Built with `@dnd-kit` for acces
 
 #### Props
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `items` | `TItem[]` | Array of items to display. Each item must have an `id` property. |
-| `onChange` | `(items: TItem[]) => void` | Callback fired when items are reordered. |
+| Prop         | Type                                                                   | Description                                                                                      |
+| ------------ | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `items`      | `TItem[]`                                                              | Array of items to display. Each item must have an `id` property.                                 |
+| `onChange`   | `(items: TItem[]) => void`                                             | Callback fired when items are reordered.                                                         |
 | `renderItem` | `(item: TItem, index: number, isOverlay?: boolean) => React.ReactNode` | Function to render each item. The `isOverlay` parameter indicates when an item is being dragged. |
-| `className` | `string` | Additional CSS classes for the list container. |
+| `className`  | `string`                                                               | Additional CSS classes for the list container.                                                   |
 
 ### SortableItem
 
@@ -143,11 +135,11 @@ A wrapper component for individual sortable items.
 
 #### Props
 
-| Prop | Type | Description |
-|------|------|-------------|
-| `id` | `string \| number` | Unique identifier for the item (must match item.id). |
-| `className` | `string` | Additional CSS classes. |
-| `children` | `React.ReactNode` | Content of the sortable item. |
+| Prop        | Type               | Description                                          |
+| ----------- | ------------------ | ---------------------------------------------------- |
+| `id`        | `string \| number` | Unique identifier for the item (must match item.id). |
+| `className` | `string`           | Additional CSS classes.                              |
+| `children`  | `React.ReactNode`  | Content of the sortable item.                        |
 
 ### SortableDragHandle
 
@@ -161,10 +153,29 @@ Inherits all props from `Button` component.
 
 <Callout variant="info">
   <strong>Important Information:</strong>
-  
-  - **Custom Component:** This component is not part of the default shadcn/ui registry. It's a custom component built specifically for audio/ui to enable drag-and-drop reordering of tracks in the queue.
-  - **Built with dnd-kit:** This component is built on top of <code>@dnd-kit</code>, which provides full keyboard navigation support. Users can reorder items using arrow keys and keyboard shortcuts. See the <a href="https://docs.dndkit.com/presets/sortable" target="_blank" rel="noopener noreferrer">dnd-kit documentation</a> for more details.
-  - **Drag Handle:** The <code>SortableDragHandle</code> component uses shadcn/ui's <code>Button</code> component and provides a pre-configured drag handle with proper accessibility attributes.
-  - **Item IDs:** Each item must have a unique <code>id</code> property. The <code>id</code> type must match between the item object and the <code>SortableItem</code> component.
-  - **Usage in Audio Components:** This component is used by <code>AudioTrackList</code> to enable drag-and-drop reordering of tracks in the queue.
+
+- **Custom Component:** This component is not part of the default shadcn/ui
+  registry. It's a custom component built specifically for audio/ui to enable
+  drag-and-drop reordering of tracks in the queue.
+- **Built with dnd-kit:** This component is built on top of <code>@dnd-kit</code>,
+  which provides full keyboard navigation support. Users can reorder items using
+  arrow keys and keyboard shortcuts. See the{" "}
+  <a
+    href="https://docs.dndkit.com/presets/sortable"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    dnd-kit documentation
+  </a>
+  for more details.
+  - **Drag Handle:** The <code>SortableDragHandle</code> component uses shadcn/ui's{" "}
+    <code>Button</code> component and provides a pre-configured drag handle with proper
+    accessibility attributes.
+  - **Item IDs:** Each item must have a unique <code>id</code> property. The{" "}
+    <code>id</code> type must match between the item object and the <code>
+      SortableItem
+    </code> component.
+  - **Usage in Audio Components:** This component is used by{" "}
+    <code>AudioTrackList</code> to enable drag-and-drop reordering of tracks in
+    the queue.
 </Callout>

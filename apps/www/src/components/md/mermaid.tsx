@@ -3,7 +3,7 @@
 import { useTheme } from "next-themes";
 import { use, useEffect, useId, useMemo, useState } from "react";
 
-export function Mermaid({ chart }: { chart: string }) {
+function Mermaid({ chart }: { chart: string }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -72,3 +72,5 @@ function MermaidContent({ chart }: { chart: string }) {
     />
   );
 }
+
+export { Mermaid };

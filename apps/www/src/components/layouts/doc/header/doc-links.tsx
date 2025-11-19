@@ -184,7 +184,7 @@ export function DocsLinks({ links }: DocLinksProps) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button size="sm" variant="outline">
-            <ChevronDownIcon className="rotate-180 sm:rotate-0" />
+            <ChevronDownIcon />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="ml-1 shadow-none">
