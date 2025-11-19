@@ -34,8 +34,8 @@ export const Hero = memo(function _Hero() {
             </span>
           </PageHeaderHeading>
           <PageHeaderDescription>
-            A set of accessible and composable Audio UI React components. Built
-            on top of shadcn/ui, it's designed for you to copy, paste, and own.
+            A set of accessible and composable Audio UI components. Built on top
+            of shadcn/ui, it's designed for you to copy, paste, and own.
           </PageHeaderDescription>
           <PageActions>
             <Button asChild size="sm">

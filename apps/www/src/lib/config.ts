@@ -9,7 +9,7 @@ export const appConfig = Object.freeze({
   url: baseUrl.origin,
   ogImage: `${baseUrl.origin}/opengraph-image.png`,
   description:
-    "A set of accessible and composable Audio UI React components. Built on top of shadcn/ui, it's designed for you to copy, paste, and own.",
+    "A set of accessible and composable Audio UI components. Built on top of shadcn/ui, it's designed for you to copy, paste, and own.",
   links: Object.freeze({
     twitter: "https://x.com/ouestlabs",
     github: "https://github.com/ouestlabs/audio-ui",
