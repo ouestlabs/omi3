@@ -381,6 +381,46 @@
       ]
     },
     {
+      "name": "slider-demo",
+      "description": "Slider component examples",
+      "type": "registry:example",
+      "registryDependencies": [
+        "@audio/slider"
+      ],
+      "files": [
+        {
+          "path": "src/registry/default/examples/slider-demo.tsx",
+          "type": "registry:example",
+          "target": "components/audio/examples/slider-demo.tsx",
+          "content": "\"use client\";\n\nimport { useState } from \"react\";\nimport { Slider } from \"@/components/ui/slider\";\n\nexport default function SliderDemo() {\n  const [value, setValue] = useState([50]);\n  const bufferValue = 75;\n\n  return (\n    <div className=\"w-full space-y-8 px-4\">\n      <div className=\"space-y-2\">\n        <h3 className=\"font-medium text-sm\">Basic Slider</h3>\n        <Slider className=\"w-full\" onValueChange={setValue} value={value} />\n        <p className=\"text-muted-foreground text-xs\">Value: {value[0]}</p>\n      </div>\n\n      <div className=\"space-y-2\">\n        <h3 className=\"font-medium text-sm\">Slider with Buffer</h3>\n        <Slider\n          bufferValue={bufferValue}\n          className=\"w-full\"\n          onValueChange={setValue}\n          value={value}\n        />\n        <p className=\"text-muted-foreground text-xs\">\n          Value: {value[0]} | Buffer: {bufferValue}%\n        </p>\n      </div>\n\n      <div className=\"space-y-2\">\n        <h3 className=\"font-medium text-sm\">Range Slider</h3>\n        <Slider\n          className=\"w-full\"\n          defaultValue={[20, 80]}\n          max={100}\n          min={0}\n          step={1}\n        />\n        <p className=\"text-muted-foreground text-xs\">Range: 20 - 80</p>\n      </div>\n\n      <div className=\"space-y-2\">\n        <h3 className=\"font-medium text-sm\">Disabled Slider</h3>\n        <Slider className=\"w-full\" defaultValue={[30]} disabled />\n        <p className=\"text-muted-foreground text-xs\">Disabled state</p>\n      </div>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "categories": [
+        "slider",
+        "ui"
+      ]
+    },
+    {
+      "name": "sortable-list-demo",
+      "description": "Sortable list component examples",
+      "type": "registry:example",
+      "registryDependencies": [
+        "@audio/sortable-list"
+      ],
+      "files": [
+        {
+          "path": "src/registry/default/examples/sortable-list-demo.tsx",
+          "type": "registry:example",
+          "target": "components/audio/examples/sortable-list-demo.tsx",
+          "content": "\"use client\";\n\nimport { useState } from \"react\";\nimport {\n  SortableDragHandle,\n  SortableItem,\n  SortableList,\n} from \"@/components/ui/sortable-list\";\n\ntype Item = {\n  id: string;\n  title: string;\n  description: string;\n};\n\nconst initialItems: Item[] = [\n  {\n    id: \"1\",\n    title: \"Item 1\",\n    description: \"Description for item 1\",\n  },\n  {\n    id: \"2\",\n    title: \"Item 2\",\n    description: \"Description for item 2\",\n  },\n  {\n    id: \"3\",\n    title: \"Item 3\",\n    description: \"Description for item 3\",\n  },\n  {\n    id: \"4\",\n    title: \"Item 4\",\n    description: \"Description for item 4\",\n  },\n];\n\nexport default function SortableListDemo() {\n  const [items, setItems] = useState<Item[]>(initialItems);\n\n  return (\n    <div className=\"w-full space-y-8 px-4\">\n      <div className=\"space-y-2\">\n        <h3 className=\"font-medium text-sm\">Basic Sortable List</h3>\n        <SortableList\n          items={items}\n          onChange={setItems}\n          renderItem={(item) => (\n            <SortableItem\n              className=\"flex items-center gap-3 rounded-md border border-border bg-card p-3\"\n              id={item.id}\n            >\n              <SortableDragHandle />\n              <div className=\"flex-1\">\n                <p className=\"font-medium text-sm\">{item.title}</p>\n                <p className=\"text-muted-foreground text-xs\">\n                  {item.description}\n                </p>\n              </div>\n            </SortableItem>\n          )}\n        />\n      </div>\n    </div>\n  );\n}\n"
+        }
+      ],
+      "categories": [
+        "sortable-list",
+        "ui"
+      ]
+    },
+    {
       "name": "theme-stone",
       "type": "registry:theme",
       "cssVars": {

@@ -322,6 +322,42 @@ export const Index: Record<string, any> = {
     categories: ["track","sortable","grid"],
     meta: undefined,
   },
+  "slider-demo": {
+    name: "slider-demo",
+    description: "Slider component examples",
+    type: "registry:example",
+    registryDependencies: ["@audio/slider"],
+    files: [{
+      path: "src/registry/default/examples/slider-demo.tsx",
+      type: "registry:example",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/examples/slider-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || item.name
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: ["slider","ui"],
+    meta: undefined,
+  },
+  "sortable-list-demo": {
+    name: "sortable-list-demo",
+    description: "Sortable list component examples",
+    type: "registry:example",
+    registryDependencies: ["@audio/sortable-list"],
+    files: [{
+      path: "src/registry/default/examples/sortable-list-demo.tsx",
+      type: "registry:example",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/examples/sortable-list-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || item.name
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: ["sortable-list","ui"],
+    meta: undefined,
+  },
   "theme-stone": {
     name: "theme-stone",
     description: "",

@@ -36,9 +36,9 @@ function DocsSidebar({
             <SidebarGroupContent>
               {item.type === "folder" && (
                 <SidebarMenu className="gap-0.5">
-                  {item.children.map(
-                    (i) =>
-                      i.type === "page" && (
+                  {item.children.map((i) => {
+                    if (i.type === "page") {
+                      return (
                         <SidebarMenuItem key={i.url}>
                           <SidebarMenuButton
                             asChild
@@ -59,8 +59,48 @@ function DocsSidebar({
                             </Link>
                           </SidebarMenuButton>
                         </SidebarMenuItem>
-                      )
-                  )}
+                      );
+                    }
+                    if (i.type === "folder") {
+                      return (
+                        <SidebarGroup className="gap-1 pl-4" key={i.$id}>
+                          <SidebarGroupLabel className="h-6 px-0 text-sidebar-accent-foreground text-xs">
+                            {i.name}
+                          </SidebarGroupLabel>
+                          <SidebarGroupContent>
+                            <SidebarMenu className="gap-0.5">
+                              {i.children.map(
+                                (child) =>
+                                  child.type === "page" && (
+                                    <SidebarMenuItem key={child.url}>
+                                      <SidebarMenuButton
+                                        asChild
+                                        className="after:-inset-y-1 relative h-[30px] 3xl:fixed:w-full w-fit 3xl:fixed:max-w-48 overflow-visible border border-transparent font-medium text-[0.8rem] after:absolute after:inset-x-0 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent"
+                                        isActive={child.url === pathname}
+                                      >
+                                        <Link
+                                          className="flex items-center justify-between gap-2"
+                                          href={child.url}
+                                        >
+                                          {child.name}
+                                          {PAGES_NEW.includes(child.url) && (
+                                            <span
+                                              className="flex size-2 rounded-full bg-primary"
+                                              title="New"
+                                            />
+                                          )}
+                                        </Link>
+                                      </SidebarMenuButton>
+                                    </SidebarMenuItem>
+                                  )
+                              )}
+                            </SidebarMenu>
+                          </SidebarGroupContent>
+                        </SidebarGroup>
+                      );
+                    }
+                    return null;
+                  })}
                 </SidebarMenu>
               )}
             </SidebarGroupContent>

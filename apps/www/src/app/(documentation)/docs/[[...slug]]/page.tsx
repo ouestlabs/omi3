@@ -70,7 +70,6 @@ export default async function Page(props: {
   });
 
   const links = doc.links;
-
   return (
     <div
       className="flex min-h-[calc(100vh-var(--header-height)+5px)] items-stretch sm:text-[.9375rem] xl:w-full"
