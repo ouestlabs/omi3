@@ -7,7 +7,6 @@ import { SiteFooter } from "@/components/layouts/global/footer";
 import { createMetadata } from "@/lib/metadata";
 import { getPageImage, source } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
-
 export function generateStaticParams() {
   return source.generateParams();
 }

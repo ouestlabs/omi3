@@ -1,18 +1,6 @@
 import type * as React from "react";
 import { cn } from "@/registry/default/lib/utils";
 
-function Anchor({ className, ...props }: React.ComponentProps<"a">) {
-  return (
-    <a
-      className={cn(
-        "font-medium text-foreground underline underline-offset-4",
-        className
-      )}
-      {...props}
-    />
-  );
-}
-
 function Paragraph({ className, ...props }: React.ComponentProps<"p">) {
   return (
     <p
@@ -25,10 +13,7 @@ function Paragraph({ className, ...props }: React.ComponentProps<"p">) {
   );
 }
 
-function Strong({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLElement>) {
+function Strong({ className, ...props }: React.HTMLAttributes<HTMLElement>) {
   return (
     <strong
       className={cn("font-medium text-foreground", className)}
@@ -49,4 +34,4 @@ function Blockquote({
   );
 }
 
-export { Anchor, Paragraph, Strong, Blockquote };
+export { Paragraph, Strong, Blockquote };

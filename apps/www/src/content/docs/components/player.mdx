@@ -35,16 +35,19 @@ A fully composable audio player component system. Build custom audio interfaces 
         ```bash
         npm install zustand lucide-react
         ```
+
       <Step>Install the required shadcn/ui primitives:</Step>
 
         ```bash
         npx shadcn@latest add button dialog dropdown-menu empty input item scroll-area toggle tooltip
         ```
+
       <Step>Install the slider components from this registry:</Step>
 
         ```bash
         npx shadcn@latest add @audio/slider
         ```
+
       <Step>Copy and paste the following code into your project.</Step>
         <Source name="player" title="components/audio/player.tsx" />
       <Step>Copy the required provider file.</Step>
@@ -291,6 +294,7 @@ Inherits all props from `DropdownMenu` component.
   - **Previous Button Behavior:** The previous button restarts the track if it has
     been played for more than 3 seconds, otherwise it navigates to the previous
     track in the queue.
+
 </Callout>
 
 <Callout variant="warning">
