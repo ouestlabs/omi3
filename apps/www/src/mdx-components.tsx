@@ -17,7 +17,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/md/tabs";
-import { Anchor, Blockquote, Paragraph, Strong } from "@/components/md/text";
+import { Blockquote, Paragraph, Strong } from "@/components/md/text";
 import {
   Table,
   TableBody,
@@ -37,7 +37,7 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     h4: H4,
     h5: H5,
     h6: H6,
-    a: Anchor,
+    a: Link,
     p: Paragraph,
     strong: Strong,
     ul: UnorderedList,
@@ -76,7 +76,6 @@ export function getMDXComponents(components?: MDXComponents): MDXComponents {
     Source,
     Collapse,
     ComponentsList,
-    Link,
     Mermaid,
     ...components,
   };
