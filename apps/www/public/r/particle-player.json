@@ -17,8 +17,5 @@
       "target": "components/audio/particles/particle-player.tsx"
     }
   ],
-  "categories": [
-    "player",
-    "queue"
-  ]
+  "categories": ["player", "queue"]
 }
