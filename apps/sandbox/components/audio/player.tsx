@@ -16,9 +16,6 @@ import {
   VolumeXIcon,
 } from "lucide-react";
 import React from "react";
-import { formatDuration, isLive } from "@/lib/audio";
-import { useAudioStore } from "@/lib/audio-store";
-import { cn } from "@/lib/utils";
 import { Button, type buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -31,6 +28,9 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { formatDuration, isLive } from "@/lib/audio";
+import { useAudioStore } from "@/lib/audio-store";
+import { cn } from "@/lib/utils";
 
 interface AudioPlayerButtonProps extends React.ComponentProps<typeof Button> {
   tooltip?: boolean;

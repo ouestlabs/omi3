@@ -21,7 +21,7 @@ function Img({
   );
 }
 
- function Image({
+function Image({
   src,
   className,
   width,
