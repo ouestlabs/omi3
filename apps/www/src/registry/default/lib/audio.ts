@@ -529,6 +529,23 @@ class AudioLib {
     }
     return this.audio.buffered;
   }
+
+  setPlaybackRate(rate: number): void {
+    this.ifClient(() => {
+      const audio = this.ensureAudio();
+      const clampedRate = Math.max(0.25, Math.min(2, rate));
+      audio.playbackRate = clampedRate;
+    });
+  }
+
+  getPlaybackRate(): number {
+    return (
+      this.ifClient(() => {
+        const audio = this.ensureAudio();
+        return audio.playbackRate;
+      }) ?? 1
+    );
+  }
 }
 
 export const $audio = new AudioLib();

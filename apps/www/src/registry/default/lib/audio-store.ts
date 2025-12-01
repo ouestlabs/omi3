@@ -15,6 +15,7 @@ type AudioStore = {
   isBuffering: boolean;
   volume: number;
   isMuted: boolean;
+  playbackRate: number;
   repeatMode: RepeatMode;
   shuffleEnabled: boolean;
   currentTime: number;
@@ -48,6 +49,7 @@ type AudioStore = {
   // Control Actions
   setVolume: (params: { volume: number }) => void;
   toggleMute: () => void;
+  setPlaybackRate: (rate: number) => void;
   changeRepeatMode: () => void;
   setInsertMode: (mode: InsertMode) => void;
   shuffle: () => void;
@@ -224,6 +226,7 @@ const useAudioStore = create<AudioStore>()(
       isBuffering: false,
       volume: 1,
       isMuted: false,
+      playbackRate: 1,
       repeatMode: "none",
       shuffleEnabled: false,
       currentTime: 0,
@@ -470,6 +473,12 @@ const useAudioStore = create<AudioStore>()(
         set({ isMuted: newMuted });
       },
 
+      setPlaybackRate(rate: number) {
+        const clampedRate = Math.max(0.25, Math.min(2, rate));
+        $audio.setPlaybackRate(clampedRate);
+        set({ playbackRate: clampedRate });
+      },
+
       changeRepeatMode() {
         const modes: RepeatMode[] = ["none", "one", "all"];
         const currentIndex = modes.indexOf(get().repeatMode);
@@ -578,6 +587,7 @@ const useAudioStore = create<AudioStore>()(
         history: state.history,
         volume: state.volume,
         isMuted: state.isMuted,
+        playbackRate: state.playbackRate,
         repeatMode: state.repeatMode,
         shuffleEnabled: state.shuffleEnabled,
         currentTime: state.currentTime,
