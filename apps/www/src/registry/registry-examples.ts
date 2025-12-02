@@ -166,4 +166,17 @@ export const examples: Registry["items"] = [
     ],
     categories: ["sortable-list", "ui"],
   },
+  {
+    name: "playback-speed-demo",
+    description: "Playback speed component example",
+    type: "registry:example",
+    registryDependencies: ["@audio/playback-speed", "@audio/player"],
+    files: [
+      {
+        path: "examples/playback-speed-demo.tsx",
+        type: "registry:example",
+      },
+    ],
+    categories: ["playback-speed"],
+  },
 ];

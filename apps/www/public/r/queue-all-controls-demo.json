@@ -3,7 +3,10 @@
   "name": "queue-all-controls-demo",
   "type": "registry:example",
   "description": "Queue with all controls (shuffle, repeat, preferences)",
-  "registryDependencies": ["@audio/player", "@audio/queue"],
+  "registryDependencies": [
+    "@audio/player",
+    "@audio/queue"
+  ],
   "files": [
     {
       "path": "src/registry/default/examples/queue-all-controls-demo.tsx",
@@ -12,5 +15,7 @@
       "target": "components/audio/examples/queue-all-controls-demo.tsx"
     }
   ],
-  "categories": ["queue"]
+  "categories": [
+    "queue"
+  ]
 }

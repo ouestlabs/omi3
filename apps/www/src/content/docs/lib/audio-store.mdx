@@ -121,7 +121,6 @@ The store exposes state organized by concern:
 |                   | `progress`          | `number`                       | Normalized progress 0–1      |
 |                   | `bufferedTime`      | `number`                       | Buffered amount              |
 | **Queue**         | `queue`             | `Track[]`                      | Array of tracks              |
-|                   | `history`           | `Track[]`                      | Previously played tracks     |
 |                   | `currentQueueIndex` | `number`                       | Active track index           |
 | **Controls**      | `volume`            | `number`                       | Volume 0–1                   |
 |                   | `isMuted`           | `boolean`                      | Mute state                   |
@@ -327,7 +326,7 @@ The store automatically persists a subset of state to localStorage using Zustand
 | Category     | Properties                                                        |
 | ------------ | ----------------------------------------------------------------- |
 | **Playback** | `currentTrack`, `currentTime`, `currentQueueIndex`                |
-| **Queue**    | `queue`, `history`                                                |
+| **Queue**    | `queue`                                                           |
 | **Settings** | `volume`, `isMuted`, `repeatMode`, `shuffleEnabled`, `insertMode` |
 
 **Storage Key:** `audio:ui:store`
@@ -357,3 +356,12 @@ This allows users to resume playback and maintain queue state across page refres
   - Direct store access via <code>getState()</code> is useful for non-React code
     or imperative operations
 </Callout>
+
+## Changelog
+
+### 2025-12-02 History removal and live stream improvements
+
+- **Removed**: `history` state and `addToHistory` action (feature deprecated)
+- **Added**: `setPlaybackRate()` now prevents rate changes for live streams
+- **Fixed**: Playback rate automatically resets to 1.0 when loading live streams
+- **Improved**: Live stream detection integrated into playback rate controls

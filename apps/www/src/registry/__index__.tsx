@@ -15,6 +15,18 @@ export const Index: Record<string, any> = {
       path: "src/registry/default/ui/audio/player.tsx",
       type: "registry:component",
       target: ""
+    },{
+      path: "src/registry/default/lib/audio.ts",
+      type: "registry:lib",
+      target: ""
+    },{
+      path: "src/registry/default/lib/audio-store.ts",
+      type: "registry:lib",
+      target: ""
+    },{
+      path: "src/registry/default/ui/slider.tsx",
+      type: "registry:component",
+      target: ""
     }],
     component: React.lazy(async () => {
       const mod = await import("@/registry/default/ui/audio/player.tsx")
@@ -33,6 +45,14 @@ export const Index: Record<string, any> = {
       path: "src/registry/default/ui/audio/provider.tsx",
       type: "registry:component",
       target: ""
+    },{
+      path: "src/registry/default/lib/audio.ts",
+      type: "registry:lib",
+      target: ""
+    },{
+      path: "src/registry/default/lib/audio-store.ts",
+      type: "registry:lib",
+      target: ""
     }],
     component: React.lazy(async () => {
       const mod = await import("@/registry/default/ui/audio/provider.tsx")
@@ -49,6 +69,18 @@ export const Index: Record<string, any> = {
     registryDependencies: ["@audio/store","@audio/lib","@audio/track","@audio/provider","@shadcn/empty","@shadcn/button","@shadcn/command","@shadcn/dialog","@shadcn/dropdown-menu","@shadcn/input","@shadcn/item","@shadcn/scroll-area","@shadcn/toggle","@shadcn/tooltip"],
     files: [{
       path: "src/registry/default/ui/audio/queue.tsx",
+      type: "registry:component",
+      target: ""
+    },{
+      path: "src/registry/default/lib/audio.ts",
+      type: "registry:lib",
+      target: ""
+    },{
+      path: "src/registry/default/lib/audio-store.ts",
+      type: "registry:lib",
+      target: ""
+    },{
+      path: "src/registry/default/ui/audio/track.tsx",
       type: "registry:component",
       target: ""
     }],
@@ -69,9 +101,47 @@ export const Index: Record<string, any> = {
       path: "src/registry/default/ui/audio/track.tsx",
       type: "registry:component",
       target: ""
+    },{
+      path: "src/registry/default/lib/audio.ts",
+      type: "registry:lib",
+      target: ""
+    },{
+      path: "src/registry/default/lib/audio-store.ts",
+      type: "registry:lib",
+      target: ""
+    },{
+      path: "src/registry/default/ui/sortable-list.tsx",
+      type: "registry:component",
+      target: ""
     }],
     component: React.lazy(async () => {
       const mod = await import("@/registry/default/ui/audio/track.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || item.name
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: undefined,
+    meta: undefined,
+  },
+  "playback-speed": {
+    name: "playback-speed",
+    description: "",
+    type: "registry:component",
+    registryDependencies: ["@audio/store","@audio/lib","@shadcn/button","@shadcn/dropdown-menu","@shadcn/tooltip"],
+    files: [{
+      path: "src/registry/default/ui/audio/playback-speed.tsx",
+      type: "registry:component",
+      target: ""
+    },{
+      path: "src/registry/default/lib/audio.ts",
+      type: "registry:lib",
+      target: ""
+    },{
+      path: "src/registry/default/lib/audio-store.ts",
+      type: "registry:lib",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/ui/audio/playback-speed.tsx")
       const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || item.name
       return { default: mod.default || mod[exportName] }
     }),
@@ -356,6 +426,24 @@ export const Index: Record<string, any> = {
       return { default: mod.default || mod[exportName] }
     }),
     categories: ["sortable-list","ui"],
+    meta: undefined,
+  },
+  "playback-speed-demo": {
+    name: "playback-speed-demo",
+    description: "Playback speed component example",
+    type: "registry:example",
+    registryDependencies: ["@audio/playback-speed","@audio/player"],
+    files: [{
+      path: "src/registry/default/examples/playback-speed-demo.tsx",
+      type: "registry:example",
+      target: ""
+    }],
+    component: React.lazy(async () => {
+      const mod = await import("@/registry/default/examples/playback-speed-demo.tsx")
+      const exportName = Object.keys(mod).find(key => typeof mod[key] === 'function' || typeof mod[key] === 'object') || item.name
+      return { default: mod.default || mod[exportName] }
+    }),
+    categories: ["playback-speed"],
     meta: undefined,
   },
   "theme-stone": {

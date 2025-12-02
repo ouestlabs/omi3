@@ -8,7 +8,9 @@
     "@dnd-kit/utilities",
     "lucide-react"
   ],
-  "registryDependencies": ["@shadcn/button"],
+  "registryDependencies": [
+    "@shadcn/button"
+  ],
   "files": [
     {
       "path": "src/registry/default/ui/sortable-list.tsx",

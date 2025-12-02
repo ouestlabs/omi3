@@ -3,7 +3,9 @@
   "name": "slider-demo",
   "type": "registry:example",
   "description": "Slider component examples",
-  "registryDependencies": ["@audio/slider"],
+  "registryDependencies": [
+    "@audio/slider"
+  ],
   "files": [
     {
       "path": "src/registry/default/examples/slider-demo.tsx",
@@ -12,5 +14,8 @@
       "target": "components/audio/examples/slider-demo.tsx"
     }
   ],
-  "categories": ["slider", "ui"]
+  "categories": [
+    "slider",
+    "ui"
+  ]
 }
