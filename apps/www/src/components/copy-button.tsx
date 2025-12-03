@@ -1,6 +1,7 @@
 "use client";
 
 import { CopyCheckIcon, CopyIcon } from "lucide-react";
+import posthog from "posthog-js";
 import React from "react";
 import { cn } from "@/registry/default/lib/utils";
 import { Button } from "@/registry/default/ui/button";
@@ -19,6 +20,7 @@ function CopyButton({
   className,
   variant = "ghost",
   tooltip = "Copy to Clipboard",
+  src,
   ...props
 }: React.ComponentProps<typeof Button> & {
   value: string;
@@ -46,6 +48,10 @@ function CopyButton({
           onClick={() => {
             copyToClipboardWithMeta(value);
             setHasCopied(true);
+            posthog.capture("text_copied_to_clipboard", {
+              source: src,
+              copied_text_length: value.length,
+            });
           }}
           size="icon"
           variant={variant}
