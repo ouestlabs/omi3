@@ -41,15 +41,9 @@ function createMetadata(override: Partial<Metadata> = {}): Metadata {
     keywords: [
       "audio player",
       "audio components",
-      "open source",
-      "limeplay",
       "React",
       "TypeScript",
-      "Next.js",
-      "React",
-      "Tailwind CSS",
-      "media",
-      "ui",
+      "open source",
     ],
     ...override,
     openGraph: {
