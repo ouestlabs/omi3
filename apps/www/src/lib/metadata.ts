@@ -25,8 +25,8 @@ function createViewport() {
 function createMetadata(override: Partial<Metadata> = {}): Metadata {
   return {
     title: {
-      template: `%s - ${appConfig.name} | A collection of composable Audio UI components for building audio interfaces in your React apps.`,
-      default: `${appConfig.name} - A collection of composable Audio UI components for building audio interfaces in your React apps.`,
+      template: `%s - ${appConfig.name} | Audio UI Components for React | Accessible & Composable`,
+      default: `${appConfig.name} - Build accessible React audio interfaces fast with composable Audio UI components. Copy, paste, and own. Explore docs and ready-made components.`,
     },
     description: appConfig.description,
     applicationName: appConfig.name,
@@ -39,11 +39,11 @@ function createMetadata(override: Partial<Metadata> = {}): Metadata {
     authors: [{ name: "Lucien Loua", url: "https://github.com/lucien-loua" }],
     generator: appConfig.name,
     keywords: [
-      "audio player",
-      "audio components",
-      "React",
-      "TypeScript",
-      "open source",
+      "audio UI components",
+      "React audio player",
+      "accessible components",
+      "shadcn/ui",
+      "React UI",
     ],
     ...override,
     openGraph: {
