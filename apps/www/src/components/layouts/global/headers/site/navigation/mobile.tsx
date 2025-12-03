@@ -2,6 +2,7 @@
 
 import Link, { type LinkProps } from "next/link";
 import { useRouter } from "next/navigation";
+import posthog from "posthog-js";
 import React from "react";
 import { PAGES_NEW } from "@/lib/docs";
 import type { source } from "@/lib/source";
@@ -40,7 +41,13 @@ export function MobileNav({
   }, [isMobile, open]);
 
   return (
-    <Popover onOpenChange={setOpen} open={open && isMobile}>
+    <Popover
+      onOpenChange={(isOpen) => {
+        setOpen(isOpen);
+        posthog.capture("mobile-nav-toggled", { open: isOpen });
+      }}
+      open={open && isMobile}
+    >
       <PopoverTrigger asChild>
         <Button
           className={cn(
@@ -199,6 +206,9 @@ function MobileLink({
       className={cn("font-medium text-2xl", className)}
       href={href}
       onClick={() => {
+        posthog.capture("mobile-nav-link-clicked", {
+          href: href.toString(),
+        });
         router.push(href.toString());
         onOpenChange?.(false);
       }}
