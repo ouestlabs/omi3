@@ -29,6 +29,16 @@ type FadeVolumeParams = {
   duration: number;
 };
 
+const LIVE_STREAM_PATTERNS = [
+  /\/live\./i,
+  /\/stream/i,
+  /\/radio/i,
+  /\.m3u8$/i,
+  /\.pls$/i,
+  /\.aac$/i,
+  /icecast|shoutcast/i,
+];
+
 class AudioLib {
   private audio: HTMLAudioElement | null = null;
   private isInitialized = false;
@@ -529,21 +539,40 @@ class AudioLib {
     }
     return this.audio.buffered;
   }
+
+  setPlaybackRate(rate: number): void {
+    this.ifClient(() => {
+      const audio = this.ensureAudio();
+      const url = audio.src.toLowerCase();
+
+      // Check if current audio is a live stream using the same patterns as isLive()
+      const isLiveStream = LIVE_STREAM_PATTERNS.some((pattern) =>
+        pattern.test(url)
+      );
+
+      // Don't allow playback rate changes for live streams
+      if (isLiveStream) {
+        return;
+      }
+
+      const clampedRate = Math.max(0.25, Math.min(2, rate));
+      audio.playbackRate = clampedRate;
+    });
+  }
+
+  getPlaybackRate(): number {
+    return (
+      this.ifClient(() => {
+        const audio = this.ensureAudio();
+        return audio.playbackRate;
+      }) ?? 1
+    );
+  }
 }
 
 export const $audio = new AudioLib();
 
 const MINUTE_IN_SECONDS = 60;
-
-const LIVE_STREAM_PATTERNS = [
-  /\/live\./i,
-  /\/stream/i,
-  /\/radio/i,
-  /\.m3u8$/i,
-  /\.pls$/i,
-  /\.aac$/i,
-  /icecast|shoutcast/i,
-];
 
 export function isLive(track: Track): boolean {
   if (!track.url) {

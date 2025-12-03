@@ -9,12 +9,12 @@ type AudioStore = {
   // State
   currentTrack: Track | null;
   queue: Track[];
-  history: Track[];
   isPlaying: boolean;
   isLoading: boolean;
   isBuffering: boolean;
   volume: number;
   isMuted: boolean;
+  playbackRate: number;
   repeatMode: RepeatMode;
   shuffleEnabled: boolean;
   currentTime: number;
@@ -48,6 +48,7 @@ type AudioStore = {
   // Control Actions
   setVolume: (params: { volume: number }) => void;
   toggleMute: () => void;
+  setPlaybackRate: (rate: number) => void;
   changeRepeatMode: () => void;
   setInsertMode: (mode: InsertMode) => void;
   shuffle: () => void;
@@ -178,6 +179,7 @@ type LoadAndPlayTrackParams = {
   track: Track;
   queueIndex: number;
   set: (partial: Partial<AudioStore>) => void;
+  get: () => AudioStore;
   errorMessage: string;
 };
 
@@ -187,7 +189,7 @@ type LoadAndPlayTrackParams = {
 const loadAndPlayTrack = async (
   params: LoadAndPlayTrackParams
 ): Promise<void> => {
-  const { track, queueIndex, set, errorMessage } = params;
+  const { track, queueIndex, set, get, errorMessage } = params;
   const isLiveStream = isLive(track);
 
   set({
@@ -203,6 +205,16 @@ const loadAndPlayTrack = async (
       startTime: 0,
       isLiveStream,
     });
+
+    // Reset playback rate to 1.0 for live streams
+    if (isLiveStream) {
+      const currentState = get();
+      if (currentState.playbackRate !== 1) {
+        $audio.setPlaybackRate(1);
+        set({ playbackRate: 1 });
+      }
+    }
+
     await $audio.play();
     set(getSuccessState({ isPlaying: true }));
   } catch (error) {
@@ -218,12 +230,12 @@ const useAudioStore = create<AudioStore>()(
       // Initial State
       currentTrack: null,
       queue: [],
-      history: [],
       isPlaying: false,
       isLoading: false,
       isBuffering: false,
       volume: 1,
       isMuted: false,
+      playbackRate: 1,
       repeatMode: "none",
       shuffleEnabled: false,
       currentTime: 0,
@@ -278,6 +290,7 @@ const useAudioStore = create<AudioStore>()(
           track: nextTrack,
           queueIndex: nextIndex,
           set,
+          get,
           errorMessage: "Error loading/playing next track",
         });
       },
@@ -324,6 +337,7 @@ const useAudioStore = create<AudioStore>()(
           track: prevTrack,
           queueIndex: prevIndex,
           set,
+          get,
           errorMessage: "Error loading/playing previous track",
         });
       },
@@ -355,6 +369,7 @@ const useAudioStore = create<AudioStore>()(
           track: targetTrack,
           queueIndex: startIndex,
           set,
+          get,
           errorMessage,
         });
       },
@@ -470,6 +485,17 @@ const useAudioStore = create<AudioStore>()(
         set({ isMuted: newMuted });
       },
 
+      setPlaybackRate(rate: number) {
+        const state = get();
+        // Don't allow playback rate changes for live streams
+        if (state.currentTrack && isLive(state.currentTrack)) {
+          return;
+        }
+        const clampedRate = Math.max(0.25, Math.min(2, rate));
+        $audio.setPlaybackRate(clampedRate);
+        set({ playbackRate: clampedRate });
+      },
+
       changeRepeatMode() {
         const modes: RepeatMode[] = ["none", "one", "all"];
         const currentIndex = modes.indexOf(get().repeatMode);
@@ -558,6 +584,7 @@ const useAudioStore = create<AudioStore>()(
           track,
           queueIndex: 0,
           set,
+          get,
           errorMessage,
         });
       },
@@ -575,9 +602,9 @@ const useAudioStore = create<AudioStore>()(
       partialize: (state) => ({
         currentTrack: state.currentTrack,
         queue: state.queue,
-        history: state.history,
         volume: state.volume,
         isMuted: state.isMuted,
+        playbackRate: state.playbackRate,
         repeatMode: state.repeatMode,
         shuffleEnabled: state.shuffleEnabled,
         currentTime: state.currentTime,

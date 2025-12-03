@@ -126,9 +126,11 @@ async function buildRegistryJsonFile() {
     JSON.stringify(fixedRegistry, null, 2)
   );
 
+  const publicRDir = path.join(process.cwd(), "public/r");
+  await fs.mkdir(publicRDir, { recursive: true });
   await fs.cp(
     path.join(process.cwd(), "registry.json"),
-    path.join(process.cwd(), "public/r/registry.json"),
+    path.join(publicRDir, "registry.json"),
     { recursive: true }
   );
 }
@@ -148,6 +150,11 @@ async function buildRegistry() {
 }
 
 try {
+  console.log("🧹 Cleaning public/r directory...");
+  const publicRPath = path.join(process.cwd(), "public/r");
+  rimraf.sync(publicRPath);
+  console.log("✅ Cleaned public/r directory");
+
   console.log("🗂️ Building src/registry/__index__.tsx...");
   await buildRegistryIndex();
 

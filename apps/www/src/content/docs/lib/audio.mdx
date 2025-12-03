@@ -286,3 +286,11 @@ $audio.addEventListener("audioError", (event) => {
 - Volume fading: Animations use `requestAnimationFrame` for smooth transitions
 - Live streams: Disable seeking and use extended timeout for reliability
 - `formatDuration` handles edge cases (NaN, Infinity, negative values)
+
+## Changelog
+
+### 2025-12-02 Live stream playback rate protection
+
+- **Added**: `setPlaybackRate()` now prevents rate changes for live streams
+- **Fixed**: `LIVE_STREAM_PATTERNS` moved to top-level scope for better performance
+- **Improved**: Live stream detection uses consistent patterns across the library

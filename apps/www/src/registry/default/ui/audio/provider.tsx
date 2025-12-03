@@ -238,6 +238,8 @@ function AudioProvider({
 
     const handlePlay = () => {
       errorRetryCountRef.current = 0;
+      const state = useAudioStore.getState();
+      $audio.setPlaybackRate(state.playbackRate);
       setState({ isPlaying: true, isLoading: false, isBuffering: false });
       preloadNextTrack();
     };
@@ -384,6 +386,7 @@ function AudioProvider({
       const startTime = isLiveStream ? 0 : state.currentTime;
       const volume = state.volume;
       const muted = state.isMuted;
+      const playbackRate = state.playbackRate;
 
       try {
         setState({ isLoading: true });
@@ -395,6 +398,7 @@ function AudioProvider({
         });
         $audio.setVolume({ volume });
         $audio.setMuted(muted);
+        $audio.setPlaybackRate(playbackRate);
 
         setState({ isLoading: false, isPlaying: false });
       } catch (error) {
@@ -427,13 +431,20 @@ function AudioProvider({
 
     restoreState();
 
-    const unsubscribe = useAudioStore.subscribe(
+    const unsubscribeTrack = useAudioStore.subscribe(
       (state) => state.currentTrack?.id,
       (newSongId, oldSongId) => {
         if (newSongId && newSongId !== oldSongId) {
           errorRetryCountRef.current = 0;
           preloadNextTrack();
         }
+      }
+    );
+
+    const unsubscribePlaybackRate = useAudioStore.subscribe(
+      (state) => state.playbackRate,
+      (playbackRate) => {
+        $audio.setPlaybackRate(playbackRate);
       }
     );
 
@@ -459,7 +470,8 @@ function AudioProvider({
         preloadAudioRef.current = null;
       }
 
-      unsubscribe();
+      unsubscribeTrack();
+      unsubscribePlaybackRate();
     };
   }, [throttledTimeUpdate, setState, retryPlayback, preloadNextTrack]);
 

@@ -4,4 +4,5 @@ export const PAGES_NEW = [
   "/docs/components/queue",
   "/docs/components/ui/sortable-list",
   "/docs/components/ui/slider",
+  "/docs/components/playback-speed",
 ];
