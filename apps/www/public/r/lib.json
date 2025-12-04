@@ -13,8 +13,5 @@
       "target": "lib/audio.ts"
     }
   ],
-  "categories": [
-    "lib",
-    "audio"
-  ]
+  "categories": ["lib", "audio"]
 }

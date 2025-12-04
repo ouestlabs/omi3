@@ -2,10 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "queue",
   "type": "registry:component",
-  "dependencies": [
-    "zustand",
-    "lucide-react"
-  ],
+  "dependencies": ["zustand", "lucide-react"],
   "registryDependencies": [
     "@audio/store",
     "@audio/lib",
