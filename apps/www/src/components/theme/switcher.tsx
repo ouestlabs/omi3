@@ -2,23 +2,53 @@
 
 import { MoonIcon, SunIcon } from "lucide-react";
 import posthog from "posthog-js";
+import { useCallback } from "react";
+import { useSound } from "@/hooks/use-sound";
 import { useTheme } from "@/hooks/use-theme";
 import { Button } from "@/registry/default/ui/button";
+import { Kbd, KbdGroup } from "@/registry/default/ui/kbd";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/registry/default/ui/tooltip";
 
 export function ThemeSwitcher() {
-  const { toggleTheme } = useTheme();
+  const { resolvedTheme, toggleTheme } = useTheme();
+  const playClick = useSound("/audio/ui-sounds/click.wav");
+
+  const handleToggleTheme = useCallback(() => {
+    playClick(0.5);
+    posthog.capture("theme_toggled");
+    toggleTheme();
+  }, [toggleTheme, playClick]);
+
   return (
-    <Button
-      onClick={() => {
-        posthog.capture("theme_toggled");
-        toggleTheme();
-      }}
-      size="icon-sm"
-      variant="outline"
-    >
-      <MoonIcon className="dark:hidden" />
-      <SunIcon className="hidden dark:block" />
-      <span className="sr-only">Toggle theme</span>
-    </Button>
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button onClick={handleToggleTheme} size="icon-sm" variant="outline">
+          <MoonIcon className="dark:hidden" />
+          <SunIcon className="hidden dark:block" />
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent sideOffset={8}>
+        {resolvedTheme === "dark" ? (
+          <KbdGroup className="flex items-center gap-2.5">
+            Switch to light mode
+            <Kbd>
+              <SunIcon />
+            </Kbd>
+          </KbdGroup>
+        ) : (
+          <KbdGroup className="flex items-center gap-2.5">
+            Switch to dark mode
+            <Kbd>
+              <MoonIcon />
+            </Kbd>
+          </KbdGroup>
+        )}
+      </TooltipContent>
+    </Tooltip>
   );
 }
