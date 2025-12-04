@@ -19,8 +19,5 @@
       "target": "components/audio/particles/particle-player-widget.tsx"
     }
   ],
-  "categories": [
-    "player",
-    "widget"
-  ]
+  "categories": ["player", "widget"]
 }

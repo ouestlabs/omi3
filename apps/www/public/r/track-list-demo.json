@@ -3,10 +3,7 @@
   "name": "track-list-demo",
   "type": "registry:example",
   "description": "Track list with selection example",
-  "registryDependencies": [
-    "@audio/player",
-    "@audio/track"
-  ],
+  "registryDependencies": ["@audio/player", "@audio/track"],
   "files": [
     {
       "path": "src/registry/default/examples/track-list-demo.tsx",
@@ -15,7 +12,5 @@
       "target": "components/audio/examples/track-list-demo.tsx"
     }
   ],
-  "categories": [
-    "track"
-  ]
+  "categories": ["track"]
 }

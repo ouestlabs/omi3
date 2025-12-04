@@ -3,12 +3,8 @@
   "name": "store",
   "type": "registry:lib",
   "description": "Audio store",
-  "dependencies": [
-    "zustand"
-  ],
-  "registryDependencies": [
-    "@audio/lib"
-  ],
+  "dependencies": ["zustand"],
+  "registryDependencies": ["@audio/lib"],
   "files": [
     {
       "path": "src/registry/default/lib/audio-store.ts",
@@ -17,9 +13,5 @@
       "target": "lib/audio-store.ts"
     }
   ],
-  "categories": [
-    "lib",
-    "audio",
-    "store"
-  ]
+  "categories": ["lib", "audio", "store"]
 }

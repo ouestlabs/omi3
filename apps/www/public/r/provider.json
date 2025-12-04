@@ -2,13 +2,8 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "provider",
   "type": "registry:component",
-  "dependencies": [
-    "zustand"
-  ],
-  "registryDependencies": [
-    "@audio/store",
-    "@audio/lib"
-  ],
+  "dependencies": ["zustand"],
+  "registryDependencies": ["@audio/store", "@audio/lib"],
   "files": [
     {
       "path": "src/registry/default/ui/audio/provider.tsx",
