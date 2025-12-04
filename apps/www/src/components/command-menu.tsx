@@ -8,6 +8,7 @@ import {
   SearchIcon,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import posthog from "posthog-js";
 import type { ComponentProps } from "react";
 import React from "react";
 import { useConfig } from "@/hooks/use-config";
@@ -129,6 +130,11 @@ function CommandMenu({
         isCopyShortcut(e) &&
         (selectedType === "page" || selectedType === "component")
       ) {
+        if (copyPayload) {
+          posthog.capture("command_menu_command_copied", {
+            command: copyPayload,
+          });
+        }
         runCommand(() => {
           if (navigator.clipboard.writeText) {
             navigator.clipboard.writeText(copyPayload);
@@ -211,6 +217,11 @@ function CommandMenu({
                       setCopyPayload("");
                     }}
                     onSelect={() => {
+                      posthog.capture("command_menu_item_selected", {
+                        item_url: item.href,
+                        item_name: item.label,
+                        item_type: "page",
+                      });
                       runCommand(() => router.push(item.href));
                     }}
                     value={`Navigation ${item.label}`}
@@ -241,6 +252,11 @@ function CommandMenu({
                             handlePageHighlight(isComponent, item)
                           }
                           onSelect={() => {
+                            posthog.capture("command_menu_item_selected", {
+                              item_url: item.url,
+                              item_name: item.name?.toString(),
+                              item_type: isComponent ? "component" : "page",
+                            });
                             runCommand(() => router.push(item.url));
                           }}
                           value={

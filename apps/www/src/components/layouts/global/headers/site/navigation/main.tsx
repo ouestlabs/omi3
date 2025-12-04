@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import posthog from "posthog-js";
 import { cn } from "@/registry/default/lib/utils";
 import { Button } from "@/registry/default/ui/button";
 
@@ -21,6 +22,13 @@ function MainNav({
           asChild
           data-pressed={pathname.includes(item.href) || undefined}
           key={item.href}
+          onClick={() => {
+            posthog.capture("main_nav_link_clicked", {
+              href: item.href,
+              label: item.label,
+              current_pathname: pathname,
+            });
+          }}
           size="sm"
           variant="ghost"
         >
