@@ -19,11 +19,11 @@ function SiteHeader() {
       <div className="container-wrapper 3xl:fixed:px-0 px-6">
         <div className="3xl:fixed:container flex h-(--header-height) items-center **:data-[slot=separator]:h-4!">
           <MobileNav
-            className="flex lg:hidden"
+            className="flex md:hidden"
             items={appConfig.navItems}
             tree={pageTree}
           />
-          <Button asChild className="hidden lg:flex" size="sm" variant="ghost">
+          <Button asChild className="hidden md:flex" size="sm" variant="ghost">
             <Link
               aria-label="Home"
               className="flex items-center sm:pl-1"
@@ -40,12 +40,12 @@ function SiteHeader() {
               </div>
             </Link>
           </Button>
-          <MainNav className="hidden lg:flex" items={appConfig.navItems} />
+          <MainNav className="hidden md:flex" items={appConfig.navItems} />
           <div className="ml-auto flex items-center gap-2 md:flex-1 md:justify-end">
             <div className="hidden w-full flex-1 md:flex md:w-auto md:flex-none">
               <CommandMenu navItems={appConfig.navItems} tree={pageTree} />
             </div>
-            <Separator className="hidden lg:block" orientation="vertical" />
+            <Separator className="hidden md:block" orientation="vertical" />
             <GithubStars />
             <Separator className="3xl:flex hidden" orientation="vertical" />
             <SiteConfig className="3xl:flex hidden" />
