@@ -3,22 +3,37 @@
 import { useTheme as useNextTheme } from "next-themes";
 import React from "react";
 
+import { META_THEME_COLORS } from "@/lib/metadata";
+
 function useTheme() {
   const { setTheme, resolvedTheme } = useNextTheme();
   const [, startTransition] = React.useTransition();
-  const themeActions = React.useMemo(
-    () => ({
-      toggleTheme: () => {
-        startTransition(() => {
-          setTheme(resolvedTheme === "dark" ? "light" : "dark");
-        });
-      },
-    }),
-    [resolvedTheme, setTheme]
-  );
+
+  const setMetaColor = React.useCallback((color: string) => {
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute("content", color);
+  }, []);
+
+  const metaColor =
+    resolvedTheme !== "dark" ? META_THEME_COLORS.light : META_THEME_COLORS.dark;
+
+  function toggleTheme() {
+    startTransition(() => {
+      const newTheme = resolvedTheme === "dark" ? "light" : "dark";
+      setTheme(newTheme);
+      setMetaColor(
+        newTheme === "dark" ? META_THEME_COLORS.dark : META_THEME_COLORS.light
+      );
+    });
+  }
+
   return {
     setTheme,
-    ...themeActions,
+    resolvedTheme,
+    metaColor,
+    setMetaColor,
+    toggleTheme,
   };
 }
 export { useTheme };

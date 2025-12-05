@@ -2,18 +2,15 @@
 
 import { CopyCheckIcon, CopyIcon } from "lucide-react";
 import posthog from "posthog-js";
-import React from "react";
+import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import { cn } from "@/registry/default/lib/utils";
 import { Button } from "@/registry/default/ui/button";
+import { Kbd, KbdGroup } from "@/registry/default/ui/kbd";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from "@/registry/default/ui/tooltip";
-
-function copyToClipboardWithMeta(value: string) {
-  navigator.clipboard.writeText(value);
-}
 
 function CopyButton({
   value,
@@ -27,13 +24,14 @@ function CopyButton({
   src?: string;
   tooltip?: string;
 }) {
-  const [hasCopied, setHasCopied] = React.useState(false);
-
-  React.useEffect(() => {
-    setTimeout(() => {
-      setHasCopied(false);
-    }, 2000);
-  }, []);
+  const { isCopied, copyToClipboard } = useCopyToClipboard({
+    onCopy: () => {
+      posthog.capture("text_copied_to_clipboard", {
+        source: src,
+        copied_text_length: value.length,
+      });
+    },
+  });
 
   return (
     <Tooltip>
@@ -43,27 +41,31 @@ function CopyButton({
             "absolute top-3 right-2 z-10 size-7 bg-code hover:opacity-100 focus-visible:opacity-100",
             className
           )}
-          data-copied={hasCopied}
+          data-copied={isCopied}
           data-slot="copy-button"
-          onClick={() => {
-            copyToClipboardWithMeta(value);
-            setHasCopied(true);
-            posthog.capture("text_copied_to_clipboard", {
-              source: src,
-              copied_text_length: value.length,
-            });
-          }}
+          onClick={() => copyToClipboard(value)}
           size="icon"
           variant={variant}
           {...props}
         >
           <span className="sr-only">Copy</span>
-          {hasCopied ? <CopyCheckIcon /> : <CopyIcon />}
+          {isCopied ? <CopyCheckIcon /> : <CopyIcon />}
         </Button>
       </TooltipTrigger>
-      <TooltipContent>{hasCopied ? "Copied" : tooltip}</TooltipContent>
+      <TooltipContent>
+        {isCopied ? (
+          "Copied"
+        ) : (
+          <KbdGroup className="flex items-center gap-2.5">
+            {tooltip}
+            <Kbd>
+              <CopyIcon />
+            </Kbd>
+          </KbdGroup>
+        )}
+      </TooltipContent>
     </Tooltip>
   );
 }
 
-export { CopyButton, copyToClipboardWithMeta };
+export { CopyButton };

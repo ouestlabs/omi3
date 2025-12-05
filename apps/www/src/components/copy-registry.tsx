@@ -5,6 +5,7 @@ import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import { Icons } from "@/lib/icons";
 import { cn } from "@/registry/default/lib/utils";
 import { Button } from "@/registry/default/ui/button";
+import { Kbd, KbdGroup } from "@/registry/default/ui/kbd";
 import {
   Tooltip,
   TooltipContent,
@@ -42,7 +43,16 @@ export function CopyRegistry({
         </Button>
       </TooltipTrigger>
       <TooltipContent>
-        {isCopied ? "Copied" : "Copy Registry URL"}
+        {isCopied ? (
+          "Copied"
+        ) : (
+          <KbdGroup className="flex items-center gap-2.5">
+            Copy Registry URL
+            <Kbd>
+              <Icons.mcp />
+            </Kbd>
+          </KbdGroup>
+        )}
       </TooltipContent>
     </Tooltip>
   );

@@ -3,8 +3,8 @@
 import template from "lodash/template";
 import { CopyCheckIcon, CopyIcon } from "lucide-react";
 import React from "react";
-import { copyToClipboardWithMeta } from "@/components/copy-button";
 import { useThemeConfig } from "@/components/theme/active";
+import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import { Icons } from "@/lib/icons";
 import { THEMES } from "@/lib/themes";
 import {
@@ -166,7 +166,6 @@ export function CopyCodeButton({
 }
 
 function CustomizerCode({ themeName }: { themeName: string }) {
-  const [hasCopied, setHasCopied] = React.useState(false);
   const [tailwindVersion, setTailwindVersion] = React.useState("v4-oklch");
   const activeTheme = React.useMemo(
     () => baseColors.find((theme) => theme.name === themeName),
@@ -177,13 +176,12 @@ function CustomizerCode({ themeName }: { themeName: string }) {
     [themeName]
   );
 
-  React.useEffect(() => {
-    if (hasCopied) {
-      setTimeout(() => {
-        setHasCopied(false);
-      }, 2000);
-    }
-  }, [hasCopied]);
+  const { isCopied: hasCopiedOKLCH, copyToClipboard: copyOKLCH } =
+    useCopyToClipboard();
+  const { isCopied: hasCopiedHSL, copyToClipboard: copyHSL } =
+    useCopyToClipboard();
+  const { isCopied: hasCopiedV3, copyToClipboard: copyV3 } =
+    useCopyToClipboard();
 
   return (
     <Tabs
@@ -215,16 +213,13 @@ function CustomizerCode({ themeName }: { themeName: string }) {
               className="absolute top-3 right-2 z-10 size-7 bg-code text-code-foreground shadow-none hover:opacity-100 focus-visible:opacity-100"
               data-slot="copy-button"
               onClick={() => {
-                copyToClipboardWithMeta(
-                  getThemeCodeOKLCH(activeThemeOKLCH, 0.65)
-                );
-                setHasCopied(true);
+                copyOKLCH(getThemeCodeOKLCH(activeThemeOKLCH, 0.65));
               }}
               size="icon"
               variant="ghost"
             >
               <span className="sr-only">Copy</span>
-              {hasCopied ? <CopyCheckIcon /> : <CopyIcon />}
+              {hasCopiedOKLCH ? <CopyCheckIcon /> : <CopyIcon />}
             </Button>
             <code data-language="css" data-line-numbers>
               <span className="line text-code-foreground" data-line>
@@ -280,14 +275,13 @@ function CustomizerCode({ themeName }: { themeName: string }) {
               className="absolute top-3 right-2 z-10 size-7 bg-code text-code-foreground shadow-none hover:opacity-100 focus-visible:opacity-100"
               data-slot="copy-button"
               onClick={() => {
-                copyToClipboardWithMeta(getThemeCodeHSLV4(activeTheme, 0.65));
-                setHasCopied(true);
+                copyHSL(getThemeCodeHSLV4(activeTheme, 0.65));
               }}
               size="icon"
               variant="ghost"
             >
               <span className="sr-only">Copy</span>
-              {hasCopied ? <CopyCheckIcon /> : <CopyIcon />}
+              {hasCopiedHSL ? <CopyCheckIcon /> : <CopyIcon />}
             </Button>
             <code data-language="css" data-line-numbers>
               <span className="line text-code-foreground" data-line>
@@ -355,14 +349,13 @@ function CustomizerCode({ themeName }: { themeName: string }) {
               className="absolute top-3 right-2 z-10 size-7 bg-code text-code-foreground shadow-none hover:opacity-100 focus-visible:opacity-100"
               data-slot="copy-button"
               onClick={() => {
-                copyToClipboardWithMeta(getThemeCode(activeTheme, 0.5));
-                setHasCopied(true);
+                copyV3(getThemeCode(activeTheme, 0.5));
               }}
               size="icon"
               variant="ghost"
             >
               <span className="sr-only">Copy</span>
-              {hasCopied ? <CopyCheckIcon /> : <CopyIcon />}
+              {hasCopiedV3 ? <CopyCheckIcon /> : <CopyIcon />}
             </Button>
             <code data-language="css" data-line-numbers>
               <span className="line" data-line>

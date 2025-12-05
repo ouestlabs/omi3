@@ -1,9 +1,8 @@
 "use client";
 
-import { CopyCheckIcon, CopyIcon, TerminalIcon } from "lucide-react";
+import { TerminalIcon } from "lucide-react";
 import React from "react";
 import { useConfig } from "@/hooks/use-config";
-import { useCopyToClipboard } from "@/hooks/use-copy-to-clipboard";
 import { cn } from "@/registry/default/lib/utils";
 import { Button } from "@/registry/default/ui/button";
 import {
@@ -18,11 +17,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/registry/default/ui/tabs";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/registry/default/ui/tooltip";
+import { CopyButton } from "../copy-button";
 
 // Collapsible
 function Collapse({
@@ -73,7 +68,6 @@ function Command({
   __bun__?: string;
 }) {
   const [config, setConfig] = useConfig();
-  const { isCopied, copyToClipboard } = useCopyToClipboard();
 
   const packageManager = config?.packageManager || "bun";
   const tabs = React.useMemo(
@@ -86,15 +80,7 @@ function Command({
     [__npm__, __pnpm__, __yarn__, __bun__]
   );
 
-  const copyCommand = React.useCallback(() => {
-    const command = tabs[packageManager];
-
-    if (!command) {
-      return;
-    }
-
-    copyToClipboard(command);
-  }, [packageManager, tabs, copyToClipboard]);
+  const commandToCopy = tabs[packageManager] || "";
 
   return (
     <div className="overflow-x-auto">
@@ -137,27 +123,14 @@ function Command({
           ))}
         </div>
       </Tabs>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <Button
-            className="absolute top-1.5 right-1.5 z-3 size-9 opacity-70 hover:opacity-100 focus-visible:opacity-100 sm:size-8"
-            data-slot="copy-button"
-            onClick={copyCommand}
-            size="icon"
-            variant="ghost"
-          >
-            <span className="sr-only">Copy</span>
-            {isCopied ? (
-              <CopyCheckIcon className="size-4" />
-            ) : (
-              <CopyIcon className="size-4" />
-            )}
-          </Button>
-        </TooltipTrigger>
-        <TooltipContent>
-          {isCopied ? "Copied" : "Copy to Clipboard"}
-        </TooltipContent>
-      </Tooltip>
+      <CopyButton
+        className="absolute top-1.5 right-1.5 z-3 size-9 opacity-70 hover:opacity-100 focus-visible:opacity-100 sm:size-8"
+        data-slot="copy-button"
+        src="command_code_block"
+        tooltip="Copy to Clipboard"
+        value={commandToCopy}
+        variant="ghost"
+      />
     </div>
   );
 }

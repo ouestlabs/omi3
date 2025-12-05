@@ -1,13 +1,14 @@
 "use client";
+import { StarIcon } from "lucide-react";
 import { useGithubStars } from "@/hooks/use-github";
 import { Icons } from "@/lib/icons";
 import { cn } from "@/registry/default/lib/utils";
 import { Button } from "@/registry/default/ui/button";
-
 import {
   ButtonGroup,
   ButtonGroupText,
 } from "@/registry/default/ui/button-group";
+import { Kbd, KbdGroup } from "@/registry/default/ui/kbd";
 import { Skeleton } from "@/registry/default/ui/skeleton";
 import {
   Tooltip,
@@ -49,8 +50,13 @@ function GithubStars() {
           </ButtonGroupText>
         </ButtonGroup>
       </TooltipTrigger>
-      <TooltipContent className="font-sans">
-        {new Intl.NumberFormat("en-US").format(stargazersCount)} stars
+      <TooltipContent>
+        <KbdGroup className="gap-2">
+          {new Intl.NumberFormat("en-US").format(stargazersCount)} stars
+          <Kbd>
+            <StarIcon />
+          </Kbd>
+        </KbdGroup>
       </TooltipContent>
     </Tooltip>
   );
